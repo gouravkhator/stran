@@ -1,5 +1,5 @@
 {
-  "name": "dapp-reactjs-hardhat",
+  "name": "stran",
   "scripts":{
     "hardhat": "NODE_OPTIONS=--openssl-legacy-provider hardhat",
     "full-install": "npm install && cd app && npm install",

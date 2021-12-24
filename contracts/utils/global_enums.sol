@@ -44,3 +44,12 @@ enum Location {
     AFRICA,
     ANTARCTICA
 }
+
+// Status - an enum for the availability state of the user
+enum Status{
+    AVAILABLE,
+    DND,
+    BRB,
+    AWAY,
+    OFFLINE
+}

@@ -1,4 +1,4 @@
-# Hybrid App Development with React Native
+# Stran Frontend with React Native
 
 > Hoping that all npm packages were already installed, from full-install npm script, when run from the project's root folder.
 
