@@ -1,0 +1,72 @@
+# Smart Contract files
+node_modules/
+.env/
+/coverage/
+/coverage.json
+/typechain/
+
+# Hardhat files
+/cache
+/artifacts
+
+# React Native files
+# OSX
+#
+/app/.DS_Store
+
+# Xcode
+#
+/app/build/
+/app/*.pbxuser
+/app/!default.pbxuser
+/app/*.mode1v3
+/app/!default.mode1v3
+/app/*.mode2v3
+/app/!default.mode2v3
+/app/*.perspectivev3
+/app/!default.perspectivev3
+/app/xcuserdata
+/app/*.xccheckout
+/app/*.moved-aside
+/app/DerivedData
+/app/*.hmap
+/app/*.ipa
+/app/*.xcuserstate
+
+# Android/IntelliJ
+#
+/app/build/
+/app/.idea
+/app/.gradle
+/app/local.properties
+/app/*.iml
+/app/*.hprof
+
+# node.js
+#
+/app/node_modules/
+/app/npm-debug.log
+/app/yarn-error.log
+
+# BUCK
+/app/buck-out/
+/app/\.buckd/
+/app/*.keystore
+/app/!debug.keystore
+
+# fastlane
+#
+# It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the
+# screenshots whenever they are needed.
+# For more information about the recommended setup visit:
+# https://docs.fastlane.tools/best-practices/source-control/
+
+/app/*/fastlane/report.xml
+/app/*/fastlane/Preview.html
+/app/*/fastlane/screenshots
+
+# Bundle artifact
+/app/*.jsbundle
+
+# CocoaPods
+/app/ios/Pods/
