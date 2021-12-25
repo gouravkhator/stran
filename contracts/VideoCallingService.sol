@@ -8,7 +8,7 @@ import "./utils/global_enums.sol"; // for global enums like languages, locations
 contract VideoCallingService {
     // ---structs--- : Defines the schema
     struct User {
-        address user_id;
+        address userid;
         string username;
         Location location;
         Language primaryLanguage;
@@ -52,7 +52,7 @@ contract VideoCallingService {
 
         // setting userdata
         userdata[msg.sender] = User({
-            user_id: msg.sender,
+            userid: msg.sender,
             username: name,
             location: location,
             primaryLanguage: primaryLanguage,
@@ -76,11 +76,33 @@ contract VideoCallingService {
 
     function doVideoCallStranger() public {}
 
-    function addFriend() public {}
+    function addFriend(address friendToAdd) public {
+        if(userdata[friendToAdd].userid > address(0)){
+            // this friend to add is actually a valid user
+            userdata[msg.sender].friends.push(friendToAdd);
+        }
+    }
 
-    function deleteUser() public {}
+    function deleteUser() public {
+        // TODO: check while deleting user, do we also have to invalidate the data in the mapping, by setting the different object for that address??
 
-    // ---read-only functions
+        uint i;
+
+        for(i = 0; i < users.length; i++){
+            if(users[i] == msg.sender){
+                break;
+            }
+        }
+
+        // if the user to be removed was not found, i will be users.length
+        // and we should not proceed further for deletion, so we use require for proceeding only when i < users.length
+        require(i < users.length);
+
+        users[i] = users[users.length - 1];
+        users.pop();
+    }
+
+    // ---read-only functions---
     function getFriendsList() public view returns (address[] memory) {
         if (userdata[msg.sender].friends.length > 0) {
             return userdata[msg.sender].friends;
