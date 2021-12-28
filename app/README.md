@@ -1,5 +1,9 @@
 # Stran Frontend with React Native
 
+> **Note: There were some issues with Node version 17.3.0, as some React-Native packages were erroring out, so I removed node_modules folder and package-lock.json file and used node version 16.13.0**
+
+We can use nvm for various node version management.
+
 > Hoping that all npm packages were already installed, from full-install npm script, when run from the project's root folder.
 
 ## Resourceful Links for Setup
@@ -14,22 +18,50 @@
 
 ## Hybrid Dev Ninja Tactics for *GeekyNinjas*
 
-Run the Metro Server in one terminal session:
+* If you have installed/removed some packages from npm, or you have added some config, then you need to connect the android device once again via usb and then first type:
 
-```bash
-npm start
-```
+    ```bash
+    adb devices
+    ```
 
-Open another terminal and run the app on Android Emulator:
+    This should show the device ID, which is currently connected. If it doesn't show, we can try reconnecting the device via usb.
 
-```bash
-npm run android
-```
+    Once it shows in the adb devices list, we then type:
 
-\***Note\*: Below command works only for MAC users..**
+    ```bash
+    npm run android
+    ```
 
-Open another terminal and run the app on IOS Emulator:
+    This above command builds the new packages and removes old packages. It configures on the android device, any changes we configured in the project.
 
-```bash
-npm run ios
-```
+    Then, we can wirelessly run the app via Metro server as explained below.
+
+* Run the Metro Server in one terminal session:
+
+    ```bash
+    npm start
+    ```
+
+* Building the app on android:
+
+    ```bash
+    npm run android
+    ```
+
+* Building the app on ios:
+
+    \***Note\*: Below command works only for MAC users..**
+
+    ```bash
+    npm run ios
+    ```
+
+* react-native-vector-icons icons not loading in the app:
+
+    We have to add the following line in `<project_root_folder>`/app/android/app/build.gradle:
+
+    ```bash
+    apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+    ```
+
+    And then rebuild the app again.

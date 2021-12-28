@@ -1,13 +1,12 @@
 {
   "name": "stran",
   "scripts":{
-    "hardhat": "NODE_OPTIONS=--openssl-legacy-provider hardhat",
     "full-install": "npm install && cd app && npm install",
-    "sc-accounts": "npm run hardhat -- accounts",
-    "sc-compile": "npm run hardhat -- compile",
-    "sc-test": "npm run hardhat -- test",
-    "sc-localnet": "npm run hardhat -- node",
-    "sc-deploy": "npm run sc-compile && npm run hardhat -- run --network localhost scripts/deploy.js",
+    "sc-accounts": "npx hardhat accounts",
+    "sc-compile": "npx hardhat compile",
+    "sc-test": "npx hardhat test",
+    "sc-localnet": "npx hardhat node",
+    "sc-deploy": "npm run sc-compile && npx hardhat run --network localhost scripts/deploy.js",
     "app-start": "cd app && npm start",
     "app-test": "cd app && npm test"
   },
