@@ -5,7 +5,9 @@ import "hardhat/console.sol";
 import "./utils/Datetime.sol"; // for datetime, if not needed, we will remove this import in future.
 import "./utils/global_enums.sol"; // for global enums like languages, locations etc.
 
-contract VideoCallingService {
+contract VideoCallContract {
+    // TODO: Index some userdata like the status, location, language for optimised access
+
     // ---structs--- : Defines the schema
     struct User {
         address userid;
@@ -48,6 +50,8 @@ contract VideoCallingService {
         Language primaryLanguage,
         Language[] memory knownLanguages
     ) public {
+        // TODO: Check if the same user exists in this array or not (maybe we set userid to the one user gives as input).
+
         address[] memory emptyArr;
 
         // setting userdata
@@ -110,5 +114,17 @@ contract VideoCallingService {
 
         address[] memory temp;
         return temp; // returning empty object
+    }
+
+    function getRandomAvailableUser() public view returns (address){
+        uint i;
+
+        for(i = 0; i < users.length; i++){
+            if(userdata[users[i]].status == Status.AVAILABLE){
+                return users[i];
+            }
+        }
+
+        return address(0); // invalid user, which denotes that no user is available
     }
 }

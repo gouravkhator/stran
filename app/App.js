@@ -1,9 +1,12 @@
 import React, { } from 'react';
+import './shim';
+
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import LoginScreen from './screens/LoginScreen';
 import MainScreen from './screens/MainScreen';
+import VideoCalling from './screens/VideoCalling';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,8 +26,9 @@ export default App = () => {
 		// Main Functionality
 		<NavigationContainer>
 			<Stack.Navigator>
-				<Stack.Screen name="LoginScreen" component={LoginScreen} options={{ headerShown: false }} />
+				{/* <Stack.Screen name="LoginScreen" component={LoginScreen} options={{ headerShown: false }} /> */}
 				<Stack.Screen name="MainScreen" component={MainScreen} options={{ headerShown: false }} />
+				<Stack.Screen name="VideoCalling" component={VideoCalling} options={{ headerShown: false }} />
 			</Stack.Navigator>
 		</NavigationContainer>
 	);

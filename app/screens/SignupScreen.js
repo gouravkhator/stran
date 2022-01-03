@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, TextInput } from 'react-native';
 
+import Web3 from 'web3';
+
 import globalStyles from '../styles/globalStyles';
 
 export default SignupScreen = ({ navigation }) => {
@@ -10,6 +12,20 @@ export default SignupScreen = ({ navigation }) => {
 	const [password, setPassword] = useState('');
 	const [error, setError] = useState('');
 
+	// TODO: these two are set once we deploy the contract
+    const contract_abi = '', contract_address = ''; 
+
+    const createConnection = () =>{
+        // givenProvider maybe the one set by Metamask in the browser, and if it is not set, we revert back to localnet
+        // we start the local-network of ethereum via: npm run localnet
+        const web3 = new Web3(Web3.givenProvider || "ws://localhost:8545");
+
+        const VideoCallContract = web3.eth.Contract(contract_abi, contract_address);
+
+        // TODO: registerUser with all required params and then set it in the async storage too
+        // VideoCallContract.methods.registerUser()
+    }
+	
 	const navigateToLoginPage = () => {
 		navigation.navigate('LoginScreen');
 	}

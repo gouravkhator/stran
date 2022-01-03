@@ -65,3 +65,7 @@ We can use nvm for various node version management.
     ```
 
     And then rebuild the app again.
+
+* Setting up web3.js in react native:
+
+    Check the solution [here](https://ethereum.stackexchange.com/questions/46239/using-web3-1-0-with-react-native/68986#68986)
