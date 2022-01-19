@@ -1,12 +1,14 @@
 # Stran Frontend with React Native
 
-> **Note: There were some issues with Node version 17.3.0, as some React-Native packages were erroring out, so I removed node_modules folder and package-lock.json file and used node version 16.13.0**
+## Some Important Notes before starting off:
 
-> There are some issues while I run the app, tried reinstalling and installing and copying previous files. None resolved that.
+* **Note: There were some issues with Node version 17.3.0, as some React-Native packages were erroring out, so I removed node_modules folder and package-lock.json file and used node version 16.13.0**
 
-We can use nvm for various node version management.
+    We can use nvm for various node version management.
 
-> Hoping that all npm packages were already installed, from full-install npm script, when run from the project's root folder.
+* > ⚠️ 🧐 There are some issues while I run the app, tried reinstalling and installing and copying previous files. The app is not loading when tried on a physical device. When I open that up, it just automatically closes again. It was running fine before. 
+
+* > Hoping that all npm packages were already installed, from full-install npm script, when run from the project's root folder.
 
 ## Resourceful Links for Setup
 
