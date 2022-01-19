@@ -6,7 +6,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import LoginScreen from './screens/LoginScreen';
 import MainScreen from './screens/MainScreen';
-import VideoCalling from './screens/VideoCalling';
+import VideoCalling from './screens/VideoCall';
 
 const Stack = createNativeStackNavigator();
 

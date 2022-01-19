@@ -2,8 +2,8 @@
 pragma solidity ^0.8.0;
 
 import "hardhat/console.sol";
-import "./utils/Datetime.sol"; // for datetime, if not needed, we will remove this import in future.
-import "./utils/global_enums.sol"; // for global enums like languages, locations etc.
+import "../utils/Datetime.sol"; // for datetime, if not needed, we will remove this import in future.
+import "../utils/global_enums.sol"; // for global enums like languages, locations etc.
 
 contract VideoCallContract {
     // TODO: Index some userdata like the status, location, language for optimised access

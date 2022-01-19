@@ -1,8 +1,8 @@
-import { create } from 'ipfs';
+// import { create } from 'ipfs';
 
 // this should be called after login. And we can save this node object in the app local storage
 export async function createIPFSNode() {
-    return await create();
+    // return await create();
 }
 
 export async function addDataToIPFS(ipfsNode, data) {

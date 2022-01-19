@@ -1,13 +1,13 @@
 # Smart Contract files
 node_modules/
-.env/
+.env
 /coverage/
 /coverage.json
 /typechain/
 
 # Hardhat files
-/cache
-/artifacts
+/blockchain/cache
+/blockchain/artifacts
 
 # React Native files
 # OSX

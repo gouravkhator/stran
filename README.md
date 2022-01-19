@@ -30,7 +30,7 @@ deleteUser will also be a function in the smart contract.
 
 We can use web workers in react native (for video calling) and smart contract transaction simultaneously and then sync them up with the results of whether the video call was a success or a failure.
 
-We can use IDFS (some local decentralized storage) for storing the contract's transactions which are not synced with the mainnet. We can have them queued up locally.
+We can use IPFS (some local decentralized storage) for storing the contract's transactions which are not synced with the mainnet. We can have them queued up locally.
 
 Also, the video call logs will be fetched from smart contract. 
 

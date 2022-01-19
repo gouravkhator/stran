@@ -2,6 +2,8 @@
 
 > **Note: There were some issues with Node version 17.3.0, as some React-Native packages were erroring out, so I removed node_modules folder and package-lock.json file and used node version 16.13.0**
 
+> There are some issues while I run the app, tried reinstalling and installing and copying previous files. None resolved that.
+
 We can use nvm for various node version management.
 
 > Hoping that all npm packages were already installed, from full-install npm script, when run from the project's root folder.
