@@ -1,12 +1,14 @@
 # Stran Frontend with React Native
 
+This branch `react-native-experimental` is created for saving the react-native incomplete code. When I successfully build the p2p video calling using vanilla JS, then I will try to implement that in react-native too.
+
 ## Some Important Notes before starting off:
+
+* > ⚠️ 🧐 There are some issues while I run the app, tried reinstalling and installing and copying previous files. The app is not loading when tried on a physical device. When I open that up, it just automatically closes again. It was running fine before. 
 
 * **Note: There were some issues with Node version 17.3.0, as some React-Native packages were erroring out, so I removed node_modules folder and package-lock.json file and used node version 16.13.0**
 
     We can use nvm for various node version management.
-
-* > ⚠️ 🧐 There are some issues while I run the app, tried reinstalling and installing and copying previous files. The app is not loading when tried on a physical device. When I open that up, it just automatically closes again. It was running fine before. 
 
 * > Hoping that all npm packages were already installed, from full-install npm script, when run from the project's root folder.
 
