@@ -1,19 +1,20 @@
 {
   "name": "stran",
+  "description": "A Video Calling P2P DApp for masses to integrate strangers again..",
   "config": {
     "hardhatConfigPath": "./blockchain/hardhat.config.js",
     "deployContractScript": "./blockchain/scripts/deploy_contract.js"
   },
-  "scripts":{
+  "scripts": {
     "hardhat": "npx hardhat --config $npm_package_config_hardhatConfigPath",
-    "full-install": "npm install && cd app && npm install",
+    "full-install": "npm install",
     "sc-accounts": "npm run hardhat -- accounts",
     "sc-compile": "npm run hardhat -- compile",
     "sc-test": "npm run hardhat -- test",
     "sc-localnet": "npm run hardhat -- node",
     "sc-deploy": "npm run sc-compile && npm run hardhat -- run --network localhost $npm_package_config_deployContractScript",
-    "app-start": "cd app && npm start",
-    "app-test": "cd app && npm test"
+    "app-start": "npx live-server client --port=3000 --no-browser",
+    "app-test": "echo 'Testing client-side'"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.3",
@@ -21,6 +22,29 @@
     "chai": "^4.3.4",
     "ethereum-waffle": "^3.4.0",
     "ethers": "^5.5.2",
-    "hardhat": "^2.8.0"
-  }
+    "hardhat": "^2.8.0",
+    "live-server": "^1.2.1"
+  },
+  "repository": {
+    "url": "https://github.com/gouravkhator/stran/"
+  },
+  "bugs": {
+    "url": "https://github.com/gouravkhator/stran/issues"
+  },
+  "author": {
+    "name": "Gourav Khator",
+    "email": "gouravkhator9@gmail.com"
+  },
+  "keywords": [
+    "strangers",
+    "video-calling",
+    "video-call",
+    "blockchain",
+    "peer2peer",
+    "p2p",
+    "dapp",
+    "hardhat",
+    "ethereum",
+    "smart-contract"
+  ]
 }

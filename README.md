@@ -2,7 +2,7 @@
 
 ## System Design and Architecture
 
-From React Native App, user will login. User's login will be saved and an address will be provided to him by the ethereum network. This address will go to the smart contract code and registerUser will be called. User should keep the address with him, else his account will not be retrievable.
+From Client side, user will login. User's login will be saved and an address will be provided to him by the ethereum network. This address will go to the smart contract code and registerUser will be called. User should keep the address with him, else his account will not be retrievable.
 
 Now, when he gets to the main page, he sees his already added friends (if any). 
 Also, he sees a call to stranger button. 
@@ -28,7 +28,7 @@ We can have an enum for all issues and their error codes. We can then use that e
 
 deleteUser will also be a function in the smart contract.
 
-We can use web workers in react native (for video calling) and smart contract transaction simultaneously and then sync them up with the results of whether the video call was a success or a failure.
+We can use web workers in client side (for video calling) and smart contract transaction simultaneously and then sync them up with the results of whether the video call was a success or a failure.
 
 We can use IPFS (some local decentralized storage) for storing the contract's transactions which are not synced with the mainnet. We can have them queued up locally.
 
@@ -43,12 +43,6 @@ While calling a friend, the options is ignored completely.
 ---
 
 ## Project Installation
-
-### Prerequisite Software 
-
-Check out [this](https://reactnative.dev/docs/environment-setup#installing-dependencies) link. It helps in setting up required softwares for smart contracts and react native development.
-
----
 
 ### Installation Guide
 
@@ -77,12 +71,6 @@ Run tests on smart contracts:
 npm run sc-test
 ```
 
-Run tests on smart contracts:
-
-```bash
-npm run sc-test
-```
-
 Run Hardhat Network, such that external clients can connect to it:
 
 ```bash
@@ -95,13 +83,13 @@ Deploy the smart contract -- It will firstly compile the smart contracts and the
 npm run sc-deploy
 ```
 
-Start the React Native App Development Server:
+Start the Client side server:
 
 ```bash
 npm run app-start
 ```
 
-Run tests on the React Native App:
+Test the frontend application:
 
 ```bash
 npm run app-test
