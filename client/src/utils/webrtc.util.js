@@ -1,4 +1,4 @@
-import { captureStream } from './video_stream.util.js';
+import { captureStream } from './video_stream.util';
 
 /**
  * Creates the RTC Peer connection
@@ -19,7 +19,15 @@ export async function setupPeers({
     setLocalStream,
     setRemoteStream
 }) {
-    const pc = peerConnection ?? createPeerConnection();
+    // let pc = null;
+
+    // if(peerConnection !== undefined){
+    //     pc = peerConnection;
+    // }else{
+    //     pc = createPeerConnection();
+    // }
+    const pc = peerConnection ?? createPeerConnection(); 
+    // ! ISSUE: nullish coalescing operator does not work, tried that stackoverflow solution too
 
     const stream = await captureStream();
 
@@ -50,10 +58,10 @@ export async function collectIceCandidates(pc) {
     }
 
     // TODO: get the ICE candidate added
-    // use pubsub of IPFS to get the added candidates
-    const addedCandidate = null;
+    // use pubsub of IPFS to get the added candidates, and uncomment below codes
+    // const addedCandidate = null;
 
     // and update the local PC
-    const candidate = new RTCIceCandidate(addedCandidate);
-    pc.addIceCandidate(candidate);
+    // const candidate = new RTCIceCandidate(addedCandidate);
+    // pc.addIceCandidate(candidate);
 }

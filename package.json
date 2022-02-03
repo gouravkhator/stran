@@ -7,14 +7,16 @@
   },
   "scripts": {
     "hardhat": "npx hardhat --config $npm_package_config_hardhatConfigPath",
-    "full-install": "npm install",
+    "full-install": "npm i && cd client && npm i",
     "sc-accounts": "npm run hardhat -- accounts",
     "sc-compile": "npm run hardhat -- compile",
     "sc-test": "npm run hardhat -- test",
     "sc-localnet": "npm run hardhat -- node",
     "sc-deploy": "npm run sc-compile && npm run hardhat -- run --network localhost $npm_package_config_deployContractScript",
-    "app-start": "npx live-server client --port=3000 --no-browser",
-    "app-test": "echo 'Testing client-side'"
+    "app-start": "cd client && npm start",
+    "app-test": "cd client && npm test",
+    "server-start": "cd server && npm start",
+    "server-dev": "cd server && npm run dev"
   },
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.3",
@@ -22,8 +24,7 @@
     "chai": "^4.3.4",
     "ethereum-waffle": "^3.4.0",
     "ethers": "^5.5.2",
-    "hardhat": "^2.8.0",
-    "live-server": "^1.2.1"
+    "hardhat": "^2.8.0"
   },
   "repository": {
     "url": "https://github.com/gouravkhator/stran/"

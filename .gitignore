@@ -8,3 +8,7 @@ node_modules
 # Hardhat files
 /blockchain/cache
 /blockchain/artifacts
+
+# Frontend files
+/client/build
+/client/*.log

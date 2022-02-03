@@ -1,4 +1,4 @@
-import { setupPeers, collectIceCandidates } from './webrtc.util.js';
+import { setupPeers, collectIceCandidates } from './webrtc.util';
 
 /**
  * Sets the peer connection if not provided, sets local and remote streams,

@@ -1,4 +1,8 @@
-# Stran - A Video Calling Hybrid DApp | Privacy with Fun, for connecting with passion
+# Stran - A Video Calling P2P Dapp
+
+**--- Connect with new faces whilst being Private ---**
+
+This is a video calling peer-to-peer decentralised app, centered to the users to connect with new faces daily, whilst also being on the **3rd era of Web, i.e. the modern and more privacy-focused web**.
 
 ## System Design and Architecture
 
