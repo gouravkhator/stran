@@ -2,11 +2,10 @@ export async function captureStream() {
     let isFront = true;
     const sourceInfos = await navigator.mediaDevices.enumerateDevices();
 
-    let videoSourceId = '';
-
+    let videoSourceId;
     for (let i = 0; i < sourceInfos.length; i++) {
         const sourceInfo = sourceInfos[i];
-        if (sourceInfo.kind == "videoinput") {
+        if (sourceInfo.kind == "videoinput" && sourceInfo.facing == (isFront ? "front" : "environment")) {
             videoSourceId = sourceInfo.deviceId;
         }
     }
@@ -28,11 +27,12 @@ export async function captureStream() {
 /**
  * Sets the incoming stream to target element 
  */
-export function setStream({ incomingStream, targetElement }) {
+export function setStream({incomingStream, targetElement}){
     if ('srcObject' in targetElement) {
         targetElement.srcObject = incomingStream;
+    } else {
+        // fallback for older browsers
+        targetElement.src = URL.createObjectURL(incomingStream);
     }
-
-    throw new Error(`Src could not be set at targetElement ${targetElement}`);
 }
 

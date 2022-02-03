@@ -7,14 +7,14 @@
   },
   "scripts": {
     "hardhat": "npx hardhat --config $npm_package_config_hardhatConfigPath",
-    "full-install": "npm i && cd client && npm i && cd ../server && npm i",
+    "full-install": "npm i && cd client-vanilla && npm i && cd ../server && npm i",
     "sc-accounts": "npm run hardhat -- accounts",
     "sc-compile": "npm run hardhat -- compile",
     "sc-test": "npm run hardhat -- test",
     "sc-localnet": "npm run hardhat -- node",
     "sc-deploy": "npm run sc-compile && npm run hardhat -- run --network localhost $npm_package_config_deployContractScript",
-    "app-start": "cd client && npm start",
-    "app-test": "cd client && npm test",
+    "app-start": "cd client-vanilla && npm start",
+    "app-test": "cd client-vanilla && npm test",
     "server-start": "cd server && npm start",
     "server-dev": "cd server && npm run dev"
   },
