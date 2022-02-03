@@ -52,7 +52,7 @@ While calling a friend, the options is ignored completely.
 
 > Firstly, *clone this repository*.
 
-Install all the npm packages required for smart contract code and frontend, in one go.
+Install all the npm packages required for smart contract code, frontend and server, in one go.
 
 ```bash
 npm run full-install

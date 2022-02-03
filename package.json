@@ -7,7 +7,7 @@
   },
   "scripts": {
     "hardhat": "npx hardhat --config $npm_package_config_hardhatConfigPath",
-    "full-install": "npm i && cd client && npm i",
+    "full-install": "npm i && cd client && npm i && cd ../server && npm i",
     "sc-accounts": "npm run hardhat -- accounts",
     "sc-compile": "npm run hardhat -- compile",
     "sc-test": "npm run hardhat -- test",
