@@ -4,18 +4,19 @@ const { createIPFSNode,
 
 async function createIPFSNodeIfNA(req, res, next) {
     try {
-        if (!req.session.ipfsNode) {
+        if (!req.cookies.ipfsNode) {
             const ipfsNode = createIPFSNode();
-            req.session.ipfsNode = ipfsNode;
+            req.cookies.ipfsNode = ipfsNode;
         }
         
-        const ipfsNode = req.session.ipfsNode;
-
-        const topicsSubscribed = await getTopicsSubsribed(ipfsNode);
+        const ipfsNode = req.cookies.ipfsNode;
         
-        if (!topicsSubscribed.includes('caller')) {
-            subscribeForCallee(ipfsNode);
-        }
+        // TODO: caller and callee subscribe
+        // const topicsSubscribed = await getTopicsSubsribed(ipfsNode);
+        
+        // if (!topicsSubscribed.includes('caller')) {
+        //     subscribeForCallee(ipfsNode);
+        // }
 
         return next();
     } catch (err) {

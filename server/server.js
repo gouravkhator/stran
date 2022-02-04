@@ -10,13 +10,15 @@ if (process.env.NODE_ENV !== 'production') {
 const express = require('express');
 const app = express();
 const session = require('express-session');
+const cookieParser = require('cookie-parser');
 
 const ipfsMiddleware = require('./middlewares/ipfs.middleware');
 const ipfsRouter = require('./routes/ipfs.route');
 const { AppError } = require('./utils/errors.util');
 
 app.use(express.json());
-app.use(express.urlencoded({extended: false}));
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser(process.env.SESSION_SECRET));
 
 app.use(session({
     // express session
@@ -34,14 +36,18 @@ app.use(session({
 
 app.use('/ipfs', ipfsMiddleware.createIPFSNodeIfNA, ipfsRouter);
 
-app.use((err, req, res, next)=>{
-    if(err instanceof AppError){
+app.use((err, req, res, next) => {
+    if (err instanceof AppError) {
         return res.status(err.statusCode).send({
             errorMsg: err.message,
+            shortErrCode: err.shortMsg,
         });
     }
 
-    return res.status(500).send("Some internal server error..");
+    return res.status(500).send({
+        errorMsg: "Some internal server error..",
+        shortErrCode: "server-err",
+    });
 });
 
 const PORT = process.env.PORT ?? 8081;

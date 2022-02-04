@@ -3,16 +3,35 @@ const { AppError } = require('../utils/errors.util');
 
 async function addDataToIpfsController(req, res, next) {
     try {
-        const data = req.body.data;
-        const node = req.session.ipfsNode;
+        const data = req.body;
+
+        if(data === undefined){
+            // TODO: more checks will be done on server end itself,
+            // when data is going to be saved to solidity smart contract
+            throw new AppError({
+                shortMsg: 'invalid-data-input',
+                message: 'Either *data* is not provided, or it is provided as invalid data..',
+                statusCode: 401
+            });
+        }
+
+        const node = req.cookies.ipfsNode;
 
         const cid = await addDataToIPFS(node, data);
 
         // TODO: save cid to smart contract
 
-        return res.status(201).send(`Content added, kindly check the path ${req.originalUrl}${cid}`);
+        return res.status(201).send(`Content added, kindly check the path https://ipfs.io/ipfs/${cid}`);
     } catch (err) {
-        return next(err);
+        if(err instanceof AppError){
+            return next(err);
+        }
+
+        return next(new AppError({
+            message: 'Data could not be added to IPFS',
+            shortMsg: 'data-not-added',
+            statusCode: 500
+        }));
     }
 }
 
@@ -26,7 +45,7 @@ async function getDataFromIpfsController(req, res, next) {
     }
 
     try {
-        let data = await getDataByCID(req.session.ipfsNode, req.params.cid);
+        let data = await getDataByCID(req.cookies.ipfsNode, req.params.cid);
         return res.send(data);
     } catch (err) {
         return next(err);
@@ -35,7 +54,7 @@ async function getDataFromIpfsController(req, res, next) {
 
 async function callInitiationController(req, res, next) {
     try {
-        await publishCaller(req.session.ipfsNode, req.body.caller);
+        await publishCaller(req.cookies.ipfsNode, req.body.caller);
         res.status(201).send('Published caller info to the caller topic of IPFS..');
     } catch {
         return next(new AppError({

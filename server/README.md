@@ -22,20 +22,26 @@ ipfs daemon --enable-pubsub-experiment
 
 ## Checklist for Server code
 
-* [x] IPFS connect and its basic required services.
-* [ ] Save cid to the smart contract.
-* [ ] Caller and callee information to save and retrieve from smart contract.
-* [ ] Either migrate to golang server code, or use wasm and docker to automate the CI/CD, to run ipfs daemon, before starting the nodejs server. 
+* [ ] Connection with IPFS:
+    - [x] IPFS basic connection and some basic required services.
+* [ ] Connection with Smart Contracts:
+    - [ ] Save cid to the smart contract.
+    - [ ] Caller and callee information to save and retrieve from smart contract.
+* [ ] Either migrate to golang server code, or use wasm and docker to automate the CI/CD, to run ipfs daemon, before starting the nodejs server.
+* [ ] Postman Todos:
+    - [ ] Do API testing using Postman or other automation api testing tools.
+    - [ ] Save the API testing Postman requests/collections and tests in the `server` folder and push that to github too, without exposing Postman collections' environment variables.
 
 ## Some IPFS Data added via code
 
-* [Random Data #1](https://ipfs.io/ipfs/QmSHwzocaPP7kzQ1ciqXppqbzQV6nnyaNakPbQQeFMVyTT)
+* [Random Data #1](https://ipfs.io/ipfs/QmdRqHHVdU92TteMfNxrqQwbShLvysxXTuVjEQA2577Evf)
 
 ## Some notes for developers
 
-* Port 8080 and 5001 are for ipfs daemon services.
-* I have used port 8081 for nodejs server.
-* I have used port 3000 for client frontend.
+* IPFS WebUI: Port 5001
+* IPFS Daemon Service: Port 8080
+* Nodejs Server: Port 8081
+* Client Frontend: Port 3000
 
 ## Some issues faced in the past
 

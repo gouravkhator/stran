@@ -11,7 +11,10 @@ async function addDataToIPFS(ipfsNode, data) {
         return results.path;
     }
 
-    throw new Error("IPFS Node not created.. Please create one, before adding the data to IPFS");
+    throw new AppError({
+        message: "IPFS Node not created.. Please create one, before adding the data to IPFS",
+        statusCode: 500,
+    });
 }
 
 async function getDataByCID(ipfsNode, cid) {
@@ -28,7 +31,7 @@ async function getDataByCID(ipfsNode, cid) {
     } catch (e) {
         throw new AppError({
             statusCode: 404,
-            message: "Invalid CID!! Cannot get data by the given cid..",
+            message: "Data not found by provided CID!! Cannot get data by the given cid..",
             shortMsg: "invalid-cid",
         });
     }
