@@ -7,17 +7,17 @@
     "start": "node server.js",
     "dev": "nodemon server.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "cookie-parser": "^1.4.6",
     "express": "^4.17.2",
     "express-session": "^1.17.2",
-    "ipfs-http-client": "^56.0.0"
+    "ipfs-http-client": "^56.0.0",
+    "web3": "^1.7.0"
   },
   "devDependencies": {
     "dotenv": "^14.3.2",
     "nodemon": "^2.0.15"
-  }
+  },
+  "author": "Gourav Khator",
+  "license": "Apache-2.0"
 }

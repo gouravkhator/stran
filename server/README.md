@@ -8,17 +8,17 @@ Install go-ipfs on your host system.
 
 ## Commands 
 
-Initialize the installed ipfs (it is run only once):
+* Initialize the installed ipfs (it is run only once):
 
-```sh
-ipfs init
-```
+    ```sh
+    ipfs init
+    ```
 
-Run a local ipfs node (it runs a daemon):
+* Run a local ipfs node (it runs a daemon):
 
-```sh
-ipfs daemon --enable-pubsub-experiment
-```
+    ```sh
+    ipfs daemon --enable-pubsub-experiment
+    ```
 
 ## Checklist for Server code
 
@@ -32,16 +32,9 @@ ipfs daemon --enable-pubsub-experiment
     - [ ] Do API testing using Postman or other automation api testing tools.
     - [ ] Save the API testing Postman requests/collections and tests in the `server` folder and push that to github too, without exposing Postman collections' environment variables.
 
-## Some IPFS Data added via code
+## Sample IPFS Data added via code
 
 * [Random Data #1](https://ipfs.io/ipfs/QmdRqHHVdU92TteMfNxrqQwbShLvysxXTuVjEQA2577Evf)
-
-## Some notes for developers
-
-* IPFS WebUI: Port 5001
-* IPFS Daemon Service: Port 8080
-* Nodejs Server: Port 8081
-* Client Frontend: Port 3000
 
 ## Some issues faced in the past
 

@@ -1,0 +1,28 @@
+{
+  "name": "blockchain",
+  "version": "1.0.0",
+  "description": "Blockchain code for Stran Project",
+  "directories": {
+    "test": "tests"
+  },
+  "config": {
+    "deployContractScript": "./scripts/deploy_contract.js"
+  },
+  "scripts": {
+    "accounts": "npx hardhat accounts",
+    "compile": "npx hardhat compile",
+    "test": "npx hardhat test",
+    "localnode": "npx hardhat node",
+    "deploy": "npm run compile && npx hardhat run --network localhost $npm_package_config_deployContractScript"
+  },
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.3",
+    "@nomiclabs/hardhat-waffle": "^2.0.1",
+    "chai": "^4.3.4",
+    "ethereum-waffle": "^3.4.0",
+    "ethers": "^5.5.2",
+    "hardhat": "^2.8.0"
+  },
+  "author": "Gourav Khator",
+  "license": "Apache-2.0"
+}

@@ -1,31 +1,19 @@
 {
   "name": "stran",
-  "description": "A Video Calling P2P DApp for masses to integrate strangers again..",
-  "config": {
-    "hardhatConfigPath": "./blockchain/hardhat.config.js",
-    "deployContractScript": "./blockchain/scripts/deploy_contract.js"
-  },
+  "description": "A Video Calling P2P DApp, to strongly connect strangers together..",
   "scripts": {
-    "hardhat": "npx hardhat --config $npm_package_config_hardhatConfigPath",
-    "full-install": "npm i && cd client && npm i && cd ../server && npm i",
-    "sc-accounts": "npm run hardhat -- accounts",
-    "sc-compile": "npm run hardhat -- compile",
-    "sc-test": "npm run hardhat -- test",
-    "sc-localnet": "npm run hardhat -- node",
-    "sc-deploy": "npm run sc-compile && npm run hardhat -- run --network localhost $npm_package_config_deployContractScript",
-    "app-start": "cd client && npm start",
-    "app-test": "cd client && npm test",
-    "server-start": "cd server && npm start",
-    "server-dev": "cd server && npm run dev"
+    "full-install": "npm i && npm i --prefix blockchain/ && npm i --prefix client/ && npm i --prefix server/",
+    "sc-accounts": "npm run accounts --prefix blockchain/",
+    "sc-compile": "npm run compile --prefix blockchain/",
+    "sc-test": "npm test --prefix blockchain/",
+    "sc-localnode": "npm run localnode --prefix blockchain/",
+    "sc-deploy": "npm run deploy --prefix blockchain/",
+    "app-start": "npm start --prefix client/",
+    "app-test": "npm test --prefix client/",
+    "server-start": "npm start --prefix server/",
+    "server-dev": "npm run dev --prefix server/"
   },
-  "devDependencies": {
-    "@nomiclabs/hardhat-ethers": "^2.0.3",
-    "@nomiclabs/hardhat-waffle": "^2.0.1",
-    "chai": "^4.3.4",
-    "ethereum-waffle": "^3.4.0",
-    "ethers": "^5.5.2",
-    "hardhat": "^2.8.0"
-  },
+  "license": "Apache-2.0",
   "repository": {
     "url": "https://github.com/gouravkhator/stran/"
   },
@@ -46,6 +34,7 @@
     "dapp",
     "hardhat",
     "ethereum",
-    "smart-contract"
+    "smart-contract",
+    "decentralised"
   ]
 }

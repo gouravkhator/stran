@@ -1,10 +1,69 @@
 # Stran - A Video Calling P2P Dapp
 
-**--- Connect with new faces whilst being Private ---**
+**--- Connect with new faces, whilst being *private* ---**
 
 This is a video calling peer-to-peer decentralised app, centered to the users to connect with new faces daily, whilst also being on the **3rd era of Web, i.e. the modern and more privacy-focused web**.
 
-## System Design and Architecture
+## Project Installation
+
+### Installation Guide 🤔
+
+> Firstly, *clone this repository*.
+
+Install all the npm packages required for smart contract code, frontend and server, in one go.
+
+```bash
+npm run full-install
+```
+
+## Hacky Commands for *Geeks* 🤓
+
+Compile the smart contracts:
+
+```bash
+npm run sc-compile
+```
+
+Run tests on smart contracts:
+
+```bash
+npm run sc-test
+```
+
+Run Hardhat Network, such that external clients can connect to it:
+
+```bash
+npm run sc-localnode
+```
+
+Deploy the smart contract -- It will firstly compile the smart contracts and then would deploy them.
+
+```bash
+npm run sc-deploy
+```
+
+Start the Client side server:
+
+```bash
+npm run app-start
+```
+
+Test the frontend application:
+
+```bash
+npm run app-test
+```
+
+## Some notes for developers 🧠
+
+* IPFS WebUI: Port 5001
+* IPFS Daemon Service: Port 8080
+* Nodejs Server: Port 8081
+* Client Frontend: Port 3000
+
+## Theoretical Knowledge Base 😆
+
+### System Design and Architecture
 
 From Client side, user will login. User's login will be saved and an address will be provided to him by the ethereum network. This address will go to the smart contract code and registerUser will be called. User should keep the address with him, else his account will not be retrievable.
 
@@ -45,56 +104,3 @@ Also, while calling a stranger mainly, we can filter by language and if the reci
 While calling a friend, the options is ignored completely.
 
 ---
-
-## Project Installation
-
-### Installation Guide
-
-> Firstly, *clone this repository*.
-
-Install all the npm packages required for smart contract code, frontend and server, in one go.
-
-```bash
-npm run full-install
-```
-
----
----
-
-## Hacky Commands for *Geeks*
-
-Compile the smart contracts:
-
-```bash
-npm run sc-compile
-```
-
-Run tests on smart contracts:
-
-```bash
-npm run sc-test
-```
-
-Run Hardhat Network, such that external clients can connect to it:
-
-```bash
-npm run sc-localnet
-```
-
-Deploy the smart contract -- It will firstly compile the smart contracts and then would deploy them.
-
-```bash
-npm run sc-deploy
-```
-
-Start the Client side server:
-
-```bash
-npm run app-start
-```
-
-Test the frontend application:
-
-```bash
-npm run app-test
-```

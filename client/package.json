@@ -2,7 +2,6 @@
   "private": true,
   "name": "client",
   "version": "0.0.0",
-  "license": "MIT",
   "scripts": {
     "build": "preact build",
     "serve": "sirv build --port 3000 --cors --single",
@@ -38,5 +37,7 @@
       "<rootDir>/tests/__mocks__/browserMocks.js",
       "<rootDir>/tests/__mocks__/setupTests.js"
     ]
-  }
+  },
+  "author": "Gourav Khator",
+  "license": "Apache-2.0"
 }

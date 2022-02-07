@@ -4,6 +4,8 @@
 // When running the script with `npx hardhat run <script>` you'll find the Hardhat
 // Runtime Environment's members available in the global scope.
 const hre = require("hardhat");
+const fs = require("fs/promises");
+const path = require("path");
 
 async function main() {
   // Hardhat always runs the compile task when running scripts with its command
@@ -13,19 +15,32 @@ async function main() {
   // manually to make sure everything is compiled
   // await hre.run('compile');
 
+  // --------ELECTION SMART CONTRACT---------
+  
   // We get the contract to deploy
-  const Greeter = await hre.ethers.getContractFactory("Greeter");
-  const greeter = await Greeter.deploy("Hello, Hardhat!");
+  // const Election = await hre.ethers.getContractFactory("Election");
+  // const election = await Election.deploy();
 
-  await greeter.deployed();
-  console.log("Greeter deployed to:", greeter.address);
+  // await election.deployed();
 
-  const Election = await hre.ethers.getContractFactory("Election");
-  const election = await Election.deploy();
+  // console.log("Election deployed to:", election.address);
 
-  await election.deployed();
+  const VideoCallContract = await hre.ethers.getContractFactory("VideoCallContract");
+  const videoCallContract = await VideoCallContract.deploy();
 
-  console.log("Election deployed to:", election.address);
+  await videoCallContract.deployed();
+
+  const artifact = await hre.artifacts.readArtifact('VideoCallContract'); // for getting abi from compiled contracts' artifacts
+
+  const configPath = path.join(__dirname, "../contractsConfig/VideoCallContract.config.json");
+
+  await fs.writeFile(configPath, JSON.stringify({
+    CONTACTS_ADDRESS: videoCallContract.address,
+    CONTACTS_ABI: artifact.abi,
+  }));
+
+  console.log(`\nSaved ABI and smart contract address for VideoCallContract to below path:\n${configPath}\n`);
+  console.log(`VideoCallContract smart contract is deployed to address: ${videoCallContract.address}`);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
