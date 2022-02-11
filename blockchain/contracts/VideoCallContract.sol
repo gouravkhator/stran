@@ -49,8 +49,9 @@ contract VideoCallContract {
         Location location,
         Language primaryLanguage,
         Language[] memory knownLanguages
-    ) public {
+    ) public returns (address){
         // TODO: Check if the same user exists in this array or not (maybe we set userid to the one user gives as input).
+        require(userdata[msg.sender].userid <= address(0));
 
         address[] memory emptyArr;
 
@@ -73,6 +74,7 @@ contract VideoCallContract {
         });
 
         users.push(msg.sender); // inserting user's address to the global users list
+        return msg.sender; // return the address
     }
 
     // doVideoCall, doVideoCallWithStranger with options which can be saved in blockchain.

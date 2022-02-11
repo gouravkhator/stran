@@ -35,8 +35,8 @@ async function main() {
   const configPath = path.join(__dirname, "../contractsConfig/VideoCallContract.config.json");
 
   await fs.writeFile(configPath, JSON.stringify({
-    CONTACTS_ADDRESS: videoCallContract.address,
-    CONTACTS_ABI: artifact.abi,
+    CONTRACT_ADDRESS: videoCallContract.address,
+    CONTRACT_ABI: artifact.abi,
   }));
 
   console.log(`\nSaved ABI and smart contract address for VideoCallContract to below path:\n${configPath}\n`);
