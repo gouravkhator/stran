@@ -1,0 +1,26 @@
+# This workflow labels issues with proper well-defined labels.
+# Refer https://docs.github.com/en/actions/managing-issues-and-pull-requests/adding-labels-to-issues 
+# and https://github.com/marketplace/actions/simple-issue-labeler for more details on the workflow automation tool used.
+
+name: Issues Labeler
+on:
+  issues:
+    types:
+      - reopened
+      - opened
+jobs:
+  triage_labeler:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Label New Issues
+        uses: andymckay/labeler@e6c4322d0397f3240f0e7e30a33b5c5df2d39e90
+        with:
+          add-labels: "needs-triage"
+          # ignore adding "needs-triage" label, if the issue already has some labels
+          ignore-if-labeled: true
+          # ignore adding "needs-triage" label, if it is assigned already to someone 
+          ignore-if-assigned: true
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
