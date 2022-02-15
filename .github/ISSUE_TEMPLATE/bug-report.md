@@ -7,23 +7,23 @@ assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+## Describe the bug
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Run  '....'
-2. See the error.
+## Reproduce the bug
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+1. Run '....'
+2. See the bug/error.
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+## Environment
+ - NodeJS with version details. Ex- NodeJS v16.13.0
+ - Browser environment with browser name and version. Ex- Google Chrome v93.0 
 
-**Environment (please complete the following information):**
- - NodeJS/Browser [e.g. chrome, safari]
- - Respective Environment Version [e.g. node version v16.13.0]
+## Error Stack Trace
 
-**Additional context**
-Add any other context about the problem here.
+```sh
+Shell error stack trace
+```
+
+## Resolution Thoughts/Tips
+
+Provide the resolution strategies and any PR for that resolution.

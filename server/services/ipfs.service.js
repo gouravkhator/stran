@@ -17,6 +17,12 @@ async function addDataToIPFS(ipfsNode, data) {
     });
 }
 
+/**
+ * Returns the data by the data id in the ipfs
+ * @param {*} ipfsNode
+ * @param {*} cid Public ID of the data, when it was added to IPFS
+ * @returns Data when searched by CID, or throws the error for invalid cid
+ */
 async function getDataByCID(ipfsNode, cid) {
     try {
         const stream = ipfsNode.cat(cid);

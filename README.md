@@ -56,7 +56,10 @@ npm run app-test
 
 ## Checklist of features overall
 
-* [ ] 
+* [ ] Privacy setting for every user
+    - It is bcoz, every user can allow/deny his profile visibility.
+    - Seeting can be different for friends and for other strangers.
+* [ ] Have the Search functionality for any person, with filters of location and primary languages, and known languages.
 
 ## Some notes for developers 🧠
 
