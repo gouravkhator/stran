@@ -54,6 +54,10 @@ Test the frontend application:
 npm run app-test
 ```
 
+## Checklist of features overall
+
+* [ ] 
+
 ## Some notes for developers 🧠
 
 * IPFS WebUI: Port 5001

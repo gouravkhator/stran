@@ -82,13 +82,6 @@ contract VideoCallContract {
 
     function doVideoCallStranger() public {}
 
-    function addFriend(address friendToAdd) public {
-        if(userdata[friendToAdd].userid > address(0)){
-            // this friend to add is actually a valid user
-            userdata[msg.sender].friends.push(friendToAdd);
-        }
-    }
-
     function deleteUser() public {
         // TODO: check while deleting user, do we also have to invalidate the data in the mapping, by setting the different object for that address??
 
@@ -104,8 +97,19 @@ contract VideoCallContract {
         // and we should not proceed further for deletion, so we use require for proceeding only when i < users.length
         require(i < users.length);
 
+        delete userdata[msg.sender]; // works only when mapped value is a struct..
+        // this sets all values to zeros.
+        // refer this for more details : https://ethereum.stackexchange.com/a/15282
+        
         users[i] = users[users.length - 1];
         users.pop();
+    }
+
+    function addFriend(address friendToAdd) public {
+        // if this friend to add is actually a valid user, then we add that friend
+        require(userdata[friendToAdd].userid > address(0));
+
+        userdata[msg.sender].friends.push(friendToAdd);
     }
 
     // ---read-only functions---
