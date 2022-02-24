@@ -22,9 +22,12 @@ module.exports = {
     tests: "tests",
   },
   networks: {
+    hardhat: {
+      // Metamask requires chainId, to get us connected to hardhat network on Metamask.
+      chainId: 1337
+    },
+    
     // TODO: have a rinkeby network for deploying the contracts and many more
-    // hardhat: {
-    // },
     // rinkeby: {
     //   url: "https://eth-rinkeby.alchemyapi.io/v2/123abc123abc123abc123abc123abcde",
     //   accounts: [],

@@ -1,48 +1,40 @@
 # Stran Server 
 
-## Prerequisites
+## Endpoints
 
-Install go-ipfs on your host system. 
+Base URL for the local server: `http://localhost:8081/`
 
-> We can use docker in future for managing these installs and other prerequisite commands on hosted server, or just write all server code in golang.
+### Smart Contract Endpoints
 
-## Commands
+* 
 
-* Initialize the installed ipfs (it is run only once):
+### IPFS Endpoints
 
-    ```sh
-    ipfs init
-    ```
+* `GET /ipfs/:cid`: Pass the path variable `cid` and it will return the data as the response, else a status of 404 Not Found.
 
-* Run a local ipfs node (it runs a daemon):
+* `POST /ipfs/`: Pass the data in the request body and it will return the saved cid, the ipfs url to access the data, and the success flag.
 
-    ```sh
-    ipfs daemon --enable-pubsub-experiment
-    ```
+## Server Folder Structure
 
-## Checklist for Server code
+> Credit goes to [geshan's expressjs-structure](https://github.com/geshan/expressjs-structure).
 
-* [ ] Connection with IPFS:
-    - [x] IPFS basic connection and some basic required services.
-* [ ] Connection with Smart Contracts:
-    - [ ] Implement CRUD operations of user details via smart contract.
-        - [ ] Update operation remaining to add.
-        - [x] Other operations like create user, delete user, add friend, get friends, get user data
-    - [ ] Save ipfs cid to the smart contract.
-    - [ ] Caller and callee information to save and retrieve from smart contract.
-* [ ] Either migrate to golang server code, or use wasm and docker to automate the CI/CD, to run ipfs daemon, before starting the nodejs server.
-* [ ] Postman/Insomnia Todos:
-    - [ ] Do API testing using REST Client automation API testing tool.
-    - [ ] Save the API testing requests/collections and tests in the `server/rest` folder and push that to github too, without exposing the collections' private environment variables.
+The main article for organizing the project structure is given [here](https://blog.logrocket.com/organizing-express-js-project-structure-better-productivity/).
 
-## Sample IPFS Data added via code
+**Folders and their functions:**
+* `src/controllers`: Controllers control the request and response that goes in and out, to and from the route. They are like utils to the routes.
 
-* [Random Data #1](https://ipfs.io/ipfs/QmdRqHHVdU92TteMfNxrqQwbShLvysxXTuVjEQA2577Evf)
+* `src/middlewares`: Here we store middlewares, which behave like helper middlewares to the controllers and other requests.
 
-## Some thoughts
+* `src/routes`: Routes will contain the created express router, and those routes uses controllers for managing their requests and response flow.
 
-* In `smart-contract.service.js`, the senderAccIndex should only be given in testing environment.
+* `src/services`: Services contain necessary methods for different phases of the app.
 
-    So, a more modular approach should be thought of, for senderAccIndex. accounts array can have only 1 account present, so we cannot use accounts[1].
+    Example: Connecting to ipfs or connecting to smart-contracts.
 
+* `src/utils`: Utilities and helpers required throughout the app.
 
+* `tests/`: Refer the below image.
+
+    ![Test Folder Structure](https://blog.logrocket.com/wp-content/uploads/2022/01/Express-test-folder-structure.png)
+
+    As you can see, ***tests for each unit of the src folder, will be created in the same structure in tests folder..***

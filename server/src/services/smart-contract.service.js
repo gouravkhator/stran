@@ -1,8 +1,6 @@
 const { Language, Location, Status } = require('../utils/enums.util');
 const { AppError } = require("../utils/errors.util");
-
-// alias the long method name as the own short name
-const { getContractAndAcc: getSC } = require("./blockchain-init.service");
+const { getContract } = require("../services/blockchain-init.service");
 
 /**
  * Does sanity checking of the params for this smart contract service methods
@@ -42,14 +40,14 @@ async function createUser({
         if (username === null) {
             // cannot save null data in smart contract
             throw new AppError({
-                message: 'Please provide your name.. We cannot save unnamed person in our application.',
+                message: 'Please provide your name.. We cannot save a person with no name provided.',
                 shortMsg: 'name-not-provided',
                 statusCode: 400, // 400 bad request
             });
         }
 
         validateParams({ senderAccAddr });
-        const { vcContract } = await getSC();
+        const { vcContract } = await getContract();
 
         // check if user already exists or not, via the sender account address
         // if user already exists with this address as the userid, then registerUser method will throw the error.
@@ -90,7 +88,7 @@ async function createUser({
         return savedUserData;
 
     } catch (err) {
-        // null username, validateParams, getSC, existing user etc. throws AppError indirectly or directly. 
+        // null username, validateParams, getContract, existing user etc. throws AppError indirectly or directly. 
         if (err instanceof AppError) {
             throw err;
         }
@@ -117,10 +115,10 @@ async function updateUser({
 }) {
     try {
         validateParams({ senderAccAddr });
-        const { vcContract } = await getSC();
+        const { vcContract } = await getContract();
 
         const userdata = await getUserData(senderAccAddr, senderAccAddr);
-        
+
         // check if user already exists or not, via the sender account address
         if (userdata.username === '') {
             throw new AppError({
@@ -151,7 +149,7 @@ async function updateUser({
 async function deleteUser(senderAccAddr) {
     try {
         validateParams({ senderAccAddr });
-        const { vcContract } = await getSC();
+        const { vcContract } = await getContract();
 
         // check if user already exists or not, via the sender account address
         if ((await getUserData(senderAccAddr, senderAccAddr)).username === '') {
@@ -186,7 +184,7 @@ async function deleteUser(senderAccAddr) {
 async function addFriend(friendUserId, senderAccAddr) {
     try {
         validateParams({ senderAccAddr });
-        const { vcContract } = await getSC();
+        const { vcContract } = await getContract();
 
         // check if user already exists or not, via the sender account address
         if ((await getUserData(senderAccAddr, senderAccAddr)).username === '') {
@@ -229,7 +227,7 @@ async function addFriend(friendUserId, senderAccAddr) {
 async function getFriendsList(senderAccAddr) {
     try {
         validateParams({ senderAccAddr });
-        const { vcContract } = await getSC();
+        const { vcContract } = await getContract();
 
         // check if user already exists or not, via the sender account address
         if ((await getUserData(senderAccAddr, senderAccAddr)).username === '') {
@@ -248,9 +246,9 @@ async function getFriendsList(senderAccAddr) {
         const friendsObjList = await friendsAddrList.reduce(async (list, friendAddr) => {
             const friendData = await getUserData(friendAddr, senderAccAddr);
 
-            if(friendData.username !== ''){
+            if (friendData.username !== '') {
                 list.push(friendData);
-            }else{
+            } else {
                 list.push({
                     deleted: true,
                     userid: friendAddr,
@@ -289,7 +287,7 @@ async function getUserData(userid, senderAccAddr) {
         */
 
         validateParams({ senderAccAddr });
-        const { vcContract } = await getSC();
+        const { vcContract } = await getContract();
 
         return await vcContract.methods.userdata(userid).call({
             from: senderAccAddr,
@@ -319,7 +317,10 @@ module.exports = {
 // Sample code as below, and this file can be run like: node server/services/smart-contract.service.js
 (async () => {
     try {
-        const { accounts } = await getSC();
+        const accounts = [
+            '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266',
+            '0x70997970c51812dc3a010c7d01b50e0d17dc79c8',
+        ];
 
         const currentUserData = await createUser({
             username: 'Gourav Khator',
@@ -360,3 +361,4 @@ module.exports = {
         console.error(error);
     }
 })();
+

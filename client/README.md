@@ -21,8 +21,8 @@ For detailed explanation on how things work, checkout the [CLI Readme](https://g
 
 | ISSUES | Solved Status | Resolution Tries |
 | --- | --- | --- |
+| Using peerjs dependency led to breaking of `npm run build` script | Temporary solution | Using `preact build --no-prerender` did work.
 | Process is not defined | SOLVED | [Stack Overflow solution](https://stackoverflow.com/questions/70368760/react-uncaught-referenceerror-process-is-not-defined). Added config.node.process = true; in `preact.config.js` file. |
-| 'electron' not resolved | NOT SOLVED | IPFS uses electron, and electron is not there in process.versions object. Check [this](https://github.com/ipfs/js-ipfs/issues/4024) issue opened by me in ipfs. 
 | Cannot convert bigint to number | SOLVED | Added browserslist with proper supported browsers version in package.json
 | Nullish Coalescing operator not working | NOT SOLVED | For Nullish coalescing operator, the issue shows "You need additional loaders for handling the result of these"
 

@@ -1,65 +1,119 @@
 # Stran - A Video Calling P2P Dapp
 
-**--- Connect with new faces, whilst being *private* ---**
+> **Know the unknowns, whilst being *private***
 
-This is a video calling peer-to-peer decentralised app, centered to the users to connect with new faces daily, whilst also being on the **3rd era of Web, i.e. the modern and more privacy-focused web**.
+This is a video calling peer-to-peer decentralised app, centered to the users to connect with unknowns, whilst also being on the **3rd era of Web, i.e. the modern and more privacy-focused web**.
 
 ## Project Installation
 
-### Installation Guide 🤔
+### Prerequisites
+
+Install go-ipfs on your host system. 
+
+> We can use docker in future for managing these installs and other prerequisite commands on hosted server.
+
+### Installation/Setup Guide 🤔
 
 > Firstly, *clone this repository*.
 
-Install all the npm packages required for smart contract code, frontend and server, in one go.
+1. Install all the npm packages required for smart contract code, frontend and server, in one go.
 
-```bash
-npm run full-install
-```
+    ```sh
+    npm run full-install
+    ```
+
+2. Install go-ipfs in the host system and then initialize the installed ipfs.
+
+    The below command should be run only once, in the first initialization:
+
+    ```sh
+    ipfs init
+    ```
+
+3. Configure IPFS to allow CORS requests (needed this config only once):
+
+    ```sh
+    ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"*\"]"
+    ```
 
 ## Hacky Commands for *Geeks* 🤓
 
-Compile the smart contracts:
+* Run a local ipfs node (it runs a daemon):
 
-```bash
-npm run sc-compile
-```
+    ```sh
+    ipfs daemon --enable-pubsub-experiment
+    ```
 
-Run tests on smart contracts:
+* Compile the smart contracts:
 
-```bash
-npm run sc-test
-```
+    ```sh
+    npm run sc-compile
+    ```
 
-Run Hardhat Network, such that external clients can connect to it:
+* Run tests on smart contracts:
 
-```bash
-npm run sc-localnode
-```
+    ```sh
+    npm run sc-test
+    ```
 
-Deploy the smart contract -- It will firstly compile the smart contracts and then would deploy them.
+* Run Hardhat Network, such that external clients can connect to it:
 
-```bash
-npm run sc-deploy
-```
+    ```sh
+    npm run sc-localnode
+    ```
 
-Start the Client side server:
+* Connect ***MetaMask*** to Local node:
 
-```bash
-npm run app-start
-```
+    After running the local node, connect the MetaMask to that local node.
+    
+    Then, import the account, by providing the private key of one of the accounts of that localnode.
 
-Test the frontend application:
+    Refer [this article](https://dev.to/dabit3/the-complete-guide-to-full-stack-ethereum-development-3j13) for more details.
 
-```bash
-npm run app-test
-```
+* Deploy the smart contract -- It will firstly compile the smart contracts and then would deploy them.
 
-## Checklist of features overall
+    ```sh
+    npm run sc-deploy
+    ```
+
+* Build the client-side code and serve it locally:
+
+    ```sh
+    npm run app-start
+    ```
+
+* Run a development spin for the client-side code to watch the file changes and reload:
+
+    ```sh
+    npm run app-dev
+    ```
+
+* Test the frontend application:
+
+    ```sh
+    npm run app-test
+    ```
+
+## Checklist
 
 * [ ] Privacy setting for every user
     - It is bcoz, every user can allow/deny his profile visibility.
-    - Seeting can be different for friends and for other strangers.
+    - There can be different settings for friends vs for other strangers.
 * [ ] Have the Search functionality for any person, with filters of location and primary languages, and known languages.
+* [ ] Connection with Smart Contracts:
+    - [ ] Implement CRUD operations of user details via smart contract.
+        - [ ] Update operation remaining to add.
+        - [x] Other operations like create user, delete user, add friend, get friends, get user data
+    - [ ] Call history to save and retrieve from smart contract.
+* [ ] Smart contract solidity code
+    - [x] Basic structure for smart contract
+    - [ ] More info like call history, and some other call related methods to implement
+
+## Features on hold for now
+
+* [ ] Connecting with IPFS:
+    - [x] IPFS basic connection and some basic required services.
+    - [ ] Using docker for running IPFS daemon on them, or an online IPFS node runner.
 
 ## Some notes for developers 🧠
 
@@ -111,3 +165,7 @@ Also, while calling a stranger mainly, we can filter by language and if the reci
 While calling a friend, the options is ignored completely.
 
 ---
+
+## Credits
+
+[This](https://youtu.be/pv3UHYwgxnM) video helped me in webrtc and javascript interaction.

@@ -1,0 +1,137 @@
+{
+	"info": {
+		"_postman_id": "8f2a2fae-bb26-4228-a64b-2ef54bd8cf3d",
+		"name": "Stran",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "IPFS",
+			"item": [
+				{
+					"name": "Get Data by CID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{ipfsUrl}}/:cid",
+							"host": [
+								"{{ipfsUrl}}"
+							],
+							"path": [
+								":cid"
+							],
+							"variable": [
+								{
+									"key": "cid",
+									"value": "{{sampleDataCid}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Data to IPFS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response has status 201\", () => {",
+									"    pm.response.to.have.status(201);",
+									"",
+									"    const responseJson = pm.response.json();",
+									"    pm.expect(responseJson.success).to.eql(true);",
+									"    pm.expect(responseJson.cid).to.be.a('string').and.have.length.gte(1);",
+									"    pm.expect(responseJson.ipfsURL).to.be.a('string').and.satisfy(url => url.startsWith('https://ipfs.io/ipfs/'));",
+									"",
+									"    // setting saved cid to the collection variable",
+									"    pm.collectionVariables.set('sampleDataCid', responseJson.cid);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"{{$randomFullName}}\",\n    \"age\": {{$randomInt}},\n    \"friends\": [\"{{$randomFirstName}}\", \"{{$randomFirstName}}\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{ipfsUrl}}/",
+							"host": [
+								"{{ipfsUrl}}"
+							],
+							"path": [
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Smart-Contract",
+			"item": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:8081",
+			"type": "string"
+		},
+		{
+			"key": "ipfsUrl",
+			"value": "http://localhost:8081/ipfs",
+			"type": "string"
+		},
+		{
+			"key": "sampleDataCid",
+			"value": "QmdRqHHVdU92TteMfNxrqQwbShLvysxXTuVjEQA2577Evf",
+			"type": "string"
+		}
+	]
+}

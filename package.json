@@ -10,8 +10,10 @@
     "sc-deploy": "npm run deploy --prefix blockchain/",
     "app-start": "npm start --prefix client/",
     "app-test": "npm test --prefix client/",
+    "app-dev": "npm run dev --prefix client/",
     "server-start": "npm start --prefix server/",
-    "server-dev": "npm run dev --prefix server/"
+    "server-dev": "npm run dev --prefix server/",
+    "server-test": "npm run test --prefix server/"
   },
   "license": "Apache-2.0",
   "repository": {

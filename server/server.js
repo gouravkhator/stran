@@ -12,9 +12,8 @@ const app = express();
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 
-const ipfsMiddleware = require('./middlewares/ipfs.middleware');
-const ipfsRouter = require('./routes/ipfs.route');
-const { AppError } = require('./utils/errors.util');
+const ipfsRouter = require('./src/routes/ipfs.route');
+const { AppError } = require('./src/utils/errors.util');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -34,7 +33,7 @@ app.use(session({
     }
 }));
 
-app.use('/ipfs', ipfsMiddleware.createIPFSNodeIfNA, ipfsRouter);
+app.use('/ipfs', ipfsRouter);
 
 app.use((err, req, res, next) => {
     if (err instanceof AppError) {
