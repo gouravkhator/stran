@@ -1,3 +1,5 @@
+const { AppError } = require("./errors.util");
+
 function convertArrToEnum(list = []) {
     const finalObj = list.reduce((object, val, index) => {
         return {
@@ -13,7 +15,7 @@ function convertArrToEnum(list = []) {
 // Language - an enum for the filter for users, to call a stranger speaking a particular language only
 const languagesList = [
     'ENGLISH', 'HINDI', 'BENGALI', 'FRENCH', 'SPANISH', 'RUSSIAN',
-    'SINDHI', 'GERMAN', 'CHINESE', 'JAPANESE', 'ITALIAN', 'MALYALAM', 
+    'SINDHI', 'GERMAN', 'CHINESE', 'JAPANESE', 'ITALIAN', 'MALYALAM',
     'ORIYA', 'POLISH', 'ROMANIAN', 'TAMIL', 'TELUGU', 'TURKISH',
     'UKRANIAN', 'PUNJABI', 'URDU', 'MALAYSIAN', 'KANNADA', 'NEPALI',
     'ASSAMESE', 'BHOJPURI', 'GREEK', 'GUJARATI', 'INDONESIAN', 'KOREAN'
@@ -35,6 +37,45 @@ const statusList = [
 
 const Status = convertArrToEnum(statusList);
 
+function parseEnumsInUser(user = {}) {
+    try {
+        if (user?.username === '') {
+            return user;
+        }
+
+        user.location = locationsList.at(parseInt(user.location));
+        user.primaryLanguage = languagesList.at(parseInt(user.primaryLanguage));
+        user.status = statusList.at(parseInt(user.status));
+
+        user.knownLanguages = user.knownLanguages?.reduce((tempList, val) => {
+            const languageIndex = parseInt(val);
+
+            if (languageIndex < languagesList.length && languageIndex >= 0) {
+                return [
+                    ...tempList,
+                    languagesList.at(languageIndex)
+                ];
+            } else {
+                return [
+                    ...tempList,
+                ];
+            }
+        }, []);
+
+        return user;
+
+    } catch (err) {
+        throw new AppError({
+            status: 400,
+            shortMsg: 'user-not-parseable',
+            message: 'User saved in the database is in improper format, and cannot be parseable. Please contact the application owner with your public address..',
+        });
+    }
+}
+
 module.exports = {
-    Language, Location, Status,
+    Language,
+    Location,
+    Status,
+    parseEnumsInUser
 };

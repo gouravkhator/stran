@@ -93,8 +93,152 @@
 			]
 		},
 		{
-			"name": "Smart-Contract",
-			"item": []
+			"name": "User Auth",
+			"item": [
+				{
+					"name": "Get User Data",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "jwtToken={{jwtToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/user",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Nonce",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "jwtToken={{jwtToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/auth/nonce/:publicAddress",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"nonce",
+								":publicAddress"
+							],
+							"variable": [
+								{
+									"key": "publicAddress",
+									"value": "{{localNodeAcc}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create New Account",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "jwtToken={{jwtToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"publicAddress\": \"{{localNodeAcc}}\",\n    \"name\": \"{{$randomFirstName}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/signup",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Verify Signature",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "jwtToken={{jwtToken}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"publicAddress\": \"{{localNodeAcc}}\",\n    \"signature\": \"0x0626a7a84e20be0e2cc217fab8398cee609619735ffdb26a8e6c524ccdbdfda67c86b31ef9c2ba4d482d4cf324b1c0e561cb964d4e4e511849e2d000d76ff24d1c\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/auth/verify",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"auth",
+								"verify"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
 		}
 	],
 	"event": [
@@ -125,12 +269,22 @@
 		},
 		{
 			"key": "ipfsUrl",
-			"value": "http://localhost:8081/ipfs",
+			"value": "{{baseUrl}}/ipfs",
 			"type": "string"
 		},
 		{
 			"key": "sampleDataCid",
 			"value": "QmdRqHHVdU92TteMfNxrqQwbShLvysxXTuVjEQA2577Evf",
+			"type": "string"
+		},
+		{
+			"key": "localNodeAcc",
+			"value": "0x...",
+			"type": "string"
+		},
+		{
+			"key": "jwtToken",
+			"value": "-",
 			"type": "string"
 		}
 	]

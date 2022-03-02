@@ -94,27 +94,6 @@ Install go-ipfs on your host system.
     npm run app-test
     ```
 
-## Checklist
-
-* [ ] Privacy setting for every user
-    - It is bcoz, every user can allow/deny his profile visibility.
-    - There can be different settings for friends vs for other strangers.
-* [ ] Have the Search functionality for any person, with filters of location and primary languages, and known languages.
-* [ ] Connection with Smart Contracts:
-    - [ ] Implement CRUD operations of user details via smart contract.
-        - [ ] Update operation remaining to add.
-        - [x] Other operations like create user, delete user, add friend, get friends, get user data
-    - [ ] Call history to save and retrieve from smart contract.
-* [ ] Smart contract solidity code
-    - [x] Basic structure for smart contract
-    - [ ] More info like call history, and some other call related methods to implement
-
-## Features on hold for now
-
-* [ ] Connecting with IPFS:
-    - [x] IPFS basic connection and some basic required services.
-    - [ ] Using docker for running IPFS daemon on them, or an online IPFS node runner.
-
 ## Some notes for developers 🧠
 
 * IPFS WebUI: Port 5001

@@ -11,9 +11,7 @@
 
 *   `npm run lint`: Pass TypeScript files using ESLint
 
-*   `npm run test`: Run Jest and Enzyme with
-    [`enzyme-adapter-preact-pure`](https://github.com/preactjs/enzyme-adapter-preact-pure) for
-    your tests
+*   `npm run test`: Run Jest and Enzyme with [`enzyme-adapter-preact-pure`](https://github.com/preactjs/enzyme-adapter-preact-pure) for your tests
 
 For detailed explanation on how things work, checkout the [CLI Readme](https://github.com/developit/preact-cli/blob/master/README.md).
 
@@ -21,6 +19,7 @@ For detailed explanation on how things work, checkout the [CLI Readme](https://g
 
 | ISSUES | Solved Status | Resolution Tries |
 | --- | --- | --- |
+| process.env is empty | NOT SOLVED | Tried dotenv loading in preact.config.js file, but no luck. 
 | Using peerjs dependency led to breaking of `npm run build` script | Temporary solution | Using `preact build --no-prerender` did work.
 | Process is not defined | SOLVED | [Stack Overflow solution](https://stackoverflow.com/questions/70368760/react-uncaught-referenceerror-process-is-not-defined). Added config.node.process = true; in `preact.config.js` file. |
 | Cannot convert bigint to number | SOLVED | Added browserslist with proper supported browsers version in package.json

@@ -1,6 +1,19 @@
+const { recoverPersonalSignature } = require('@metamask/eth-sig-util');
+const { bufferToHex } = require('ethereumjs-util');
+
 const { Language, Location, Status } = require('../utils/enums.util');
 const { AppError } = require("../utils/errors.util");
 const { getContract } = require("../services/blockchain-init.service");
+
+const validateHexAddress = (data) => {
+    data = data ?? '';
+
+    if (data !== '' && (typeof data === 'string') && data.startsWith('0x') && data.length > 2) {
+        return true;
+    }
+
+    return false;
+}
 
 /**
  * Does sanity checking of the params for this smart contract service methods
@@ -9,7 +22,7 @@ const { getContract } = require("../services/blockchain-init.service");
 const validateParams = ({ senderAccAddr }) => {
     senderAccAddr = senderAccAddr ?? '';
 
-    if (senderAccAddr !== '' && senderAccAddr.startsWith('0x') && senderAccAddr.length > 2) {
+    if (validateHexAddress(senderAccAddr) === true) {
         return true;
     } else {
         throw new AppError({
@@ -306,15 +319,68 @@ async function getUserData(userid, senderAccAddr) {
     }
 }
 
+async function verifySignature({ senderAccAddr, signature }) {
+    try {
+        validateParams({ senderAccAddr });
+        const publicAddress = senderAccAddr;
+
+        // signature is of 132-character long, which includes the 0x characters too
+        // first validate if it is a hex or not, and then check the length
+        if (validateHexAddress(signature) === false || signature.length < 132) {
+            throw new AppError({
+                statusCode: 400,
+                shortMsg: 'signature-not-valid',
+                message: 'Either signature was not provided or is invalid. It should be 0x-prefixed hex strings and 132-characters long. Please provide valid signature, by signing from MetaMask..',
+            });
+        }
+
+        const userdata = await getUserData(publicAddress, publicAddress);
+
+        if (userdata.username === '') {
+            throw new AppError({
+                statusCode: 400,
+                shortMsg: 'user-not-found-bad-request',
+                message: 'User not found, so we cannot verify any signature to let you login. Please click on "Login with Metamask" again..',
+            });
+        }
+
+        const msg = `I am signing my one-time number: ${userdata.nonce}`;
+
+        const msgBufferHex = bufferToHex(Buffer.from(msg, 'utf8'));
+        const address = recoverPersonalSignature({
+            data: msgBufferHex,
+            signature,
+        });
+
+        if (address.toLowerCase() === publicAddress.toLowerCase()) {
+            return {
+                user: userdata,
+                verified: true,
+            };
+        } else {
+            throw new AppError({
+                statusCode: 401,
+                message: 'Signature verification failed! Please try again..',
+                shortMsg: 'signature-verify-failed',
+            });
+        }
+    } catch (err) {
+        throw err;
+    }
+}
+
 module.exports = {
     createUser,
     updateUser,
     deleteUser,
     addFriend,
     getFriendsList,
+    getUserData,
+    verifySignature,
 };
 
 // Sample code as below, and this file can be run like: node server/services/smart-contract.service.js
+/*
 (async () => {
     try {
         const accounts = [
@@ -361,4 +427,4 @@ module.exports = {
         console.error(error);
     }
 })();
-
+*/

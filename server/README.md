@@ -1,19 +1,5 @@
 # Stran Server 
 
-## Endpoints
-
-Base URL for the local server: `http://localhost:8081/`
-
-### Smart Contract Endpoints
-
-* 
-
-### IPFS Endpoints
-
-* `GET /ipfs/:cid`: Pass the path variable `cid` and it will return the data as the response, else a status of 404 Not Found.
-
-* `POST /ipfs/`: Pass the data in the request body and it will return the saved cid, the ipfs url to access the data, and the success flag.
-
 ## Server Folder Structure
 
 > Credit goes to [geshan's expressjs-structure](https://github.com/geshan/expressjs-structure).
@@ -37,4 +23,4 @@ The main article for organizing the project structure is given [here](https://bl
 
     ![Test Folder Structure](https://blog.logrocket.com/wp-content/uploads/2022/01/Express-test-folder-structure.png)
 
-    As you can see, ***tests for each unit of the src folder, will be created in the same structure in tests folder..***
+    As you can see, ***tests for each unit of the src folder, can be created in the same structure in tests folder..***

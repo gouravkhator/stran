@@ -11,6 +11,7 @@ contract VideoCallContract {
     // ---structs--- : Defines the schema
     struct User {
         address userid;
+        uint nonce;
         string username;
         Location location;
         Language primaryLanguage;
@@ -43,6 +44,14 @@ contract VideoCallContract {
     constructor() {}
 
     // ---functions---
+    function getRandomNumber() private view returns (uint){
+        uint data = block.difficulty + block.timestamp;
+        bytes memory dataInBytes = new bytes(32);
+        assembly { mstore(add(dataInBytes, 32), data) }
+
+        return uint(keccak256(dataInBytes));
+    }
+
     // registerUser
     function registerUser(
         string memory name,
@@ -58,6 +67,7 @@ contract VideoCallContract {
         // setting userdata
         userdata[msg.sender] = User({
             userid: msg.sender,
+            nonce: getRandomNumber(),
             username: name,
             location: location,
             primaryLanguage: primaryLanguage,

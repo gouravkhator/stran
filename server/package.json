@@ -9,10 +9,13 @@
     "test": "echo 'Testing server'"
   },
   "dependencies": {
+    "@metamask/eth-sig-util": "^4.0.0",
     "cookie-parser": "^1.4.6",
+    "ethereumjs-util": "^7.1.4",
     "express": "^4.17.2",
     "express-session": "^1.17.2",
     "ipfs-http-client": "^56.0.0",
+    "jsonwebtoken": "^8.5.1",
     "web3": "^1.7.0"
   },
   "devDependencies": {

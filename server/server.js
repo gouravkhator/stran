@@ -9,31 +9,40 @@ if (process.env.NODE_ENV !== 'production') {
 
 const express = require('express');
 const app = express();
-const session = require('express-session');
+// const session = require('express-session');
 const cookieParser = require('cookie-parser');
 
+const { allowCrossDomain } = require('./src/middlewares/global.middleware');
+const { authenticateTokenMiddleware } = require('./src/middlewares/auth.middleware');
+
 const ipfsRouter = require('./src/routes/ipfs.route');
+const authRouter = require('./src/routes/auth.route');
+const userRouter = require('./src/routes/user.route');
 const { AppError } = require('./src/utils/errors.util');
 
+app.use(cookieParser(process.env.TOKEN_SECRET));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser(process.env.SESSION_SECRET));
+app.use(allowCrossDomain);
 
+// Uncomment the below if needed, else would remove in future.
+/*
 app.use(session({
-    // express session
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
-        // sameSite is set to lax, to prevent CSRF attack..
-        sameSite: 'lax',
+        sameSite: 'lax', // to prevent CSRF attack..
         maxAge: 24 * 60 * 60 * 1000, // 24 hrs written in milliseconds
         secure: process.env.NODE_ENV === 'production', // secure only on production environment
         signed: true, // signed cookie
     }
 }));
+*/
 
 app.use('/ipfs', ipfsRouter);
+app.use('/auth', authenticateTokenMiddleware, authRouter);
+app.use('/user', authenticateTokenMiddleware, userRouter);
 
 app.use((err, req, res, next) => {
     if (err instanceof AppError) {
@@ -42,6 +51,8 @@ app.use((err, req, res, next) => {
             shortErrCode: err.shortMsg,
         });
     }
+
+    console.error(err);
 
     return res.status(500).send({
         errorMsg: "Some internal server error..",
