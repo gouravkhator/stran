@@ -47,19 +47,19 @@ Install go-ipfs on your host system.
 * Compile the smart contracts:
 
     ```sh
-    npm run sc-compile
+    npm run sc:compile
     ```
 
 * Run tests on smart contracts:
 
     ```sh
-    npm run sc-test
+    npm run sc:test
     ```
 
 * Run Hardhat Network, such that external clients can connect to it:
 
     ```sh
-    npm run sc-localnode
+    npm run sc:localnode
     ```
 
 * Connect ***MetaMask*** to Local node:
@@ -73,19 +73,19 @@ Install go-ipfs on your host system.
 * Deploy the smart contract -- It will firstly compile the smart contracts and then would deploy them.
 
     ```sh
-    npm run sc-deploy
+    npm run sc:deploy
     ```
 
 * Build the client-side code and serve it locally:
 
     ```sh
-    npm run app-start
+    npm run app:serve
     ```
 
 * Run a development spin for the client-side code to watch the file changes and reload:
 
     ```sh
-    npm run app-dev
+    npm run app:start
     ```
 
 * Test the frontend application:

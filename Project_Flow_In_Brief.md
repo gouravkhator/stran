@@ -1,5 +1,10 @@
 # Project Flow in Brief
 
+## Flowchart
+
+To add a flowchart for the flow of the auth and the project working.
+This flowchart can be made in any control-flow-chart maker software.
+
 ## System Design and Architecture
 
 From Client side, user will login. User's login will be saved and an address will be provided to him by the ethereum network. This address will go to the smart contract code and registerUser will be called. User should keep the address with him, else his account will not be retrievable.

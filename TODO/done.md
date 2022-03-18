@@ -4,6 +4,7 @@
 
 ## Client End Only
 
+- [x] Make all components in client end, the `.jsx` files.
 - Calling Feature
   - [x] PeerJS feature implemented
 
@@ -15,6 +16,10 @@
 ## Blockchain Solidity Only
 
 - [x] Basic structure for smart contract
+
+## Overall Feature
+
+- [x] Rename npm scripts in package.json to be having colons for better script-names like server:start or server:dev etc.
 
 ## Features On Hold, but some parts completed
 

@@ -5,9 +5,9 @@
 
 *   `npm run dev`: Run a development, HMR server
 
-*   `npm run serve`: Build and then run a production-like server
-
 *   `npm run build`: Production-ready build
+
+*   `npm run serve`: Run the build script and then run a production-like server
 
 *   `npm run lint`: Pass TypeScript files using ESLint
 

@@ -25,10 +25,8 @@
 
 ## Features Planned
 
-- [ ] Package.json revamp of script names, like server:start or server:dev etc.
-- [ ] Migrate client code from preact-cli to ViteJS, using [my preact+vite](https://github.com/gouravkhator/previte) template.
+- [ ] Migrate client code from preact-cli to ViteJS, using [my Preact + ViteJS](https://github.com/gouravkhator/previte) template.
 - [ ] Have the env working in the client end.. 
-- [ ] Make all components in client end, the `.jsx` files.
 - [ ] Privacy setting for every user
   - It is bcoz, every user can allow/deny his profile visibility.
   - There can be different settings for friends vs for other strangers.
@@ -37,6 +35,7 @@
 - [ ] User preferred Location can be taken from browser current location data.
 - [ ] Test cases for client and server side, and even for solidity code.
 - [ ] Postman Export with versioning in the filename/file's contents.
+- [ ] Add a flowchart for the whole project flow, in the `Project_Flow_In_Brief.md` file.
 
 ## Features on hold for now
 
