@@ -8,12 +8,14 @@
     "sc-test": "npm test --prefix blockchain/",
     "sc-localnode": "npm run localnode --prefix blockchain/",
     "sc-deploy": "npm run deploy --prefix blockchain/",
-    "app-start": "npm start --prefix client/",
+    "app-start": "npm run dev --prefix client/",
+    "app-serve": "npm run serve --prefix client/",
     "app-test": "npm test --prefix client/",
-    "app-dev": "npm run dev --prefix client/",
     "server-start": "npm start --prefix server/",
     "server-dev": "npm run dev --prefix server/",
-    "server-test": "npm run test --prefix server/"
+    "server-test": "npm run test --prefix server/",
+    "check-format": "prettier --config .prettierrc -c .",
+    "format": "prettier --config .prettierrc -w ."
   },
   "license": "Apache-2.0",
   "repository": {
@@ -38,5 +40,8 @@
     "ethereum",
     "smart-contract",
     "decentralised"
-  ]
+  ],
+  "devDependencies": {
+    "prettier": "^2.5.1"
+  }
 }

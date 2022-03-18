@@ -5,7 +5,7 @@
 
 *   `npm run dev`: Run a development, HMR server
 
-*   `npm run serve`: Run a production-like server
+*   `npm run serve`: Build and then run a production-like server
 
 *   `npm run build`: Production-ready build
 

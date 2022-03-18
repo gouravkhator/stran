@@ -1,6 +1,6 @@
 {
-  "name": "client",
-  "short_name": "client",
+  "name": "preact-client",
+  "short_name": "preact-client",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",

@@ -16,7 +16,7 @@ async function main() {
   // await hre.run('compile');
 
   // --------ELECTION SMART CONTRACT---------
-  
+
   // We get the contract to deploy
   // const Election = await hre.ethers.getContractFactory("Election");
   // const election = await Election.deploy();
@@ -25,22 +25,34 @@ async function main() {
 
   // console.log("Election deployed to:", election.address);
 
-  const VideoCallContract = await hre.ethers.getContractFactory("VideoCallContract");
+  const VideoCallContract = await hre.ethers.getContractFactory(
+    "VideoCallContract",
+  );
   const videoCallContract = await VideoCallContract.deploy();
 
   await videoCallContract.deployed();
 
-  const artifact = await hre.artifacts.readArtifact('VideoCallContract'); // for getting abi from compiled contracts' artifacts
+  const artifact = await hre.artifacts.readArtifact("VideoCallContract"); // for getting abi from compiled contracts' artifacts
 
-  const configPath = path.join(__dirname, "../contractsConfig/VideoCallContract.config.json");
+  const configPath = path.join(
+    __dirname,
+    "../contractsConfig/VideoCallContract.config.json",
+  );
 
-  await fs.writeFile(configPath, JSON.stringify({
-    CONTRACT_ADDRESS: videoCallContract.address,
-    CONTRACT_ABI: artifact.abi,
-  }));
+  await fs.writeFile(
+    configPath,
+    JSON.stringify({
+      CONTRACT_ADDRESS: videoCallContract.address,
+      CONTRACT_ABI: artifact.abi,
+    }),
+  );
 
-  console.log(`\nSaved ABI and smart contract address for VideoCallContract to below path:\n${configPath}\n`);
-  console.log(`VideoCallContract smart contract is deployed to address: ${videoCallContract.address}`);
+  console.log(
+    `\nSaved ABI and smart contract address for VideoCallContract to below path:\n${configPath}\n`,
+  );
+  console.log(
+    `VideoCallContract smart contract is deployed to address: ${videoCallContract.address}`,
+  );
 }
 
 // We recommend this pattern to be able to use async/await everywhere

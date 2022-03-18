@@ -1,9 +1,8 @@
-// import Dotenv from 'dotenv-webpack';
-
-export default function (config) {
+export default function (config, env, helpers) {
     config.node.process = 'mock';
     config.node.Buffer = true;
 
-    // ! ISSUE: the below line didn't help in loading env
-    // config.plugins.push(new Dotenv({ path: './.env' }));
+    console.log({env});
+    /*const { plugin } = helpers.getPluginsByName(config, 'DefinePlugin')[0];
+    plugin.definitions['process.env.MY_VARIABLE'] = JSON.stringify('my-value');*/
 }

@@ -1,31 +1,36 @@
-if (process.env.NODE_ENV !== 'production') {
-    /* either NODE_ENV will be 'production', or it can be set to nothing too.
+if (process.env.NODE_ENV !== "production") {
+  /* either NODE_ENV will be 'production', or it can be set to nothing too.
     So, it assumes nothing also as 'development' mode.
     */
-    require('dotenv').config({
-        path: './.env',
-    });
+  require("dotenv").config({
+    path: "./.env",
+  });
 }
 
-const express = require('express');
+const express = require("express");
 const app = express();
-// const session = require('express-session');
-const cookieParser = require('cookie-parser');
+// const session = require('express-session'); // for session-based auth
+const cookieParser = require("cookie-parser");
 
-const { allowCrossDomain } = require('./src/middlewares/global.middleware');
-const { authenticateTokenMiddleware } = require('./src/middlewares/auth.middleware');
+const { allowCrossDomain } = require("./src/middlewares/global.middleware");
+const {
+  authenticateTokenMiddleware,
+} = require("./src/middlewares/auth.middleware");
 
-const ipfsRouter = require('./src/routes/ipfs.route');
-const authRouter = require('./src/routes/auth.route');
-const userRouter = require('./src/routes/user.route');
-const { AppError } = require('./src/utils/errors.util');
+const ipfsRouter = require("./src/routes/ipfs.route");
+const authRouter = require("./src/routes/auth.route");
+const userRouter = require("./src/routes/user.route");
+const { AppError } = require("./src/utils/errors.util");
 
 app.use(cookieParser(process.env.TOKEN_SECRET));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(allowCrossDomain);
 
-// Uncomment the below if needed, else would remove in future.
+/**
+ * We are using token authentication currently,
+ * but uncomment the below session-based auth if needed, else would remove in future.
+ */
 /*
 app.use(session({
     secret: process.env.SESSION_SECRET,
@@ -40,28 +45,28 @@ app.use(session({
 }));
 */
 
-app.use('/ipfs', ipfsRouter);
-app.use('/auth', authenticateTokenMiddleware, authRouter);
-app.use('/user', authenticateTokenMiddleware, userRouter);
+app.use("/ipfs", ipfsRouter);
+app.use("/auth", authenticateTokenMiddleware, authRouter);
+app.use("/user", authenticateTokenMiddleware, userRouter);
 
 app.use((err, req, res, next) => {
-    if (err instanceof AppError) {
-        return res.status(err.statusCode).send({
-            errorMsg: err.message,
-            shortErrCode: err.shortMsg,
-        });
-    }
-
-    console.error(err);
-
-    return res.status(500).send({
-        errorMsg: "Some internal server error..",
-        shortErrCode: "server-err",
+  console.error(err); // just for debugging
+  
+  if (err instanceof AppError) {
+    return res.status(err.statusCode).send({
+      errorMsg: err.message,
+      shortErrCode: err.shortMsg,
     });
+  }
+
+  return res.status(500).send({
+    errorMsg: "Some internal server error..",
+    shortErrCode: "server-err",
+  });
 });
 
 const PORT = process.env.PORT ?? 8081;
 
 app.listen(PORT, () => {
-    console.log(`Server started on port ${PORT}`);
+  console.log(`Server started on port ${PORT}`);
 });

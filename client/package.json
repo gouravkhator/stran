@@ -3,10 +3,9 @@
   "name": "client",
   "version": "0.0.0",
   "scripts": {
-    "build": "preact build",
-    "serve": "sirv build --port 3000 --cors --single",
+    "build": "preact build --no-prerender",
+    "serve": "npm run build && sirv build --port 3000 --cors --single",
     "dev": "PORT=3000 preact watch",
-    "start": "npm run build && npm run serve",
     "lint": "eslint src",
     "test": "jest"
   },
@@ -17,7 +16,6 @@
     ]
   },
   "devDependencies": {
-    "dotenv-webpack": "^7.1.0",
     "enzyme": "^3.10.0",
     "enzyme-adapter-preact-pure": "^2.0.0",
     "eslint": "^6.0.1",
@@ -33,7 +31,8 @@
     "preact": "^10.3.2",
     "preact-render-to-string": "^5.1.4",
     "preact-router": "^3.2.1",
-    "web3": "^1.7.0"
+    "sass": "^1.49.9",
+    "sass-loader": "^10.2.1"
   },
   "jest": {
     "preset": "jest-preset-preact",

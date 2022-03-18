@@ -1,0 +1,40 @@
+# Prettier ignore will ignore the below files and not prettify them..
+# .prettierignore has similar config as .gitignore
+
+# Build files
+build/
+dist/
+cache/
+
+# Tools and General files
+node_modules/
+.github/
+.gitignore
+.env
+.env.*
+package.json
+package-lock.json
+TODO/
+
+# Other general files
+*.md
+*.json
+LICENSE
+
+# CSS Style files
+*.css
+*.scss
+*.sass
+*.less
+
+# Image files
+*.svg
+*.jpg
+*.jpeg
+*.webp
+*.png
+*.gif
+
+# blockchain files
+*.sol
+artifacts/
