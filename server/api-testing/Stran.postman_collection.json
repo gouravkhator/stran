@@ -96,9 +96,32 @@
 			"name": "User Auth",
 			"item": [
 				{
-					"name": "Get User Data",
+					"name": "Get User",
 					"request": {
 						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "jwtToken={{jwtToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/user",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
 						"header": [
 							{
 								"key": "Cookie",

@@ -1,6 +1,6 @@
 {
-  "name": "preact-client",
-  "short_name": "preact-client",
+  "name": "Stran - Know the strangers, whilst being private",
+  "short_name": "Stran",
   "start_url": "/",
   "display": "standalone",
   "orientation": "portrait",

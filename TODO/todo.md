@@ -9,7 +9,8 @@
 
 ### Server End Only
 
-- [ ] Parse enums of the user returned directly in `smart-contract.service.js` file.
+- [x] Parse enums of the user returned directly in `smart-contract.service.js` file.
+- [ ] ISSUE: knownLanguages array in `smart-contract.service.js` createUser method becomes undefined after we save it to blockchain.
 - [ ] Add CRUD operations for user in contacting the smart contract, and also in the server endpoints.
   - [ ] Update operation remaining to implement in smart contract integration.
   - [x] Other operations like create user, delete user, add friend, get friends, get user data to add in smart contract integration.
@@ -17,16 +18,29 @@
 
 ### Blockchain Solidity Only
 
-- [ ]
+- [ ] 
 
 ### Overall In-Progress for full integration
 
-- [ ]
+- [ ] 
 
 ## Features Planned
 
+### Client End Only
+
 - [ ] Migrate client code from preact-cli to ViteJS, using [my Preact + ViteJS](https://github.com/gouravkhator/previte) template.
-- [ ] Have the env working in the client end.. 
+- [ ] Have the env working in the client end.
+
+### Server End Only
+
+- [ ] User shpuld not request multiple times for same things, or else sent a `429 Too Many Requests` as the response status code.
+
+### Blockchain Solidity Only
+
+- [ ] 
+
+### Overall In-Progress for full integration
+
 - [ ] Privacy setting for every user
   - It is bcoz, every user can allow/deny his profile visibility.
   - There can be different settings for friends vs for other strangers.

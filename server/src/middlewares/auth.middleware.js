@@ -6,6 +6,10 @@ async function authenticateTokenMiddleware(req, res, next) {
     userid = null;
 
   try {
+    /**
+     * As we save the token in the signed cookies in the client end from this server..
+     * So, we read from the signed cookies itself..
+     */
     const token = req.signedCookies["jwtToken"] ?? null;
 
     const result = authenticateToken(token);
@@ -16,7 +20,6 @@ async function authenticateTokenMiddleware(req, res, next) {
     // if authenticated is false, authenticateToken should have already thrown the error
     if (authenticated === true) {
       req.user = await getUserData(userid, userid);
-
       return next();
     }
   } catch (err) {
@@ -32,21 +35,6 @@ async function authenticateTokenMiddleware(req, res, next) {
   }
 }
 
-async function returnUserIfUserExists(req, res, next) {
-  try {
-    if (req.user && req.user.username) {
-      return res.json({
-        user: req.user,
-      });
-    } else {
-      return next();
-    }
-  } catch (err) {
-    return next(err);
-  }
-}
-
 module.exports = {
   authenticateTokenMiddleware,
-  returnUserIfUserExists,
 };

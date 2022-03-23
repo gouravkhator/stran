@@ -6,7 +6,7 @@ const {
   logoutController,
 } = require("../controllers/auth.controller");
 
-const { returnUserIfUserExists } = require("../middlewares/auth.middleware");
+const { returnUserIfUserExists } = require("../middlewares/user.middleware");
 
 router.get("/nonce/:publicAddress", returnUserIfUserExists, getNonceController);
 

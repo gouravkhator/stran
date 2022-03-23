@@ -1,36 +1,7 @@
-const { AppError } = require("./errors.util");
-
-function parseEnumsInUser(user = {}) {
-  try {
-    if (user?.username === "") {
-      return user;
-    }
-
-    user.location = locationsList.at(parseInt(user.location));
-    user.primaryLanguage = languagesList.at(parseInt(user.primaryLanguage));
-    user.status = statusList.at(parseInt(user.status));
-
-    user.knownLanguages = user.knownLanguages?.reduce((tempList, val) => {
-      const languageIndex = parseInt(val);
-
-      if (languageIndex < languagesList.length && languageIndex >= 0) {
-        return [...tempList, languagesList.at(languageIndex)];
-      } else {
-        return [...tempList];
-      }
-    }, []);
-
-    return user;
-  } catch (err) {
-    throw new AppError({
-      status: 400,
-      shortMsg: "user-not-parseable",
-      message:
-        "User saved in the database is in improper format, and cannot be parseable. Please contact the application owner with your public address..",
-    });
-  }
-}
-
+/**
+ * Converts array to un-modifiable objects,
+ * with array values as the key and indices as the values in the object..
+ */
 function convertArrToEnum(list = []) {
   const finalObj = list.reduce((object, val, index) => {
     return {
@@ -100,5 +71,7 @@ module.exports = {
   Language,
   Location,
   Status,
-  parseEnumsInUser,
+  locationsList,
+  languagesList,
+  statusList,
 };

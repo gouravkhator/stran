@@ -3,21 +3,24 @@ const { bufferToHex } = require("ethereumjs-util");
 
 const { Language, Location, Status } = require("../utils/enums.util");
 const { AppError } = require("../utils/errors.util");
+const { cleanseUserData } = require("../utils/user.util");
+
 const { getContract } = require("../services/blockchain-init.service");
 
+/**
+ * Check if the parameter provided is a valid hex address or not
+ * @param {*} data Any Javascript string, which will be passed through the validation checks.
+ * @returns true if it is valid hex address, otherwise false
+ */
 const validateHexAddress = (data) => {
   data = data ?? "";
 
-  if (
+  return (
     data !== "" &&
     typeof data === "string" &&
     data.startsWith("0x") &&
     data.length > 2
-  ) {
-    return true;
-  }
-
-  return false;
+  );
 };
 
 /**
@@ -68,9 +71,11 @@ async function createUser({
     validateParams({ senderAccAddr });
     const { vcContract } = await getContract();
 
-    // check if user already exists or not, via the sender account address
-    // if user already exists with this address as the userid, then registerUser method will throw the error.
-    // So, we check beforehand..
+    /**
+     * check if user already exists or not, via the sender account address.
+     * if user already exists with this address as the userid, then registerUser method will throw the error.
+     * So, we check beforehand..
+     */
     if ((await getUserData(senderAccAddr, senderAccAddr)).username !== "") {
       throw new AppError({
         message: "This account already exists. Please login to continue..",
@@ -80,16 +85,16 @@ async function createUser({
       });
     }
 
-    /*
-        If we pass just the javascript number type in the params of a smart contract method like registerUser
-    
-        And we know, that registerUser in smart contract also takes uint8, then we also need to parse the number using parseInt.
-    
-        Why an extra parsing step??
-        >> It maybe bcoz web3 is parsing the javascript number again to string, and solidity wants to have uint8.
-        That is why we are getting below error:
-        INVALID_ARGUMENT error..
-        */
+    /**
+     * If we pass just the javascript number type in the params of a smart contract method like registerUser.
+     *
+     * And we know, that registerUser in smart contract also takes uint8, then we also need to parse the number using parseInt.
+     *
+     * Why an extra parsing step??
+     * >> It maybe bcoz web3 is parsing the javascript number again to string, and solidity wants to have uint8.
+     * That is why we are getting below error:
+     * INVALID_ARGUMENT error..
+     */
     const transactionObj = await vcContract.methods
       .registerUser(
         username,
@@ -108,7 +113,8 @@ async function createUser({
         from: senderAccAddr,
       });
 
-    return savedUserData;
+    // ! ISSUE: the savedUserData has knownLanguages as undefined
+    return cleanseUserData(savedUserData);
   } catch (err) {
     // null username, validateParams, getContract, existing user etc. throws AppError indirectly or directly.
     if (err instanceof AppError) {
@@ -174,7 +180,7 @@ async function deleteUser(senderAccAddr) {
     validateParams({ senderAccAddr });
     const { vcContract } = await getContract();
 
-    // check if user already exists or not, via the sender account address
+    // check if user exists or not, via the sender account address
     if ((await getUserData(senderAccAddr, senderAccAddr)).username === "") {
       throw new AppError({
         message: "This account does not exist. Please signup to continue..",
@@ -306,18 +312,20 @@ async function getFriendsList(senderAccAddr) {
  */
 async function getUserData(userid, senderAccAddr) {
   try {
-    /*
-        TODO: Current user should get only his own data and some partial data of his friend, 
-        iff the friend has allowed that in his privacy settings
-        Or, current user can search some other user and also get some info, which are made public..
-        */
+    /**
+     * TODO: Current user should get only his own data and some partial data of his friend,
+     * iff the friend has allowed that in his privacy settings..
+     * Or, current user can search some other user and also get some info, which are made public..
+     */
 
     validateParams({ senderAccAddr });
     const { vcContract } = await getContract();
 
-    return await vcContract.methods.userdata(userid).call({
-      from: senderAccAddr,
-    });
+    return cleanseUserData(
+      await vcContract.methods.userdata(userid).call({
+        from: senderAccAddr,
+      }),
+    );
   } catch (err) {
     if (err instanceof AppError) {
       throw err;
@@ -337,8 +345,10 @@ async function verifySignature({ senderAccAddr, signature }) {
     validateParams({ senderAccAddr });
     const publicAddress = senderAccAddr;
 
-    // signature is of 132-character long, which includes the 0x characters too
-    // first validate if it is a hex or not, and then check the length
+    /**
+     * signature is of 132-character long, which includes the 0x characters too..
+     * first validate if it is a hex or not, and then check the length
+     */
     if (validateHexAddress(signature) === false || signature.length < 132) {
       throw new AppError({
         statusCode: 400,
@@ -355,7 +365,7 @@ async function verifySignature({ senderAccAddr, signature }) {
         statusCode: 400,
         shortMsg: "user-not-found-bad-request",
         message:
-          'User not found, so we cannot verify any signature to let you login. Please click on "Login with Metamask" again..',
+          "User not found, so we cannot verify any signature to let you login. Please click on 'Login with Metamask' again..",
       });
     }
 
@@ -374,7 +384,7 @@ async function verifySignature({ senderAccAddr, signature }) {
       };
     } else {
       throw new AppError({
-        statusCode: 401,
+        statusCode: 400, // the user sent a bad request with invalid token details.
         message: "Signature verification failed! Please try again..",
         shortMsg: "signature-verify-failed",
       });

@@ -16,6 +16,7 @@ const { allowCrossDomain } = require("./src/middlewares/global.middleware");
 const {
   authenticateTokenMiddleware,
 } = require("./src/middlewares/auth.middleware");
+const { throwErrIfUserNotExist } = require("./src/middlewares/user.middleware");
 
 const ipfsRouter = require("./src/routes/ipfs.route");
 const authRouter = require("./src/routes/auth.route");
@@ -47,11 +48,16 @@ app.use(session({
 
 app.use("/ipfs", ipfsRouter);
 app.use("/auth", authenticateTokenMiddleware, authRouter);
-app.use("/user", authenticateTokenMiddleware, userRouter);
+app.use(
+  "/user",
+  authenticateTokenMiddleware,
+  throwErrIfUserNotExist,
+  userRouter,
+);
 
 app.use((err, req, res, next) => {
   console.error(err); // just for debugging
-  
+
   if (err instanceof AppError) {
     return res.status(err.statusCode).send({
       errorMsg: err.message,
