@@ -5,6 +5,22 @@
 To add a flowchart for the flow of the auth and the project working.
 This flowchart can be made in any control-flow-chart maker software.
 
+## Flow of the Routes and the Code
+
+Firstly, Header fetches for the user details from the token, and sets the user in the redux store. If user does not exist, then just a Sign In button is shown in the Header.
+
+If user exists, and if we visit /signin, the component shows our username and a link to our profile.
+
+If user does not exist, we are shown the login/signup components.
+
+When user clicks on `Login with Metamask`. It checks if the metamask is installed and account is connected. Else, it throws appropriate error.
+
+Next, if Metamask is all setup, then if user clicks on `Login with Metamask`, then it will fetch the nonce by doing a GET request again to `/auth/nonce`, and then will send a prompt to the user to sign the nonce. Once, the user signs the nonce, the signature is sent to the server, as a POST request to `/auth/verify`.
+
+If the signature is valid, the server returns a JWT token, to be automatically saved in the user's client side cookies.
+
+Now, when the user visits our webapp, the token is sent to the server via the Header component, and the user data is returned from the server itself.
+
 ## System Design and Architecture
 
 From Client side, user will login. User's login will be saved and an address will be provided to him by the ethereum network. This address will go to the smart contract code and registerUser will be called. User should keep the address with him, else his account will not be retrievable.

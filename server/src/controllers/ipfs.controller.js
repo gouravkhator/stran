@@ -17,7 +17,7 @@ async function addDataToIpfsController(req, res, next) {
     const cid = await addDataToIPFS(data);
 
     return res.status(201).json({
-      success: true,
+      status: "success",
       cid,
       ipfsURL: `https://ipfs.io/ipfs/${cid}`,
     });
@@ -49,7 +49,10 @@ async function getDataFromIpfsController(req, res, next) {
 
   try {
     let data = await getDataByCID(req.params.cid);
-    return res.send(data);
+    return res.json({
+      data,
+      status: "success",
+    });
   } catch (err) {
     return next(err);
   }

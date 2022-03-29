@@ -2,6 +2,14 @@
 
 ## Inbox -- Collect whatever stuff
 
+- **Authentication flow**:
+    - Header component will fetch user details from token, and if that does not work, will redirect us to signin page.
+    - Login Page will first check if metamask is installed or not. And will login with metamask.
+    - If login does not happen, then signup is the last option.
+- **Metamask Connect**:
+    - We will have the metamask connect function in most of the pages except the home page.
+    - We will log the user in and show his/her details, but will only prompt for metamask connect required, if some transactions needs to be done and metamask is not connected.
+
 ## OKR -- The Objective Keys and Results
 
 Monthly ammended. With all its history.

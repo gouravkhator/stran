@@ -1,9 +1,8 @@
-import { h } from "preact";
 import Peer from "peerjs";
 import { useEffect, useState } from "preact/hooks";
-import { callPeer, answerCall } from "../services/peerjs.service";
+import { callPeer, answerCall } from "../../services/peerjs.service";
 
-const Calling = () => {
+export default function VideoCallLogic() {
   const [localStream, setLocalStream] = useState(null);
   const [remoteStream, setRemoteStream] = useState(null);
   const [peerConn, setPeerConn] = useState(null);
@@ -20,6 +19,11 @@ const Calling = () => {
   };
 
   useEffect(() => {
+    /**
+     * ! ISSUE: Public Peer server gets down sometimes..
+     * This peer connection connects to a public peer server, but sometimes that peer server is down..
+     * If we need to have the peer server running always, we need to host our own.
+     */
     const peer = new Peer(peerjsConfguration);
 
     peer.on("open", (id) => {
@@ -45,37 +49,11 @@ const Calling = () => {
     setDestId(event.target.value);
   };
 
-  return (
-    <div>
-      <h2>Calling Component</h2>
-
-      {peerConn?._id && <h3>Your id: {peerConn._id}</h3>}
-
-      <button onClick={() => initiateCall()}>Call</button>
-
-      <input onChange={(event) => handleDestIdInput(event)} />
-      <br />
-      <h2>Local Video</h2>
-      <video
-        id="localstream"
-        autoPlay
-        style={{ width: "40%" }}
-        ref={(video) => {
-          if (video !== null && localStream) video.srcObject = localStream;
-        }}
-      ></video>
-
-      <h2>Remote Video</h2>
-      <video
-        id="remotestream"
-        autoPlay
-        style={{ width: "40%" }}
-        ref={(video) => {
-          if (video !== null && remoteStream) video.srcObject = remoteStream;
-        }}
-      ></video>
-    </div>
-  );
-};
-
-export default Calling;
+  return {
+    peerConn,
+    initiateCall,
+    localStream,
+    remoteStream,
+    handleDestIdInput,
+  };
+}

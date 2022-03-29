@@ -103,4 +103,5 @@ Install go-ipfs on your host system.
 
 ## Credits
 
-[This](https://youtu.be/pv3UHYwgxnM) video helped me in webrtc and javascript interaction.
+- [Video on WebRTC, Video calling and Javascript integration](https://youtu.be/pv3UHYwgxnM)
+- [Centralized Error Handling using Redux](https://www.pluralsight.com/guides/centralized-error-handing-with-react-and-redux)

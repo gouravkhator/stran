@@ -62,12 +62,14 @@ app.use((err, req, res, next) => {
     return res.status(err.statusCode).send({
       errorMsg: err.message,
       shortErrCode: err.shortMsg,
+      status: "error", // status will be error or success
     });
   }
 
   return res.status(500).send({
     errorMsg: "Some internal server error..",
     shortErrCode: "server-err",
+    status: "error",
   });
 });
 

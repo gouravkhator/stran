@@ -1,4 +1,4 @@
 import "./styles/main.scss";
-import App from "./App.jsx";
+import { AppWrapper } from "./App.jsx";
 
-export default App;
+export default AppWrapper;

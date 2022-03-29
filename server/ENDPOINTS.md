@@ -31,7 +31,7 @@ Secondly, the `returnUserIfUserExists` runs before some of the auth endpoints, a
 - `GET /auth/nonce`: Pass the publicAddress of the blockchain wallet, and it will return a nonce.
 - `POST /auth/signup`: Pass the user details and the public address of the wallet, and it will save the user in blockchain and return the user object.
 - `POST /auth/verify`: Pass the public address and the signature. This endpoint will verify the signature and return the user data with the jwtToken saved in the client cookies.
-- `POST /auth/logout`: Logs out the current user. It should also invalidate the jwtToken.
+- `POST /auth/logout`: Performs logout for the current user. It should also invalidate the jwtToken.
 
 ## User Endpoints
 

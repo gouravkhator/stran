@@ -11,7 +11,8 @@
     "sc:localnode": "npm run localnode --prefix blockchain/",
     "sc:deploy": "npm run deploy --prefix blockchain/",
 
-    "app:start": "npm run dev --prefix client/",
+    "app:dev": "npm run dev --prefix client/",
+    "app:start": "npm run app:dev",
     "app:build": "npm run build --prefix client/",
     "app:serve": "npm run serve --prefix client/",
     "app:test": "npm test --prefix client/",

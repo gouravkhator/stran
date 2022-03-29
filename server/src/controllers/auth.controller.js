@@ -27,7 +27,7 @@ async function getNonceController(req, res, next) {
     }
 
     return res.json({
-      success: true,
+      status: "success",
       nonce: userdata.nonce,
       user: userdata,
     });
@@ -57,7 +57,7 @@ async function signupController(req, res, next) {
     });
 
     return res.status(201).json({
-      success: true,
+      status: "success",
       user: userdata,
     });
   } catch (err) {
@@ -81,6 +81,7 @@ async function verifySignatureController(req, res, next) {
       res.cookie("jwtToken", token, secureCookieOptions);
 
       return res.json({
+        status: "success",
         verified: true,
         user,
       });

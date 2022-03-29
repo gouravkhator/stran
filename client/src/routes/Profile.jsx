@@ -1,3 +1,4 @@
+/** @jsx h */
 import { h } from "preact";
 import { useEffect, useState } from "preact/hooks";
 import style from "../styles/profile.module.scss";

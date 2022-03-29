@@ -1,15 +1,21 @@
+/** @jsx h */
 import { h } from "preact";
 import style from "../styles/home.module.scss";
-import Calling from "../components/Calling";
-import MetamaskLogin from "../components/MetamaskLogin";
+import VideoCall from "../components/VideoCall/VideoCall";
+import Counter from "../components/Counter/Counter";
+import { useSelector } from "react-redux";
 
 const Home = () => {
+  const error = useSelector(({ global }) => global.error);
+
   return (
     <div class={style.home}>
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      
       <h1>Home Page</h1>
-      <MetamaskLogin />
-      {/* Commented the Calling Component, to only include that in the calling page */}
-      {/* <Calling /> */}
+      <Counter />
+      {/* Commented the VideoCall Component, to only include that in the calling page */}
+      {/* <VideoCall /> */}
     </div>
   );
 };
