@@ -1,3 +1,10 @@
+/**
+ * This error happens when the server is not responding to the fetch events,
+ * or the client's internet/browser is not allowing the fetch to occur.
+ */
+const FETCH_ERR =
+  "Please check if you are connected to the internet or not. We are unable to connect to the decentralized storage to log you in..";
+
 export async function getUserByToken() {
   let result = null;
 
@@ -16,9 +23,7 @@ export async function getUserByToken() {
   } catch (err) {
     if (result === null) {
       // fetch was unsuccessful
-      throw new Error(
-        "Please check if you are connected to the internet or not. We are unable to connect to the decentralized storage to log you in..",
-      );
+      throw new Error(FETCH_ERR);
     }
 
     return null;
@@ -44,9 +49,7 @@ export async function fetchNonce(publicAddress) {
   } catch (err) {
     if (result === null) {
       // fetch was unsuccessful
-      throw new Error(
-        "Please check if you are connected to the internet or not. We are unable to connect to the decentralized storage to log you in..",
-      );
+      throw new Error(FETCH_ERR);
     }
 
     return null;
@@ -87,9 +90,7 @@ export async function signupHandler({
   } catch (err) {
     if (result === null) {
       // fetch was unsuccessful
-      throw new Error(
-        "Please check if you are connected to the internet or not. We are unable to connect to the decentralized storage to log you in..",
-      );
+      throw new Error(FETCH_ERR);
     }
 
     return null;
@@ -122,9 +123,7 @@ export async function verifySignatureHandler({ publicAddress, signature }) {
   } catch (err) {
     if (result === null) {
       // fetch was unsuccessful
-      throw new Error(
-        "Please check if you are connected to the internet or not. We are unable to connect to the decentralized storage to log you in..",
-      );
+      throw new Error(FETCH_ERR);
     }
 
     return null;
@@ -157,9 +156,7 @@ export async function logoutHandler() {
   } catch (err) {
     if (result === null) {
       // fetch was unsuccessful
-      throw new Error(
-        "Please check if you are connected to the internet or not. We are unable to connect to the decentralized storage to log you in..",
-      );
+      throw new Error(FETCH_ERR);
     }
 
     return {

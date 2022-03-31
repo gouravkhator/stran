@@ -27,17 +27,23 @@ export function useMetamask() {
     // Check if MetaMask is installed
     if (!window.ethereum) {
       dispatch(setIsInstalled(false));
-      dispatch(setError("Please install MetaMask to continue.."));
+      dispatch(
+        setError("Please install/enable MetaMask extension to continue."),
+      );
       return;
     }
+
+    const ethereum = window.ethereum;
 
     dispatch(setIsInstalled(true));
     dispatch(setError(null));
 
     // on metamask disconnect
     ethereum.on("disconnect", () => {
-      setError(
-        "Some issues occurred, we are unable to connect to Metamask/Ethereum network..",
+      dispatch(
+        setError(
+          "Oops! We are unable to connect to Metamask/Ethereum network..",
+        ),
       );
     });
 

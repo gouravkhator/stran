@@ -17,9 +17,13 @@ import ErrorPage from "./routes/ErrorPage";
 
 import reducer from "./store/reducers/root.reducer";
 import { Provider } from "react-redux";
-import { createStore } from "redux";
+import { createStore, applyMiddleware, compose } from "redux";
 
-const store = createStore(reducer);
+// enable the devtools for Redux
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+// global Redux store
+const store = createStore(reducer, composeEnhancers(applyMiddleware()));
 
 export function App() {
   return (

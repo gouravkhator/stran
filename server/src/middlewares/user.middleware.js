@@ -7,7 +7,7 @@ function throwErrIfUserNotExist(req, res, next) {
         statusCode: 401, // unauthorized, as the login is a mandate..
         shortMsg: "login-required",
         message:
-          "You are unauthorized to make this request. Please login to fetch the details!",
+          "You are unauthorized!! Please login first to make this request.",
       });
     } else {
       return next(); // else, go to the next route

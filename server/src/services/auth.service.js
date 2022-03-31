@@ -44,7 +44,31 @@ function authenticateToken(token) {
   }
 }
 
+/**
+ * Invalidate the JWT access token passed
+ * @param {*} token A JWT token in the string format
+ */
+function destroyAccessToken(token) {
+  try {
+    token = token ?? null;
+
+    if (token === null) {
+      throw new AppError({
+        statusCode: 401, // unauthorized request
+        shortMsg: "token-not-provided",
+        message:
+          "Please provide valid authorization token to make this request..",
+      });
+    }
+
+    // TODO: add the access token to the Redis in-memory db, to make it blacklisted
+  } catch (err) {
+    throw err;
+  }
+}
+
 module.exports = {
   generateAccessToken,
   authenticateToken,
+  destroyAccessToken,
 };

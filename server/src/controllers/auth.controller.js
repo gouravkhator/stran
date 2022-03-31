@@ -3,7 +3,10 @@ const {
   createUser,
   verifySignature,
 } = require("../services/smart-contract.service");
-const { generateAccessToken } = require("../services/auth.service");
+const {
+  generateAccessToken,
+  destroyAccessToken,
+} = require("../services/auth.service");
 
 const { AppError } = require("../utils/errors.util");
 const { secureCookieOptions } = require("../utils/global.util");
@@ -45,8 +48,7 @@ async function signupController(req, res, next) {
     if (userdata.username !== "") {
       throw new AppError({
         statusCode: 400,
-        message:
-          "User already exists. Please login to continue..",
+        message: "User already exists. Please login to continue..",
         shortMsg: "user-already-exists",
       });
     }
@@ -91,7 +93,20 @@ async function verifySignatureController(req, res, next) {
   }
 }
 
-async function logoutController(req, res, next) {}
+async function logoutController(req, res, next) {
+  try {
+    const token = req.signedCookies["jwtToken"] ?? null;
+
+    destroyAccessToken(token);
+
+    return res.json({
+      status: "success",
+      loggedOut: true,
+    });
+  } catch (err) {
+    return next(err);
+  }
+}
 
 module.exports = {
   getNonceController,

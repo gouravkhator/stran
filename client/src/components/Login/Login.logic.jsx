@@ -24,6 +24,7 @@ export default function LoginLogic() {
         const userFromToken = await getUserByToken();
         if (!!userFromToken) {
           // token is valid, and we fetched the user using the JWT token itself
+          dispatch(setError(null));
           dispatch(setUser(userFromToken));
         }
       } catch (err) {
@@ -57,6 +58,8 @@ export default function LoginLogic() {
       if (!!isMMConnected) {
         accountAddress = metamaskAcc;
       } else {
+        // TODO: dispatch(setMessage("Please check your Metamask notification for letting the login complete.."));
+
         const accounts = await ethereum.request({
           method: "eth_requestAccounts",
         });
@@ -88,6 +91,8 @@ export default function LoginLogic() {
           publicAddress: accountAddress,
         });
 
+        // setting global message to null and disabling the loading part, to enable the Login button.
+        // TODO: dispatch(setMessage(null));
         setLoading(false); // button loading should be false now
 
         if (!!user.username) {

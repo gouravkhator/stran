@@ -1,7 +1,7 @@
 /** @jsx h */
 import { h } from "preact";
 import style from "../styles/auth.module.scss";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "preact-router/match";
 
 import Login from "../components/Login/Login";
@@ -9,6 +9,8 @@ import SignupForm from "../components/SignupForm/SignupForm";
 
 import { useMetamask } from "../custom-hooks/MetamaskCustomHooks";
 import { signupHandler } from "../services/user-auth.service.js";
+import { useEffect } from "preact/hooks";
+import { setError } from "../store/actions";
 
 const AuthPage = () => {
   useMetamask();
@@ -17,6 +19,15 @@ const AuthPage = () => {
   const isMMInstalled = useSelector(({ metamask }) => metamask.isInstalled);
   const isLoggedIn = useSelector(({ user }) => user.loggedIn);
   const user = useSelector(({ user }) => user.userdata);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (!!user.username) {
+      // if user exists, don't show any metamask errors.
+      dispatch(setError(null));
+    }
+  }, [user]);
 
   const profileRedirectComponent = (
     <div>

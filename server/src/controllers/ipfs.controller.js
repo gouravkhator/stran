@@ -28,7 +28,8 @@ async function addDataToIpfsController(req, res, next) {
 
     return next(
       new AppError({
-        message: "Data could not be added to IPFS.. Maybe the IPFS node is not running, please restart it if possible, and try again..",
+        message:
+          "Data could not be added to IPFS.. Maybe the IPFS node is not running, please restart it if possible, and try again..",
         shortMsg: "data-not-added",
         statusCode: 500,
       }),
