@@ -1,5 +1,5 @@
 node_modules
-.env
+build
 /coverage/
 /coverage.json
 /typechain/
@@ -10,5 +10,4 @@ node_modules
 /blockchain/contractsConfig/*.config.json
 
 # Frontend files
-/client/build
 /client/*.log

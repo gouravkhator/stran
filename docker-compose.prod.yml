@@ -1,0 +1,58 @@
+version: "3.9"
+services:
+  frontend:
+    container_name: frontend
+    build:
+      context: ./client
+      # check the args
+      args:
+        - NODE_ENV=production
+      target: client
+    depends_on:
+      - backend
+    deploy:
+      resources:
+        limits:
+          cpus: "0.3"
+          memory: 50M
+
+  backend:
+    container_name: backend
+    # perform restart: always (not sure why this field was not suggested in intellisense)
+    # do healthcheck too in prod mode.. It is like a heartbeat signal sending every specified time interval
+    build:
+      context: ./server
+      args:
+        - NODE_ENV=production
+      target: server
+    depends_on:
+      - redis-server
+      - blockchain
+    ports:
+      - "8000:8000"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.3"
+          memory: 50M
+
+  redis-server:
+    container_name: redis-server
+    image: redis
+    ports:
+      - "6379:6379"
+
+  blockchain:
+    container_name: blockchain
+    build:
+      context: ./blockchain
+      args:
+        - NODE_ENV=production
+      target: blockchain
+    ports:
+      - "8545:8545"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.3"
+          memory: 50M

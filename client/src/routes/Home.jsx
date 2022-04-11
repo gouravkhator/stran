@@ -11,9 +11,7 @@ const Home = () => {
   return (
     <div class={style.home}>
       {error && <p style={{ color: "red" }}>{error}</p>}
-
       <h1>Home Page</h1>
-
       <Counter />
       {/* Commented the VideoCall Component, to only include that in the calling page */}
       {/* <VideoCall /> */}

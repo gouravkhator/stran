@@ -12,7 +12,7 @@ async function authenticateTokenMiddleware(req, res, next) {
      */
     const token = req.signedCookies["jwtToken"] ?? null;
 
-    const result = authenticateToken(token);
+    const result = await authenticateToken(token);
 
     authenticated = result.authenticated;
     userid = result.userid;

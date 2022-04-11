@@ -144,7 +144,7 @@ export async function logoutHandler() {
 
     const data = await result.json();
     if (data.status === "success") {
-      // if the status is success, then the token is saved in the cookie already from the server end.
+      // if the status is success, then the token will be reset in the cookie from server end.
       return {
         loggedOut: true,
       };

@@ -1,15 +1,15 @@
 /** @jsx h */
 import { h } from "preact";
 import { Link } from "preact-router/match";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useEffect } from "preact/compat";
 
 import style from "../styles/header.module.scss";
-import { getUserByToken } from "../services/user-auth.service";
+import { getUserByToken, logoutHandler } from "../services/user-auth.service";
+import { setError, setUser } from "../store/actions";
 
 const Header = () => {
   const user = useSelector(({ user }) => user.userdata);
-  const dispatch = useDispatch();
 
   useEffect(() => {
     (async () => {
@@ -23,7 +23,7 @@ const Header = () => {
 
         if (!!userFromToken?.username) {
           // token is valid, and we fetched the user using the JWT token itself
-          dispatch({ type: "SET_USER", user: userFromToken });
+          setUser(userFromToken);
         }
       } catch (err) {
         /**
@@ -35,6 +35,14 @@ const Header = () => {
       }
     })();
   }, []);
+
+  const onSignoutClick = async () => {
+    try {
+      await logoutHandler();
+    } catch (err) {
+      setError("Could not logout!! Please try after sometime..");
+    }
+  };
 
   return (
     <header class={style.header}>
@@ -49,7 +57,11 @@ const Header = () => {
             Sign In
           </Link>
         ) : (
-          <Link activeClassName={style.active} href="/signout">
+          <Link
+            activeClassName={style.active}
+            href="/"
+            onClick={() => onSignoutClick()}
+          >
             Sign Out
           </Link>
         )}

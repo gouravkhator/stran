@@ -97,7 +97,23 @@ async function logoutController(req, res, next) {
   try {
     const token = req.signedCookies["jwtToken"] ?? null;
 
-    destroyAccessToken(token);
+    /**
+     * We have to invalidate the JWT token in the server end and then also set the cookie in the client end to remove that token..
+     *
+     * What if we only remove cookie from client end, by sending a Set-Cookie header in response..?
+     *
+     * > This will let the client login again,
+     * but what if a hacker gets hold of the token, which is already valid in the server end, and has not expired yet..
+     * This can lead to account hacks, in the timespan when the token is valid till its expiry..
+     *
+     * So, we have to invalidate that token first in the server end..
+     */
+
+    await destroyAccessToken(token);
+
+    // delete the cookie by setting the token to a value "deleted", and setting max-age to 0 ms
+    // this way the token gets deleted from the user machine
+    res.cookie("jwtToken", "deleted", { ...secureCookieOptions, maxAge: 0 });
 
     return res.json({
       status: "success",
