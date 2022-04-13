@@ -3,6 +3,8 @@ import { useEffect, useState } from "preact/hooks";
 import { bufferToHex } from "ethereumjs-util";
 import { setError, setAccount, setUser } from "../../store/actions";
 
+import { getErrorObj } from "../../utils/general.util";
+
 import {
   fetchNonce,
   getUserByToken,
@@ -22,7 +24,12 @@ export default function LoginLogic() {
     (async () => {
       try {
         const userFromToken = await getUserByToken();
-        if (!!userFromToken) {
+
+        /**
+         * This step might feel redundant, as the Header component already checks if the user can be set via token..
+         * But this step may be crucial if the Header does not re-render, and we have to check in Login step itself..
+         */
+        if (!!userFromToken?.username) {
           // token is valid, and we fetched the user using the JWT token itself
           dispatch(setError(null));
           dispatch(setUser(userFromToken));
@@ -40,9 +47,11 @@ export default function LoginLogic() {
 
       return await ethereum.request({ method: "personal_sign", params });
     } catch (error) {
-      throw new Error(
-        "Cannot sign the one-time nonce.. Please try to click on Login again",
-      );
+      throw getErrorObj({
+        errorMsg:
+          "Cannot sign the one-time nonce.. Please try to click on Login again",
+        shortErr: "nonce-sign-error",
+      });
     }
   };
 
@@ -65,9 +74,10 @@ export default function LoginLogic() {
         });
 
         if (accounts.length === 0) {
-          throw new Error(
-            "Please connect this webapp with a Metamask account..",
-          );
+          throw getErrorObj({
+            errorMsg: "Please connect this webapp with a Metamask account..",
+            shortErr: "no-accounts-selected",
+          });
         }
 
         accountAddress = accounts[0];
@@ -93,7 +103,7 @@ export default function LoginLogic() {
 
         // setting global message to null and disabling the loading part, to enable the Login button.
         // TODO: dispatch(setMessage(null));
-        setLoading(false); // button loading should be false now
+        setLoading((previousLoadingState) => false); // button loading should be false now
 
         if (!!user.username) {
           // token is successfully saved
@@ -104,43 +114,34 @@ export default function LoginLogic() {
           return;
         }
       } else {
-        setLoading(false); // button loading should be false now
+        setLoading((previousLoadingState) => false); // button loading should be false now
 
-        throw new Error(
-          "This account does not exist. Please sign up to create the account..",
-        );
+        throw getErrorObj({
+          errorMsg:
+            "This account does not exist. Please sign up to create the account..",
+          shortErr: "account-not-exist",
+        });
       }
     } catch (err) {
-      setLoading(false); // button loading should be false now
+      setLoading((previousLoadingState) => false); // button loading should be false now
 
       if (err?.code === 4001) {
         // these errors are when we click on cancel instead of processing the popups from Metamask
         dispatch(
           setError(
-            "You clicked Cancel and didn't process the signin with Metamask..",
+            "You clicked Cancel and didn't continue to sign in with Metamask..",
           ),
         );
       } else {
-        dispatch(setError(err.message));
+        dispatch(setError(err.errorMsg ?? null));
       }
 
-      // TODO: check the different errors and set error accordingly
       console.error(err);
-
-      // error could have happened in the request accounts method, where user rejected that request
-      // "We see that you didn't connect any account in Metamask.. Please do that and try logging in again..",
     }
-  };
-
-  const handleLogout = async () => {
-    // TODO: send a logout request to the server to invalidate the tokens.
-    dispatch(setAccount(null));
-    dispatch(setError(null));
   };
 
   return {
     loading,
     handleLogin,
-    handleLogout,
   };
 }

@@ -8,8 +8,8 @@ export default function Counter() {
   return (
     <div>
       Count: {count}
-      <button onClick={() => increment()}>Inc</button>
-      <button onClick={() => decrement()}>Dec</button>
+      <button onClick={increment}>Inc</button>
+      <button onClick={decrement}>Dec</button>
     </div>
   );
 }

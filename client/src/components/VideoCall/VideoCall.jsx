@@ -17,9 +17,9 @@ export default function VideoCall() {
 
       {peerConn?._id && <h3>Your id: {peerConn._id}</h3>}
 
-      <button onClick={() => initiateCall()}>Call</button>
+      <button onClick={initiateCall}>Call</button>
 
-      <input onChange={(event) => handleDestIdInput(event)} />
+      <input onChange={handleDestIdInput} />
       <br />
       <h2>Local Video</h2>
       <video

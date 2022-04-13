@@ -34,6 +34,10 @@ Anything not meeting the current OKR. You may repeatedly come up with the same i
 
     - This is an already `OPEN` existing issue in metamask extension: [here on github](https://github.com/MetaMask/metamask-extension/issues/5936), but we get to know the reasons for this non-solvable issue in [this explanation](https://github.com/MetaMask/metamask-extension/issues/5936#issuecomment-755741448).
 
+- For checking if user exists on client end, we check if user.username is not empty or not null, and we do not directly check if user is null or not. That is because mostly, user can be an empty object too, and empty object is considered truthy. So, that check does not tell us if user is actually there or not..
+
+    So, don't remove any of the above checks of user.username..
+
 ## Maybe Later
 
 Tasks that are not to be started immediately.

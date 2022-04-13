@@ -1,11 +1,9 @@
 /** @jsx h */
 import { h } from "preact";
-import SignupFormLogic from "./SignupForm.logic";
+import SignupLogic from "./Signup.logic";
 
-const SignupForm = ({ signupHandler }) => {
-  const { name, handleSignupFormSubmit, handleNameInput } = SignupFormLogic({
-    signupHandler, // pass this prop to the logical part of SignupForm component
-  });
+export default function Signup() {
+  const { name, handleSignupFormSubmit, handleNameInput } = SignupLogic();
 
   return (
     <div>
@@ -27,6 +25,4 @@ const SignupForm = ({ signupHandler }) => {
       </form>
     </div>
   );
-};
-
-export default SignupForm;
+}

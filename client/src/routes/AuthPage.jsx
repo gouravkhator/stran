@@ -5,18 +5,35 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "preact-router/match";
 
 import Login from "../components/Login/Login";
-import SignupForm from "../components/SignupForm/SignupForm";
+import Signup from "../components/Signup/Signup";
+import ConnectMM from "../components/ConnectMetamask/ConnectMM";
 
 import { useMetamask } from "../custom-hooks/MetamaskCustomHooks";
 import { signupHandler } from "../services/user-auth.service.js";
 import { useEffect } from "preact/hooks";
 import { setError } from "../store/actions";
 
-const AuthPage = () => {
-  useMetamask();
+/**
+ * AuthPage Logic tree:
+ *
+ *                  User Logged In
+ *                Yes /           \  No
+ *      (Redirect to Profile)  (..............Is Metamask Installed.................)
+ *                                    Yes  /                           \ No
+ *  (Compute MM connect Logic and show Login/Signup components)       (Show MM not installed error)
+ *        /                        AND              \
+ *    (........Is MM connected?......)      (Show Login and Signup components)
+ *   Yes /                        \ No
+ * (Show connected success msg)  (Show connect MM component)
+ */
+export default function AuthPage() {
+  useMetamask(); // our own useMetamask custom hook
 
   const error = useSelector(({ global }) => global.error);
+
   const isMMInstalled = useSelector(({ metamask }) => metamask.isInstalled);
+  const isMMConnected = useSelector(({ metamask }) => metamask.isConnected);
+
   const isLoggedIn = useSelector(({ user }) => user.loggedIn);
   const user = useSelector(({ user }) => user.userdata);
 
@@ -25,6 +42,7 @@ const AuthPage = () => {
   useEffect(() => {
     if (!!user.username) {
       // if user exists, don't show any metamask errors.
+      // this setError(null) shadows/overwrites all the errors set by useMetamask() custom hook
       dispatch(setError(null));
     }
   }, [user]);
@@ -52,17 +70,31 @@ const AuthPage = () => {
       <h3>Or,</h3>
       <p>Enter your details</p>
 
-      <SignupForm
-        signupHandler={({ publicAddress, name }) =>
-          signupHandler({ publicAddress, name })
-        }
-      />
+      <Signup />
     </div>
   );
 
+  /**
+   * Checks if the metamask is connected or not, else shows the ConnectMM component,
+   * which lets users to connect the app to their metamask account.
+   */
+  const mmConnectComp =
+    isMMConnected === true ? (
+      "Your MetaMask account is already connected with our app.."
+    ) : (
+      <ConnectMM />
+    );
+
   const notLoggedInComp =
     isMMInstalled === true ? (
-      authComponent
+      <div>
+        {/**
+         * If metamask is installed, show the connect button if it is not connected
+         * Also show the auth component for login/signup..
+         */}
+        {mmConnectComp}
+        {authComponent}
+      </div>
     ) : (
       <p>
         Please install MetaMask extension in your browser to continue the signin
@@ -81,12 +113,10 @@ const AuthPage = () => {
        * else, show him the not logged in component..
        *
        * Not logged in component checks if metamask is installed or not,
-       * and if it is installed, then show him the login component,
+       * and if it is installed, then show him the metamask connect stuff as well as the login component,
        * else show him the error that metamask is not installed, so we cannot do sign in.
        */}
       {isLoggedIn === true ? profileRedirectComponent : notLoggedInComp}
     </div>
   );
-};
-
-export default AuthPage;
+}

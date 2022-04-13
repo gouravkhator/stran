@@ -7,13 +7,13 @@ export function answerCall({ peer, setLocalStream, setRemoteStream }) {
 
   peer.on("call", async function (call) {
     const localStream = await captureStream();
-    setLocalStream(localStream);
+    setLocalStream((previousLocalStream) => localStream);
 
     // Answer the call, providing our mediaStream
     call.answer(localStream);
 
     call.on("stream", function (remoteStream) {
-      setRemoteStream(remoteStream);
+      setRemoteStream((previousRemoteStream) => remoteStream);
     });
   });
 }
@@ -29,11 +29,11 @@ export async function callPeer({
   }
 
   const localStream = await captureStream();
-  setLocalStream(localStream);
+  setLocalStream((previousLocalStream) => localStream);
 
   const call = peer.call(destId, localStream);
 
   call.on("stream", function (remoteStream) {
-    setRemoteStream(remoteStream);
+    setRemoteStream((previousRemoteStream) => remoteStream);
   });
 }

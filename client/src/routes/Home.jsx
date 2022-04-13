@@ -1,9 +1,10 @@
 /** @jsx h */
 import { h } from "preact";
-import style from "../styles/home.module.scss";
-import VideoCall from "../components/VideoCall/VideoCall";
-import Counter from "../components/Counter/Counter";
 import { useSelector } from "react-redux";
+import style from "../styles/home.module.scss";
+
+// import VideoCall from "../components/VideoCall/VideoCall";
+import Counter from "../components/Counter/Counter";
 
 const Home = () => {
   const error = useSelector(({ global }) => global.error);

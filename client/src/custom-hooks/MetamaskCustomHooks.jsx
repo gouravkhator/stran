@@ -1,12 +1,15 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "preact/hooks";
 import { setError, setAccount, setIsInstalled } from "../store/actions";
+import { logoutHandler } from "../services/user-auth.service";
 
 export function useMetamask() {
   const accountAddress = useSelector(({ metamask }) => metamask.accountAddress);
+  const user = useSelector(({ user }) => user.userdata);
+
   const dispatch = useDispatch();
 
-  const handleAccountsChanged = (updatedAccounts) => {
+  const handleAccountsChanged = async (updatedAccounts) => {
     if (updatedAccounts.length === 0) {
       dispatch(setAccount(null));
       dispatch(
@@ -16,10 +19,18 @@ export function useMetamask() {
     }
 
     if (accountAddress !== updatedAccounts[0]) {
-      // TODO: send a request to the server to logout the user.
+      try {
+        // send a request to the server to logout the user, if user exists.
+        if (!!user.username) {
+          await logoutHandler();
+        }
 
-      dispatch(setError(null));
-      dispatch(setAccount(updatedAccounts[0]));
+        dispatch(setError(null));
+        dispatch(setAccount(updatedAccounts[0]));
+      } catch (err) {
+        // accounts changed, but could not logout, so we cannot show this type of error to user..
+        dispatch(setError("Some internal server error occurred"));
+      }
     }
   };
 
@@ -37,6 +48,14 @@ export function useMetamask() {
 
     dispatch(setIsInstalled(true));
     dispatch(setError(null));
+
+    const selectedAddress = ethereum.selectedAddress;
+
+    // as it is a hex value, so it will have prefix of '0x', so its length should be atleast >2
+    if (!!selectedAddress && selectedAddress.length > 2) {
+      // populate the already selected address if it exists..
+      dispatch(setAccount(selectedAddress));
+    }
 
     // on metamask disconnect
     ethereum.on("disconnect", () => {

@@ -26,8 +26,8 @@ export const setIsConnected = (isMetamaskConnected = false) => {
 };
 
 export const setUser = (user = null, toEdit = false) => {
-  if (!user) {
-    // user passed is empty
+  if (!user || !user?.username) {
+    // user passed is empty, or if user's username is not set, meaning user passed might be an empty object..
     return {
       type: userActions.REMOVE_USER,
     };

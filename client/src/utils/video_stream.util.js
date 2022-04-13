@@ -1,3 +1,5 @@
+import { getErrorObj } from "./general.util";
+
 export async function captureStream() {
   let isFront = true;
   const sourceInfos = await navigator.mediaDevices.enumerateDevices();
@@ -33,5 +35,8 @@ export function setStream({ incomingStream, targetElement }) {
     targetElement.srcObject = incomingStream;
   }
 
-  throw new Error(`Src could not be set at targetElement ${targetElement}`);
+  throw getErrorObj({
+    errorMsg: `Src could not be set at targetElement ${targetElement}`,
+    shortErr: "video-not-set",
+  });
 }

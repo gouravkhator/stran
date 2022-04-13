@@ -29,7 +29,7 @@ export default function VideoCallLogic() {
     peer.on("open", (id) => {
       console.log("Congrats! You are a peer in this video-calling dapp");
       console.info("Your id is: " + id);
-      setPeerConn(peer);
+      setPeerConn((oldPeerConn) => peer);
     });
   }, []);
 
@@ -46,7 +46,7 @@ export default function VideoCallLogic() {
   };
 
   const handleDestIdInput = (event) => {
-    setDestId(event.target.value);
+    setDestId((oldDestId) => event.target.value);
   };
 
   return {

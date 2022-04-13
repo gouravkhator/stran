@@ -11,6 +11,7 @@ const express = require("express");
 const app = express();
 // const session = require('express-session'); // for session-based auth
 const cookieParser = require("cookie-parser");
+// const helmet = require('helmet');
 
 const { allowCrossDomain } = require("./src/middlewares/global.middleware");
 const {
@@ -27,6 +28,7 @@ app.use(cookieParser(process.env.TOKEN_SECRET));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(allowCrossDomain);
+// app.use(helmet()); // !ISSUE: enabling helmet works fine for all use cases, except the token passing from server to client
 
 /**
  * We are using token authentication currently,

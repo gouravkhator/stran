@@ -15,11 +15,11 @@
 
     - What we can also do is to **send a heartbeat to the server** for the validity of this user. Heartbeat can be implemented using setTimeout function and doing fetch to the /user route to the server.
     
-- [ ] Edit setState to have functions passed in instead of objects, so that functions won't be created again and again on re-renders..
 - [ ] Add Global message state, to have message for the user in some cases
-- [ ] Signup, login and logout functionality client-side.
-  - [ ] Signup and Logout functionality.
-  - [x] Login functionality.
+- [x] Connect with Metamask.
+- [x] Edit setState to have functions passed in instead of objects, so that functions won't be created again and again on re-renders..
+- [x] Throw an object as a error and short error formatted object on client end too.
+- [x] Signup, login and logout functionality client-side.
 - [x] Global error handling
 - [x] Use Redux for metamask account management
 
@@ -27,11 +27,12 @@
 
 - [x] Parse enums of the user returned directly in `smart-contract.service.js` file.
 - [ ] `ISSUE`: knownLanguages array in `smart-contract.service.js` createUser method becomes undefined after we save it to blockchain.
-- [ ] JWT token logout will involve saving tokens in redis as invalid tokens, when user requests for logout. And when we do authenticate tokens, it should also lookup in the redis if this token is blacklisted or not.
+- [x] JWT token logout including saving invalid tokens to redis, and looking up blacklisted tokens from redis while authenticating tokens.
 - [ ] Add CRUD operations for user in contacting the smart contract, and also in the server endpoints.
   - [ ] Update operation remaining to implement in smart contract integration.
   - [x] Other operations like create user, delete user, add friend, get friends, get user data to add in smart contract integration.
   - [ ] Update operation to implement in server endpoints' routes.
+- [ ] Add helmet with proper options to allow JWT working also.
 
 ### Blockchain Solidity Only
 
