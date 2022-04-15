@@ -36,5 +36,4 @@ LICENSE
 *.gif
 
 # blockchain files
-*.sol
 artifacts/

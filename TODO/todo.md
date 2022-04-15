@@ -26,17 +26,17 @@
 ### Server End Only
 
 - [x] Parse enums of the user returned directly in `smart-contract.service.js` file.
-- [ ] `ISSUE`: knownLanguages array in `smart-contract.service.js` createUser method becomes undefined after we save it to blockchain.
 - [x] JWT token logout including saving invalid tokens to redis, and looking up blacklisted tokens from redis while authenticating tokens.
-- [ ] Add CRUD operations for user in contacting the smart contract, and also in the server endpoints.
-  - [ ] Update operation remaining to implement in smart contract integration.
-  - [x] Other operations like create user, delete user, add friend, get friends, get user data to add in smart contract integration.
+- [ ] Add user CRUD operations in contacting with smart contract and also in server endpoints.
+  - [ ] Update operation to implement in smart contract service.
   - [ ] Update operation to implement in server endpoints' routes.
-- [ ] Add helmet with proper options to allow JWT working also.
+  - [x] Other operations like create user, delete user, add friend, get friends, get user data to add in smart contract integration.
+- [ ] Add helmet with proper options to let us use JWT also.
 
 ### Blockchain Solidity Only
 
-- [ ] 
+- [x] Update operation implemented in smart contract code.
+- [ ] `ISSUE`: knownLanguages array in registerUser method is undefined and not saved when we fetch that.
 
 ### Overall Project's In-Progress Items
 

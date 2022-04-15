@@ -4,23 +4,19 @@
   "scripts": {
     "check-format": "prettier --config .prettierrc -c .",
     "format": "prettier --config .prettierrc -w .",
-
     "sc:accounts": "npm run accounts --prefix blockchain/",
     "sc:compile": "npm run compile --prefix blockchain/",
     "sc:test": "npm test --prefix blockchain/",
     "sc:localnode": "npm run localnode --prefix blockchain/",
     "sc:deploy": "npm run deploy --prefix blockchain/",
-
     "app:dev": "npm run dev --prefix client/",
     "app:start": "npm run app:dev",
     "app:build": "npm run build --prefix client/",
     "app:serve": "npm run serve --prefix client/",
     "app:test": "npm test --prefix client/",
-
     "server:start": "npm start --prefix server/",
     "server:dev": "npm run dev --prefix server/",
     "server:test": "npm run test --prefix server/",
-
     "full-install": "npm i && npm i --prefix blockchain/ && npm i --prefix client/ && npm i --prefix server/"
   },
   "license": "Apache-2.0",
@@ -48,6 +44,7 @@
     "decentralised"
   ],
   "devDependencies": {
-    "prettier": "^2.5.1"
+    "prettier": "^2.5.1",
+    "prettier-plugin-solidity": "^1.0.0-beta.19"
   }
 }

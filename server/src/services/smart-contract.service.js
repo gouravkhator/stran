@@ -316,6 +316,9 @@ async function getUserData(userid, senderAccAddr) {
      * TODO: Current user should get only his own data and some partial data of his friend,
      * iff the friend has allowed that in his privacy settings..
      * Or, current user can search some other user and also get some info, which are made public..
+     *
+     * Currently, Login and authorization has helped maintain this security by only getting own data,
+     * but we want to boil this security down to this service too..
      */
 
     validateParams({ senderAccAddr });

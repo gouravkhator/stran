@@ -15,6 +15,10 @@
 
     - Also, we can store each invalid tokens with an expiration time of around 1 day, as after 1 day, the user will obviously be asked to login again which will generate new tokens. This is because the tokens saved in the cookies also have expiration of 1 day.
 
+### Info To Be Noted for future
+
+- 
+
 ### Check and Research
 
 - [ ] What server does torrent use out of STUN and TURN, to make a peer network ?

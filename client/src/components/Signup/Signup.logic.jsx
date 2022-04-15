@@ -8,7 +8,7 @@ import { signupHandler } from "../../services/user-auth.service";
 /**
  * As sign up logic involves more user inputs than Login,
  * so we want user to have the prerequisite of staying connected with Metamask..
- * 
+ *
  * And after creating the account, user has to login to continue..
  */
 export default function SignupLogic() {
