@@ -60,6 +60,15 @@ const locationsList = [
   "ANTARCTICA",
 ];
 
+/**
+ * Location is an object like below:
+ * 
+ *  {
+ *    "ASIA": 0,
+ *    "EUROPE": 1,
+ *    ..... 
+ *  }
+ */
 const Location = convertArrToEnum(locationsList);
 
 // Status - an enum for tracking the availability state of the user

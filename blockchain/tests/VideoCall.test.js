@@ -19,10 +19,19 @@ describe("VideoCallContract", function () {
 
   it("Should register new user and check if that is added to userdata mapping", async function () {
     /**
-     * Some of the params passed in registerUser are enums,
-     * and their values in javascript is depicted like 0-based indexed arrays.
+     * enum fields or enum-based fields like location, primaryLanguage, status, knownLanguages
+     * are all in number formats and not in string formats..
      */
-    const registerUserTx = await deployedContract.registerUser("go", 0, 1, [1]);
+    const location = 0,
+      primaryLanguage = 1,
+      knownLanguages = [1];
+
+    const registerUserTx = await deployedContract.registerUser(
+      "go",
+      location,
+      primaryLanguage,
+      knownLanguages,
+    );
 
     await registerUserTx.wait();
 
@@ -38,10 +47,16 @@ describe("VideoCallContract", function () {
   it("Should edit the existing user and check if the fields are updated or not", async function () {
     const existingUser = await deployedContract.userdata(addr1.address);
 
+    /**
+     * enum fields or enum-based fields like location, primaryLanguage, status, knownLanguages
+     * are all in number formats and not in string formats..
+     */
     const updateUserTx = await deployedContract.updateUser(
       existingUser.username.toUpperCase(),
       existingUser.location,
-      existingUser.primaryLanguage,
+      existingUser.primaryLanguage + 1,
+      existingUser.status,
+      // !ISSUE: update below knownLanguages param when the issue regarding knownLanguages gets solved
       [1],
     );
 
@@ -49,6 +64,13 @@ describe("VideoCallContract", function () {
 
     const editedUser = await deployedContract.userdata(updateUserTx.from);
     expect(editedUser.username).to.equal("GO");
+    expect(editedUser.primaryLanguage).to.equal(2);
+    
+    /**
+     * as primaryLanguage gets updated,
+     * so the requiredLanguage of callerOptions also gets updated in our code..
+     */
+    expect(editedUser.callerOptions.requiredLanguage).to.equal(2);
   });
 
   it("Should delete created user and check if that is removed from userdata mapping", async function () {

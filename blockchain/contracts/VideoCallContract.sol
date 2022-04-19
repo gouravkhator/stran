@@ -105,6 +105,7 @@ contract VideoCallContract {
     string memory name,
     Location location,
     Language primaryLanguage,
+    Status status,
     Language[] memory knownLanguages
   ) public {
     require(userdata[msg.sender].userid > address(0));
@@ -113,7 +114,12 @@ contract VideoCallContract {
     User storage existingUser = userdata[msg.sender];
     existingUser.username = name;
     existingUser.location = location;
+    existingUser.status = status;
     existingUser.primaryLanguage = primaryLanguage;
+
+    // update the caller options as the updated primaryLanguage and the location..
+    existingUser.callerOptions.requiredLanguage = primaryLanguage;
+    existingUser.callerOptions.requiredLocation = location;
 
     // Why we should copy array like from memory to storage: https://stackoverflow.com/a/71820669
     existingUser.knownLanguages = knownLanguages;

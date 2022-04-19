@@ -19,7 +19,10 @@ async function getNonceController(req, res, next) {
      */
     const publicAddress = req.params.publicAddress;
 
-    const userdata = await getUserData(publicAddress, publicAddress);
+    const userdata = await getUserData({
+      userid: publicAddress,
+      senderAccAddr: publicAddress,
+    });
 
     if (userdata.username === "") {
       throw new AppError({
@@ -43,7 +46,10 @@ async function signupController(req, res, next) {
   try {
     const publicAddress = req.body.publicAddress;
 
-    let userdata = await getUserData(publicAddress, publicAddress);
+    let userdata = await getUserData({
+      userid: publicAddress,
+      senderAccAddr: publicAddress,
+    });
 
     if (userdata.username !== "") {
       throw new AppError({

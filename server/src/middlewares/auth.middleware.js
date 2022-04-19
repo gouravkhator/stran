@@ -19,7 +19,11 @@ async function authenticateTokenMiddleware(req, res, next) {
 
     // if authenticated is false, authenticateToken should have already thrown the error
     if (authenticated === true) {
-      req.user = await getUserData(userid, userid);
+      req.user = await getUserData({
+        userid: userid,
+        senderAccAddr: userid,
+      });
+      
       return next();
     }
   } catch (err) {

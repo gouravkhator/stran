@@ -35,21 +35,6 @@ Now, when the user visits our webapp, the token is sent to the server via the He
  (Show connected success msg)  (Show connect MM component)
 ```
 
-## Client-side Error
-
-As we have multiple parts of the client side where we can get the error, so we don't user default Error object, rather we throw an object with below structure:
-
-```js
-throw {
-  errorMsg: 'Long descriptive error message for user',
-  shortErr: 'short-error-message-in-hyphenated-format',
-}
-```
-
-**Why 2 fields for Error Messages ?**
-- Long error messages are for users to see.
-- Short error messages are kept, so that we can use this hyphenated short error strings in switch case statements in the catch blocks, to have conditional logic for each of those short errors. 
-
 ## System Design and Architecture
 
 From Client side, user will login. User's login will be saved and an address will be provided to him by the ethereum network. This address will go to the smart contract code and registerUser will be called. User should keep the address with him, else his account will not be retrievable.

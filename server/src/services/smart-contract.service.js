@@ -1,9 +1,12 @@
 const { recoverPersonalSignature } = require("@metamask/eth-sig-util");
 const { bufferToHex } = require("ethereumjs-util");
 
-const { Language, Location, Status } = require("../utils/enums.util");
 const { AppError } = require("../utils/errors.util");
-const { cleanseUserData } = require("../utils/user.util");
+
+const {
+  cleanseUserData,
+  makeDataBlockchainCompat,
+} = require("../utils/user.util");
 
 const { getContract } = require("../services/blockchain-init.service");
 
@@ -43,7 +46,7 @@ const validateParams = ({ senderAccAddr }) => {
 
 /**
  * Every service below has senderAccAddr to the valid address of the sender's account..
- * It specifies, from which account we want to make the blockchain modification/methpds transaction.
+ * It specifies, from which account we want to make the blockchain modification/methods transaction.
  */
 
 /**
@@ -52,9 +55,9 @@ const validateParams = ({ senderAccAddr }) => {
  */
 async function createUser({
   username = null,
-  currentLocation = Location.ASIA,
-  primaryLanguage = Language.ENGLISH,
-  knownLanguages = [Language.ENGLISH],
+  location = "ASIA",
+  primaryLanguage = "ENGLISH",
+  knownLanguages = ["ENGLISH"],
   senderAccAddr,
 } = {}) {
   try {
@@ -71,12 +74,17 @@ async function createUser({
     validateParams({ senderAccAddr });
     const { vcContract } = await getContract();
 
+    const userdata = await getUserData({
+      userid: senderAccAddr,
+      senderAccAddr: senderAccAddr,
+    });
+
     /**
      * check if user already exists or not, via the sender account address.
      * if user already exists with this address as the userid, then registerUser method will throw the error.
      * So, we check beforehand..
      */
-    if ((await getUserData(senderAccAddr, senderAccAddr)).username !== "") {
+    if (userdata.username !== "") {
       throw new AppError({
         message: "This account already exists. Please login to continue..",
         shortMsg: "account-exists-err",
@@ -85,36 +93,32 @@ async function createUser({
       });
     }
 
-    /**
-     * If we pass just the javascript number type in the params of a smart contract method like registerUser.
-     *
-     * And we know, that registerUser in smart contract also takes uint8, then we also need to parse the number using parseInt.
-     *
-     * Why an extra parsing step??
-     * >> It maybe bcoz web3 is parsing the javascript number again to string, and solidity wants to have uint8.
-     * That is why we are getting below error:
-     * INVALID_ARGUMENT error..
-     */
-    const transactionObj = await vcContract.methods
+    // transform the enum fields into blockchain compatible numbers/indices
+    const compatibleObj = makeDataBlockchainCompat({
+      location,
+      primaryLanguage,
+      knownLanguages,
+    });
+
+    const locationToSave = compatibleObj.location,
+      primaryLangToSave = compatibleObj.primaryLanguage,
+      knownLanguagesToSave = compatibleObj.knownLanguages;
+
+    const createUserTx = await vcContract.methods
       .registerUser(
         username,
-        parseInt(currentLocation),
-        parseInt(primaryLanguage),
-        knownLanguages.map((language) => parseInt(language)),
+        locationToSave,
+        primaryLangToSave,
+        knownLanguagesToSave,
       )
       .send({
         from: senderAccAddr,
       });
 
-    // userdata solidity method takes in the userid as the param
-    const savedUserData = await vcContract.methods
-      .userdata(transactionObj.from)
-      .call({
-        from: senderAccAddr,
-      });
-
-    // ! ISSUE: the savedUserData has knownLanguages as undefined
-    return cleanseUserData(savedUserData);
+    return getUserData({
+      userid: createUserTx.from,
+      senderAccAddr: senderAccAddr,
+    });
   } catch (err) {
     // null username, validateParams, getContract, existing user etc. throws AppError indirectly or directly.
     if (err instanceof AppError) {
@@ -136,20 +140,24 @@ async function createUser({
  * It takes in username, currentLocation, primaryLanguage of choice, and languages known by the user.
  */
 async function updateUser({
-  username,
-  currentLocation,
-  primaryLanguage,
-  knownLanguages,
+  username = null,
+  location = null,
+  primaryLanguage = null,
+  knownLanguages = null,
+  status = null,
   senderAccAddr,
 }) {
   try {
     validateParams({ senderAccAddr });
     const { vcContract } = await getContract();
 
-    const userdata = await getUserData(senderAccAddr, senderAccAddr);
+    const existingUser = await getUserData({
+      userid: senderAccAddr,
+      senderAccAddr: senderAccAddr,
+    });
 
     // check if user already exists or not, via the sender account address
-    if (userdata.username === "") {
+    if (existingUser.username === "") {
       throw new AppError({
         message: "This account does not exist. Please signup to continue..",
         shortMsg: "invalid-account",
@@ -157,7 +165,40 @@ async function updateUser({
       });
     }
 
-    // TODO: Update user functionality with userdata as the existing object
+    // make the enum fields of the passed params of this function as blockchain-compatible
+    const compatibleObj = makeDataBlockchainCompat({
+      // if any field is not passed, we fallback to existing values of the blockchain 
+      location: location ?? existingUser.location,
+      primaryLanguage: primaryLanguage ?? existingUser.primaryLanguage,
+      // knownLanguages: knownLanguages?.length > 0 ? knownLanguages : existingUser.knownLanguages,
+      knownLanguages: [],
+      status: status ?? existingUser.status,
+    });
+
+    const locationToSave = compatibleObj.location,
+      primaryLangToSave = compatibleObj.primaryLanguage,
+      statusToSave = compatibleObj.status,
+      knownLanguagesToSave = compatibleObj.knownLanguages,
+      usernameToSave = username ?? existingUser.username;
+
+    const updateUserTx = await vcContract.methods
+      .updateUser(
+        usernameToSave,
+        locationToSave,
+        primaryLangToSave,
+        statusToSave,
+        knownLanguagesToSave,
+      )
+      .send({
+        from: senderAccAddr,
+      });
+
+    const modifiedUserData = await getUserData({
+      userid: updateUserTx.from,
+      senderAccAddr: senderAccAddr,
+    });
+
+    return modifiedUserData;
   } catch (err) {
     if (err instanceof AppError) {
       throw err;
@@ -180,8 +221,13 @@ async function deleteUser(senderAccAddr) {
     validateParams({ senderAccAddr });
     const { vcContract } = await getContract();
 
+    const userdata = await getUserData({
+      userid: senderAccAddr,
+      senderAccAddr,
+    });
+
     // check if user exists or not, via the sender account address
-    if ((await getUserData(senderAccAddr, senderAccAddr)).username === "") {
+    if (userdata.username === "") {
       throw new AppError({
         message: "This account does not exist. Please signup to continue..",
         shortMsg: "invalid-account",
@@ -215,19 +261,15 @@ async function addFriend(friendUserId, senderAccAddr) {
     const { vcContract } = await getContract();
 
     // check if user already exists or not, via the sender account address
-    if ((await getUserData(senderAccAddr, senderAccAddr)).username === "") {
+    const userdata = await getUserData({
+      userid: senderAccAddr,
+      senderAccAddr,
+    });
+
+    // check if user exists or not, via the sender account address
+    if (userdata.username === "") {
       throw new AppError({
         message: "This account does not exist. Please signup to continue..",
-        shortMsg: "invalid-account",
-        statusCode: 404,
-      });
-    }
-
-    // check if friend already exists or not
-    if ((await getUserData(friendUserId, senderAccAddr)).username === "") {
-      throw new AppError({
-        message:
-          "This friend account is probably deleted. Cannot add them as friend.",
         shortMsg: "invalid-account",
         statusCode: 404,
       });
@@ -258,8 +300,13 @@ async function getFriendsList(senderAccAddr) {
     validateParams({ senderAccAddr });
     const { vcContract } = await getContract();
 
-    // check if user already exists or not, via the sender account address
-    if ((await getUserData(senderAccAddr, senderAccAddr)).username === "") {
+    const userdata = await getUserData({
+      userid: senderAccAddr,
+      senderAccAddr,
+    });
+
+    // check if user exists or not, via the sender account address
+    if (userdata.username === "") {
       throw new AppError({
         message: "This account does not exist. Please signup to continue..",
         shortMsg: "invalid-account",
@@ -274,7 +321,10 @@ async function getFriendsList(senderAccAddr) {
     // reduce method is used so that we can check for every friend and then return appropriate data
     const friendsObjList = await friendsAddrList.reduce(
       async (list, friendAddr) => {
-        const friendData = await getUserData(friendAddr, senderAccAddr);
+        const friendData = await getUserData({
+          userid: friendAddr,
+          senderAccAddr: senderAccAddr,
+        });
 
         if (friendData.username !== "") {
           list.push(friendData);
@@ -306,11 +356,11 @@ async function getFriendsList(senderAccAddr) {
 }
 
 /**
- * Returns the user data as saved in blockchain
+ * Gets the user data from blockchain and cleanses it up..
  * @param {*} userid User ID as required for getting data
  * @returns User data object
  */
-async function getUserData(userid, senderAccAddr) {
+async function getUserData({ userid, senderAccAddr }) {
   try {
     /**
      * TODO: Current user should get only his own data and some partial data of his friend,
@@ -324,11 +374,11 @@ async function getUserData(userid, senderAccAddr) {
     validateParams({ senderAccAddr });
     const { vcContract } = await getContract();
 
-    return cleanseUserData(
-      await vcContract.methods.userdata(userid).call({
-        from: senderAccAddr,
-      }),
-    );
+    const userdata = await vcContract.methods.userdata(userid).call({
+      from: senderAccAddr,
+    });
+
+    return cleanseUserData(userdata);
   } catch (err) {
     if (err instanceof AppError) {
       throw err;
@@ -361,7 +411,10 @@ async function verifySignature({ senderAccAddr, signature }) {
       });
     }
 
-    const userdata = await getUserData(publicAddress, publicAddress);
+    const userdata = await getUserData({
+      userid: publicAddress,
+      senderAccAddr: publicAddress,
+    });
 
     if (userdata.username === "") {
       throw new AppError({
@@ -407,52 +460,70 @@ module.exports = {
   verifySignature,
 };
 
-// Sample code as below, and this file can be run like: node server/services/smart-contract.service.js
+// Sample code as below, and this file can be run like: node server/src/services/smart-contract.service.js
 /*
 (async () => {
-    try {
-        const accounts = [
-            '0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266',
-            '0x70997970c51812dc3a010c7d01b50e0d17dc79c8',
-        ];
+  const accounts = [
+    "0xf39fd6e51aad88f6f4ce6ab8827279cfffb92266",
+    "0x70997970c51812dc3a010c7d01b50e0d17dc79c8",
+  ];
 
-        const currentUserData = await createUser({
-            username: 'Gourav Khator',
-            currentLocation: Location.AMERICA,
-            senderAccAddr: accounts[0],
-        });
+  try {
+    const currentUserData = await createUser({
+      username: "Gourav Khator",
+      currentLocation: 'AMERICA',
+      senderAccAddr: accounts[0],
+    });
 
-        console.log("Current user data is as follows: ");
-        console.log(currentUserData);
+    console.log("Current user data is as follows: ");
+    console.log(currentUserData);
 
-        const friendsObjList = await getFriendsList(accounts[0]);
-        console.log("\nCurrently, this new user has no friends as logged below:");
-        console.log(friendsObjList);
+    const modifiedUserData = await updateUser({
+      username: "Edited Gourav",
+      primaryLanguage: "TELUGU",
+      senderAccAddr: accounts[0],
+    });
 
-        const otherUser = await createUser({
-            username: 'Friend',
-            currentLocation: Location.ASIA,
-            senderAccAddr: accounts[1], // so that we can create user from different account sender
-            // as in solidity, for security reasons, we want only 1 account from that sender.
-        });
+    console.log("Modified user data is as follows: ");
+    console.log(modifiedUserData);
 
-        console.log("\nAdding friend for current user..");
-        await addFriend(otherUser.userid, accounts[0]);
+    const friendsObjList = await getFriendsList(accounts[0]);
+    console.log("\nCurrently, this new user has no friends as logged below:");
+    console.log(friendsObjList);
 
-        console.log('\nThe friends list of current user, after adding friend with id: ' + otherUser.userid);
-        console.log(await getFriendsList(accounts[0]));
+    const otherUser = await createUser({
+      username: "Friend",
+      currentLocation: "ASIA",
+      senderAccAddr: accounts[1], // so that we can create user from different account sender
+      // as in solidity, for security reasons, we want only 1 account from that sender.
+    });
 
-        await deleteUser(accounts[0]);
-        console.log('\nDeleted user : ' + currentUserData.userid);
+    console.log("\nAdding friend for current user..");
+    await addFriend(otherUser.userid, accounts[0]);
 
-        console.log('User data of current user after deleting: ');
-        console.log(await getUserData(currentUserData.userid, accounts[0])); // output will contain every field, zeroed out
+    console.log(
+      "\nThe friends list of current user, after adding friend with id: " +
+        otherUser.userid,
+    );
+    console.log(await getFriendsList(accounts[0]));
 
-        console.log('\n\nFriends list of the friend of current user: ');
-        console.log(await getFriendsList(accounts[1]));
+    await deleteUser(accounts[0]);
+    console.log("\nDeleted user : " + currentUserData.userid);
 
-    } catch (error) {
-        console.error(error);
-    }
+    console.log("User data of current user after deleting: ");
+
+    // output will contain every field, zeroed out
+    console.log(
+      await getUserData({
+        userid: currentUserData.userid,
+        senderAccAddr: accounts[0],
+      }),
+    );
+
+    console.log("\n\nFriends list of the friend of current user: ");
+    console.log(await getFriendsList(accounts[1]));
+  } catch (error) {
+    console.error(error);
+  }
 })();
 */

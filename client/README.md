@@ -1,6 +1,6 @@
 # Stran - Frontend with Preact
 
-## CLI Commands
+## NPM Scripts
 *   `npm install`: Installs dependencies
 
 *   `npm run dev`: Run a development, HMR server
@@ -14,6 +14,21 @@
 *   `npm run test`: Run Jest and Enzyme with [`enzyme-adapter-preact-pure`](https://github.com/preactjs/enzyme-adapter-preact-pure) for your tests
 
 For detailed explanation on how things work, checkout the [CLI Readme](https://github.com/developit/preact-cli/blob/master/README.md).
+
+## Client-side Error Handling
+
+As we have multiple parts of the client side where we can get the error, so we don't user default Error object, rather we throw an object with below structure:
+
+```js
+throw {
+  errorMsg: 'Long descriptive error message for user',
+  shortErr: 'short-error-message-in-hyphenated-format',
+}
+```
+
+**Why 2 fields for Error Messages ?**
+- Long error messages are for users to see.
+- Short error messages are kept, so that we can use this hyphenated short error strings in switch case statements in the catch blocks, to have conditional logic for each of those short errors.
 
 ## Resolving older Issues with PreactJS:
 
