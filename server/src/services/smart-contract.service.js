@@ -8,41 +8,13 @@ const {
   makeDataBlockchainCompat,
 } = require("../utils/user.util");
 
+const {
+  checkIfUpdateRequired,
+  validateHexAddress,
+  validateSmartContractParams,
+} = require("../utils/sc-service.util");
+
 const { getContract } = require("../services/blockchain-init.service");
-
-/**
- * Check if the parameter provided is a valid hex address or not
- * @param {*} data Any Javascript string, which will be passed through the validation checks.
- * @returns true if it is valid hex address, otherwise false
- */
-const validateHexAddress = (data) => {
-  data = data ?? "";
-
-  return (
-    data !== "" &&
-    typeof data === "string" &&
-    data.startsWith("0x") &&
-    data.length > 2
-  );
-};
-
-/**
- * Does sanity checking of the params for this smart contract service methods
- * @returns True if the params provided, are safe, else False
- */
-const validateParams = ({ senderAccAddr }) => {
-  senderAccAddr = senderAccAddr ?? "";
-
-  if (validateHexAddress(senderAccAddr) === true) {
-    return true;
-  } else {
-    throw new AppError({
-      message: "Please provide valid blockchain account address..",
-      shortMsg: "invalid-account",
-      statusCode: 401,
-    });
-  }
-};
 
 /**
  * Every service below has senderAccAddr to the valid address of the sender's account..
@@ -71,7 +43,7 @@ async function createUser({
       });
     }
 
-    validateParams({ senderAccAddr });
+    validateSmartContractParams({ senderAccAddr });
     const { vcContract } = await getContract();
 
     const userdata = await getUserData({
@@ -120,7 +92,7 @@ async function createUser({
       senderAccAddr: senderAccAddr,
     });
   } catch (err) {
-    // null username, validateParams, getContract, existing user etc. throws AppError indirectly or directly.
+    // null username, validateSmartContractParams, getContract, existing user etc. throws AppError indirectly or directly.
     if (err instanceof AppError) {
       throw err;
     }
@@ -138,6 +110,12 @@ async function createUser({
 /**
  * updateUser - A service function to update user's data in the blockchain.
  * It takes in username, currentLocation, primaryLanguage of choice, and languages known by the user.
+ * 
+ * This service method checks below things by itself or the util methods used in here:
+ * 1. checkIfUpdateRequired method checks if the fields are really to be updated..
+ * 2. makeDataBlockchainCompat method checks if we can parse the data to blockchain data types,
+ * and then parses those data.
+ * 3. Then, we update the user with all valid data..
  */
 async function updateUser({
   username = null,
@@ -148,7 +126,7 @@ async function updateUser({
   senderAccAddr,
 }) {
   try {
-    validateParams({ senderAccAddr });
+    validateSmartContractParams({ senderAccAddr });
     const { vcContract } = await getContract();
 
     const existingUser = await getUserData({
@@ -165,9 +143,28 @@ async function updateUser({
       });
     }
 
-    // make the enum fields of the passed params of this function as blockchain-compatible
+    const newUserData = {
+      username,
+      location,
+      primaryLanguage,
+      status,
+      knownLanguages,
+    };
+    
+    /**
+     * Checks if any fields are modified really or not,
+     * and if no fields are modified then it throws a 400 Bad request AppError
+     */
+    checkIfUpdateRequired({ existingUser, newUserData });
+
+    /**
+     * Makes the enum fields of the passed params of this function as blockchain-compatible.
+     *
+     * Before that, it first checks if the values passed are valid to be parsed, and then it processes them..
+     * If they are invalid, it throws a 400 Bad request AppError.
+     */
     const compatibleObj = makeDataBlockchainCompat({
-      // if any field is not passed, we fallback to existing values of the blockchain 
+      // if any field is not passed, we fallback to existing values of the blockchain
       location: location ?? existingUser.location,
       primaryLanguage: primaryLanguage ?? existingUser.primaryLanguage,
       // knownLanguages: knownLanguages?.length > 0 ? knownLanguages : existingUser.knownLanguages,
@@ -218,7 +215,7 @@ async function updateUser({
  */
 async function deleteUser(senderAccAddr) {
   try {
-    validateParams({ senderAccAddr });
+    validateSmartContractParams({ senderAccAddr });
     const { vcContract } = await getContract();
 
     const userdata = await getUserData({
@@ -257,7 +254,7 @@ async function deleteUser(senderAccAddr) {
  */
 async function addFriend(friendUserId, senderAccAddr) {
   try {
-    validateParams({ senderAccAddr });
+    validateSmartContractParams({ senderAccAddr });
     const { vcContract } = await getContract();
 
     // check if user already exists or not, via the sender account address
@@ -297,7 +294,7 @@ async function addFriend(friendUserId, senderAccAddr) {
  */
 async function getFriendsList(senderAccAddr) {
   try {
-    validateParams({ senderAccAddr });
+    validateSmartContractParams({ senderAccAddr });
     const { vcContract } = await getContract();
 
     const userdata = await getUserData({
@@ -371,7 +368,7 @@ async function getUserData({ userid, senderAccAddr }) {
      * but we want to boil this security down to this service too..
      */
 
-    validateParams({ senderAccAddr });
+    validateSmartContractParams({ senderAccAddr });
     const { vcContract } = await getContract();
 
     const userdata = await vcContract.methods.userdata(userid).call({
@@ -395,7 +392,7 @@ async function getUserData({ userid, senderAccAddr }) {
 
 async function verifySignature({ senderAccAddr, signature }) {
   try {
-    validateParams({ senderAccAddr });
+    validateSmartContractParams({ senderAccAddr });
     const publicAddress = senderAccAddr;
 
     /**

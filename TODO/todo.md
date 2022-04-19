@@ -16,26 +16,13 @@
     - What we can also do is to **send a heartbeat to the server** for the validity of this user. Heartbeat can be implemented using setTimeout function and doing fetch to the /user route to the server.
     
 - [ ] Add Global message state, to have message for the user in some cases
-- [x] Connect with Metamask.
-- [x] Edit setState to have functions passed in instead of objects, so that functions won't be created again and again on re-renders..
-- [x] Throw an object as a error and short error formatted object on client end too.
-- [x] Signup, login and logout functionality client-side.
-- [x] Global error handling
-- [x] Use Redux for metamask account management
 
 ### Server End Only
 
-- [x] Parse enums of the user returned directly in `smart-contract.service.js` file.
-- [x] JWT token logout including saving invalid tokens to redis, and looking up blacklisted tokens from redis while authenticating tokens.
-- [ ] Add user CRUD operations in contacting with smart contract and also in server endpoints.
-  - [ ] Update operation to implement in smart contract service.
-  - [ ] Update operation to implement in server endpoints' routes.
-  - [x] Other operations like create user, delete user, add friend, get friends, get user data to add in smart contract integration.
 - [ ] Add helmet with proper options to let us use JWT also.
 
 ### Blockchain Solidity Only
 
-- [x] Update operation implemented in smart contract code.
 - [ ] `ISSUE`: knownLanguages array in registerUser method is undefined and not saved when we fetch that.
 
 ### Overall Project's In-Progress Items

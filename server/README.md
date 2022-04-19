@@ -25,9 +25,9 @@ The main article for organizing the project structure is given [here](https://bl
 
     As you can see, ***tests for each unit of the src folder, can be created in the same structure in tests folder..***
 
-## [Services]('server/src/services')
+## [Services]('./src/services')
 
-### [Smart Contract Service]('server/src/services/smart-contract.service.js')
+### [Smart Contract Service]('./src/services/smart-contract.service.js')
 
 - It is for internal usage in the server end only.
 - As we know that when we save any data to blockchain, we have to pass the number/index for every enum in blockchain.
@@ -55,9 +55,9 @@ The main article for organizing the project structure is given [here](https://bl
     - `cleanseUserData`: This smart contract service processes some methods and at the end, always parses the data and returns the enum fields like language as 'ENGLISH'..
     - `makeDataBlockchainCompat`: When using this smart contract service, it lets us pass the data/fields in word formats like 'ENGLISH', and it makes that data compatible to blockchain by mapping that word to number.
 
-### [Redis Service]('server/src/services/redis.service.js')
+### [Redis Service]('./src/services/redis.service.js')
 
-### [Auth Service]('server/src/services/auth.service.js')
+### [Auth Service]('./src/services/auth.service.js')
 
-### [Blockchain Init Service]('server/src/services/blockchain-init.service.js')
+### [Blockchain Init Service]('./src/services/blockchain-init.service.js')
 

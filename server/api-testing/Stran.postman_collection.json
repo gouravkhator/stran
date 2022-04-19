@@ -96,9 +96,9 @@
 			"name": "User Auth",
 			"item": [
 				{
-					"name": "Get User",
+					"name": "Create New Account",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [
 							{
 								"key": "Cookie",
@@ -106,22 +106,32 @@
 								"type": "text"
 							}
 						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"publicAddress\": \"{{localNodeAcc}}\",\n    \"name\": \"{{$randomFirstName}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "{{baseUrl}}/user",
+							"raw": "{{baseUrl}}/auth/signup",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"user"
+								"auth",
+								"signup"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Delete User",
+					"name": "Verify Signature",
 					"request": {
-						"method": "DELETE",
+						"method": "POST",
 						"header": [
 							{
 								"key": "Cookie",
@@ -129,13 +139,23 @@
 								"type": "text"
 							}
 						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"publicAddress\": \"{{localNodeAcc}}\",\n    \"signature\": \"0xec9ec4bd7522aca94f4518cdc9cd65181d8e035073355e0c85587ce37d72db2c1504158301d6cf887c414d053e40cd1c299ce45b74a89ed4730100cb7fa821a51c\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "{{baseUrl}}/user",
+							"raw": "{{baseUrl}}/auth/verify",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"user"
+								"auth",
+								"verify"
 							]
 						}
 					},
@@ -173,9 +193,32 @@
 					"response": []
 				},
 				{
-					"name": "Create New Account",
+					"name": "Get User",
 					"request": {
-						"method": "POST",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "jwtToken={{jwtToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/user",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"method": "PUT",
 						"header": [
 							{
 								"key": "Cookie",
@@ -185,7 +228,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"publicAddress\": \"{{localNodeAcc}}\",\n    \"name\": \"{{$randomFirstName}}\"\n}",
+							"raw": "{\n    \"primaryLanguage\": \"TELUGU\",\n    \"location\": \"AFRICA\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -193,13 +236,35 @@
 							}
 						},
 						"url": {
-							"raw": "{{baseUrl}}/auth/signup",
+							"raw": "{{baseUrl}}/user",
 							"host": [
 								"{{baseUrl}}"
 							],
 							"path": [
-								"auth",
-								"signup"
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete User",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "jwtToken={{jwtToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/user",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"user"
 							]
 						}
 					},
@@ -233,39 +298,6 @@
 							"path": [
 								"auth",
 								"logout"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Verify Signature",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Cookie",
-								"value": "jwtToken={{jwtToken}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"publicAddress\": \"{{localNodeAcc}}\",\n    \"signature\": \"0x0626a7a84e20be0e2cc217fab8398cee609619735ffdb26a8e6c524ccdbdfda67c86b31ef9c2ba4d482d4cf324b1c0e561cb964d4e4e511849e2d000d76ff24d1c\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseUrl}}/auth/verify",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"auth",
-								"verify"
 							]
 						}
 					},

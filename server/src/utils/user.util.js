@@ -10,15 +10,15 @@ const {
 
 /**
  * Cleanses up the user data and non-enum fields and enum-fields.
- * 
+ *
  * It's core functionality for enum fields
  * is to convert blockchain saved enum numbers into actual words.
- *  
+ *
  * Takes in the data which mostly comes from blockchain saved data,
  * and then cleanses those up.
- * 
+ *
  * user is passed as an object like below:
- * 
+ *
  *  {
  *    location: '0', // '0' for ASIA
  *    primaryLanguage: '2' // '2' for BENGALI
@@ -69,15 +69,15 @@ function cleanseUserData(user = {}) {
 
 /**
  * Makes user data and its fields blockchain-compatible for saving..
- * 
+ *
  * Converts word-related user data fields into blockchain compatible enum numbers/ints
- * 
+ *
  * location is a string for example: "AMERICA"
- * 
+ *
  * primaryLanguage is a string for example: "ENGLISH"
- * 
+ *
  * knownLanguages is an array of strings for example: ["ENGLISH", "FRENCH"]
- * 
+ *
  * status is a string for example: "DND"
  */
 function makeDataBlockchainCompat({
@@ -87,17 +87,49 @@ function makeDataBlockchainCompat({
   status = null,
 }) {
   try {
-    const compatLocation =
-      location && location in Location ? Location[location] : null;
-    const compatLanguage =
-      primaryLanguage && primaryLanguage in Language
-        ? Language[primaryLanguage]
-        : null;
+    let compatLocation = null,
+      compatLanguage = null,
+      compatKnownLanguages = [],
+      compatStatus = null;
 
-    const compatStatus = status && status in Status ? Status[status] : null;
+    const invalidEnumErr = new AppError({
+      statusCode: 400, // bad request, as the user passed invalid values for enums
+      shortMsg: "invalid-fields-got",
+      message: "Invalid fields passed! Cannot process this request..",
+    });
 
-    const compatKnownLanguages = knownLanguages?.reduce((tempList, val) => {
-      const languageIndex = val in Language ? Language[val]: null;
+    if (location) {
+      if (location in Location) {
+        compatLocation = Location[location];
+      } else {
+        throw invalidEnumErr;
+      }
+    }
+
+    if (primaryLanguage) {
+      if (primaryLanguage in Language) {
+        compatLanguage = Language[primaryLanguage];
+      } else {
+        throw invalidEnumErr;
+      }
+    }
+
+    if (status) {
+      if (status in Status) {
+        compatStatus = Status[status];
+      } else {
+        throw invalidEnumErr;
+      }
+    }
+
+    compatKnownLanguages = knownLanguages?.reduce((tempList, val) => {
+      let languageIndex = null;
+
+      if(val in Language){
+        languageIndex = Language[val];
+      }else{
+        throw invalidEnumErr;
+      }
 
       if (languageIndex < languagesList.length && languageIndex >= 0) {
         return [...tempList, languageIndex];
@@ -113,6 +145,10 @@ function makeDataBlockchainCompat({
       knownLanguages: compatKnownLanguages,
     };
   } catch (err) {
+    if (err instanceof AppError) {
+      throw err;
+    }
+
     throw new AppError({
       statusCode: 500,
       shortMsg: "parsing-err",

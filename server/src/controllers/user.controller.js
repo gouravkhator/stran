@@ -1,5 +1,8 @@
 const { destroyAccessToken } = require("../services/auth.service");
-const { deleteUser } = require("../services/smart-contract.service");
+const {
+  deleteUser,
+  updateUser,
+} = require("../services/smart-contract.service");
 
 async function getUserController(req, res, next) {
   try {
@@ -12,7 +15,35 @@ async function getUserController(req, res, next) {
   }
 }
 
-async function editUserController(req, res, next) {}
+async function updateUserController(req, res, next) {
+  try {
+    const dataToEdit = {
+      username: req.body.username ?? null,
+      location: req.body.location ?? null,
+      primaryLanguage: req.body.primaryLanguage ?? null,
+      status: req.body.status ?? null,
+      knownLanguages: req.body.knownLanguages ?? null,
+    };
+    
+    // most necessary validations are done in the updateUser service method or its internally invoked util methods..
+    const updatedUserData = await updateUser({
+      username: dataToEdit.username,
+      location: dataToEdit.location,
+      primaryLanguage: dataToEdit.primaryLanguage,
+      status: dataToEdit.status,
+      knownLanguages: dataToEdit.knownLanguages,
+      senderAccAddr: req.user.userid,
+    });
+
+    return res.json({
+      status: "success",
+      updatedUser: true,
+      user: updatedUserData,
+    });
+  } catch (err) {
+    return next(err);
+  }
+}
 
 async function deleteUserController(req, res, next) {
   try {
@@ -38,6 +69,6 @@ async function deleteUserController(req, res, next) {
 
 module.exports = {
   getUserController,
-  editUserController,
+  updateUserController,
   deleteUserController,
 };
