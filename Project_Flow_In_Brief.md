@@ -21,19 +21,32 @@ If the signature is valid, the server returns a JWT token, to be automatically s
 
 Now, when the user visits our webapp, the token is sent to the server via the Header component, and the user data is returned from the server itself.
 
-### AuthPage Logic Tree
+### Implementation thoughts and the WHYs?
 
-```
-                  User Logged In
-                Yes /           \  No
-      (Redirect to Profile)  (..............Is Metamask Installed.................)
-                                    Yes  /                           \ No
-  (Compute MM connect Logic and show Login/Signup components)       (Show MM not installed error)
-          /                        AND              \
-    (........Is MM connected?......)      (Show Login and Signup components)
-   Yes /                        \ No
- (Show connected success msg)  (Show connect MM component)
-```
+- **AuthPage Logic Tree**:
+
+  ```
+                    User Logged In
+                  Yes /           \  No
+        (Redirect to Profile)  (..............Is Metamask Installed.................)
+                                      Yes  /                           \ No
+    (Compute MM connect Logic and show Login/Signup components)       (Show MM not installed error)
+            /                        AND              \
+      (........Is MM connected?......)      (Show Login and Signup components)
+    Yes /                        \ No
+  (Show connected success msg)  (Show connect MM component)
+  ```
+
+- **Redis and Docker**:
+    
+    - JWT token logout will involve saving tokens in redis as invalid tokens, when user requests for logout. 
+    And when we do authenticate tokens, it should also lookup in the redis if this token is blacklisted or not.
+
+    - But as there are so many services to be run to start developing the webapp, we can make a docker container to run all those services. It will be better for production too.
+
+    - Redis works in-memory, and if I publish a new update for my webapp, the docker will restart all services and if redis is restarted, then all the invalid/blacklisted tokens will get destroyed.
+
+    - Also, we store each invalid tokens with an expiration time of around 1 day, as after 1 day, the user will obviously be asked to login again which will generate new tokens. This is because the tokens saved in the cookies also have expiration of 1 day.
 
 ## System Design and Architecture
 

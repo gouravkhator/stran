@@ -30,6 +30,7 @@ export default function AuthPage() {
   useMetamask(); // our own useMetamask custom hook
 
   const error = useSelector(({ global }) => global.error);
+  const message = useSelector(({ global }) => global.message);
 
   const isMMInstalled = useSelector(({ metamask }) => metamask.isInstalled);
   const isMMConnected = useSelector(({ metamask }) => metamask.isConnected);
@@ -105,6 +106,7 @@ export default function AuthPage() {
   return (
     <div class={style.auth}>
       {error && <p style={{ color: "red" }}>{error}</p>}
+      {message && <p style={{ color: "blue" }}>{message}</p>}
 
       <h1>Auth Page</h1>
 

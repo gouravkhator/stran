@@ -15,7 +15,14 @@
 
     - What we can also do is to **send a heartbeat to the server** for the validity of this user. Heartbeat can be implemented using setTimeout function and doing fetch to the /user route to the server.
     
-- [ ] Add Global message state, to have message for the user in some cases
+  - [ ] `ISSUE`: When I just go to `/profile` or `/call` directly, it redirects me to the signin page.
+    And it is because loggedIn and user are not loaded via fetch user by token.
+
+    - [ ] We should wait for that fetch to happen and then only show the app fully.
+
+    - [ ] Also, we should keep the user's data in encrypted way in local storage and keep that for only a few seconds till we know that we have the token fetch successful.
+
+- [x] Add Global message state, to have message for the user in some cases
 
 ### Server End Only
 
@@ -47,6 +54,15 @@
 
 ### Overall Project's Features Planned
 
+- [ ] Docker Integration for below services:
+  1. Peerjs server (as free server is mostly down)
+  2. Blockchain network with persistence, only required in dev mode, as we will have main net in the prod mode.
+  3. Client side
+  4. Main server side
+  5. Redis service
+      > Keep redis and other service working in different docker containers.
+      And keep the app in a different one, so that when we have to update the app and restart the server, then the redis cache does not get flushed.
+  6. IPFS node to be running inside docker, if we need IPFS functionality in future.
 - [ ] Privacy setting for every user
   - It is bcoz, every user can allow/deny his profile visibility.
   - There can be different settings for friends vs for other strangers.

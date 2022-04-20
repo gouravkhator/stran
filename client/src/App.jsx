@@ -32,6 +32,7 @@ export function App() {
 
       <Router>
         <Home path="/" />
+
         <AsyncRoute
           path="/signin"
           // lazy loading the component
@@ -40,8 +41,24 @@ export function App() {
           }
         />
 
-        <Profile path="/profile/" user="me" />
-        <Profile path="/profile/:user" />
+        <AsyncRoute
+          path="/profile"
+          // lazy loading the component
+          getComponent={() =>
+            import("./routes/Profile").then((module) => module.default)
+          }
+        />
+
+        <AsyncRoute
+          path="/call"
+          // lazy loading the component
+          getComponent={() =>
+            import("./components/VideoCall/VideoCall").then(
+              (module) => module.default,
+            )
+          }
+        />
+
         <ErrorPage errorCode="404" default />
       </Router>
     </div>

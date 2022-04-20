@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "preact/hooks";
 import { bufferToHex } from "ethereumjs-util";
-import { setError, setAccount, setUser } from "../../store/actions";
+import { setError, setAccount, setUser, setMessage } from "../../store/actions";
 
 import { getErrorObj } from "../../utils/general.util";
 
@@ -67,7 +67,7 @@ export default function LoginLogic() {
       if (!!isMMConnected) {
         accountAddress = metamaskAcc;
       } else {
-        // TODO: dispatch(setMessage("Please check your Metamask notification for letting the login complete.."));
+        dispatch(setMessage("Please check your Metamask notification for letting the login complete.."));
 
         const accounts = await ethereum.request({
           method: "eth_requestAccounts",
@@ -102,7 +102,7 @@ export default function LoginLogic() {
         });
 
         // setting global message to null and disabling the loading part, to enable the Login button.
-        // TODO: dispatch(setMessage(null));
+        dispatch(setMessage(null));
         setLoading((previousLoadingState) => false); // button loading should be false now
 
         if (!!user.username) {
@@ -123,6 +123,7 @@ export default function LoginLogic() {
         });
       }
     } catch (err) {
+      dispatch(setMessage(null));
       setLoading((previousLoadingState) => false); // button loading should be false now
 
       if (err?.code === 4001) {

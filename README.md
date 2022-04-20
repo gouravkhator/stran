@@ -176,7 +176,9 @@ If we will be using ipfs services, then we have to install **go-ipfs** on your h
 - To deploy the environment variables to production, we can directly add the variable names to the Heroku/Netlify/Other hosting platform.
     - **For example:-** If the process.env does not find the required variable in the `server` folder, then it will look for the environment defined in the parent folder of server, and if not there even, then it will go further upwards in the folder hierarchy.
 
-## Credits
+## Credits/Resources Followed
 
 - [Video on WebRTC, Video calling and Javascript integration](https://youtu.be/pv3UHYwgxnM)
 - [Centralized Error Handling using Redux](https://www.pluralsight.com/guides/centralized-error-handing-with-react-and-redux)
+- For blockchain deployment and testing inside docker container: [How To Dockerize Your Hardhat Solidity Contract On Localhost](https://codingwithmanny.medium.com/how-to-dockerize-your-hardhat-solidity-contract-on-localhost-a45424369896)
+

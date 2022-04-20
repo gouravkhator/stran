@@ -2,7 +2,7 @@
 import { h } from "preact";
 import { Link } from "preact-router/match";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "preact/compat";
+import { useEffect } from "preact/hooks";
 
 import style from "../styles/header.module.scss";
 import { getUserByToken, logoutHandler } from "../services/user-auth.service";
@@ -21,7 +21,7 @@ const Header = () => {
 
       try {
         const userFromToken = await getUserByToken();
-
+        
         if (!!userFromToken?.username) {
           // token is valid, and we fetched the user using the JWT token itself
           dispatch(setUser(userFromToken));
@@ -58,21 +58,19 @@ const Header = () => {
             Sign In
           </Link>
         ) : (
-          <Link
-            activeClassName={style.active}
-            href="/"
-            onClick={onSignoutClick}
-          >
-            Sign Out
-          </Link>
+          <>
+            <Link
+              activeClassName={style.active}
+              href="/"
+              onClick={onSignoutClick}
+            >
+              Sign Out
+            </Link>
+            <Link activeClassName={style.active} href="/profile">
+              Profile
+            </Link>
+          </>
         )}
-
-        <Link activeClassName={style.active} href="/profile">
-          Me
-        </Link>
-        <Link activeClassName={style.active} href="/profile/john">
-          John
-        </Link>
       </nav>
     </header>
   );

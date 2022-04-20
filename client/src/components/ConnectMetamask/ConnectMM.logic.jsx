@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import { useState } from "preact/hooks";
-import { setError, setAccount } from "../../store/actions";
+import { setError, setAccount, setMessage } from "../../store/actions";
 import { getErrorObj } from "../../utils/general.util";
 
 export default function ConnectMMLogic() {
@@ -13,8 +13,12 @@ export default function ConnectMMLogic() {
       setLoading((previousLoadingState) => true);
 
       dispatch(setError(null));
+      dispatch(
+        setMessage(
+          "Please check your Metamask notification for letting the login complete..",
+        ),
+      );
 
-      // TODO: dispatch(setMessage("Please check your Metamask notification for letting the login complete.."));
       const accounts = await ethereum.request({
         method: "eth_requestAccounts",
       });
@@ -31,9 +35,11 @@ export default function ConnectMMLogic() {
       // sets account address and by default, this also sets metamask connected state too
       dispatch(setAccount(accountAddress));
       dispatch(setError(null));
-
+      dispatch(setMessage(null));
+      
       setLoading((previousLoadingState) => false); // button loading should be false now
     } catch (err) {
+      dispatch(setMessage(null));
       setLoading((previousLoadingState) => false); // button loading should be false now
 
       if (err?.code === 4001) {
@@ -44,8 +50,6 @@ export default function ConnectMMLogic() {
       } else {
         dispatch(setError(err.errorMsg ?? null));
       }
-
-      console.error(err);
     }
   };
 

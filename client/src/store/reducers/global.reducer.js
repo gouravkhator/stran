@@ -2,6 +2,7 @@ import { globalActions } from "../actions";
 
 const initialState = {
   error: "",
+  message: "",
 };
 
 const globalReducer = (state = initialState, action) => {
@@ -15,6 +16,16 @@ const globalReducer = (state = initialState, action) => {
       return {
         ...state,
         error: initialState.error, // resets to the initial error state
+      };
+    case globalActions.SET_MSG:
+      return {
+        ...state,
+        message: action.message,
+      };
+    case globalActions.RESET_MSG:
+      return {
+        ...state,
+        message: initialState.message, // resets to the initial error state
       };
     default:
       return {

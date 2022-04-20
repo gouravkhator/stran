@@ -2,19 +2,6 @@
 
 ## Inbox -- Collect whatever stuff
 
-### Implementation thoughts
-
-- **Redis and Docker**:
-    
-    - JWT token logout will involve saving tokens in redis as invalid tokens, when user requests for logout. 
-    And when we do authenticate tokens, it should also lookup in the redis if this token is blacklisted or not.
-
-    - But as there are so many services to be run to start developing the webapp, we can make a docker container to run all those services. It will be better for production too.
-
-    - Redis works in-memory, and if I publish a new update for my webapp, the docker will restart all services and if redis is restarted, then all the invalid/blacklisted tokens will get destroyed.
-
-    - Also, we can store each invalid tokens with an expiration time of around 1 day, as after 1 day, the user will obviously be asked to login again which will generate new tokens. This is because the tokens saved in the cookies also have expiration of 1 day.
-
 ### Info To Be Noted for future
 
 - 

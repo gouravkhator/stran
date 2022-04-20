@@ -1,11 +1,14 @@
 import Peer from "peerjs";
 import { useEffect, useState } from "preact/hooks";
+import { useSelector } from "react-redux";
 import { callPeer, answerCall } from "../../services/peerjs.service";
 
 export default function VideoCallLogic() {
   const [localStream, setLocalStream] = useState(null);
   const [remoteStream, setRemoteStream] = useState(null);
   const [peerConn, setPeerConn] = useState(null);
+
+  const user = useSelector(({ user }) => user.userdata);
 
   const [destId, setDestId] = useState("");
 
@@ -24,7 +27,9 @@ export default function VideoCallLogic() {
      * This peer connection connects to a public peer server, but sometimes that peer server is down..
      * If we need to have the peer server running always, we need to host our own.
      */
-    const peer = new Peer(peerjsConfguration);
+
+    // if we don't pass the userid, it creates its own unique id..
+    const peer = new Peer(user.userid, peerjsConfguration);
 
     peer.on("open", (id) => {
       console.log("Congrats! You are a peer in this video-calling dapp");

@@ -60,21 +60,38 @@ export const setError = (errorMsg = null) => {
   }
 };
 
+export const setMessage = (message = null) => {
+  if (!message) {
+    return {
+      type: globalActions.RESET_MSG,
+    };
+  } else {
+    return {
+      type: globalActions.SET_MSG,
+      message,
+    };
+  }
+};
+
 /*-----Action names as objects-----*/
-export const metamaskActions = {
+// ? NOTE: we use Object.freeze so that these actions cannot be changed anywhere..
+
+export const metamaskActions = Object.freeze({
   SET_ACC_ADDR: "SET_ACC_ADDR",
   RESET_ACC_ADDR: "RESET_ACC_ADDR",
   SET_IS_CONNECTED: "SET_IS_CONNECTED",
   SET_IS_INSTALLED: "SET_IS_INSTALLED",
-};
+});
 
-export const userActions = {
+export const userActions = Object.freeze({
   SET_USER: "SET_USER",
   EDIT_USER: "EDIT_USER",
   REMOVE_USER: "REMOVE_USER",
-};
+});
 
-export const globalActions = {
+export const globalActions = Object.freeze({
   SET_ERR: "SET_ERR",
   RESET_ERR: "RESET_ERR",
-};
+  SET_MSG: "SET_MSG",
+  RESET_MSG: "RESET_MSG",
+});

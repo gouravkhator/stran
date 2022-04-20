@@ -1,6 +1,6 @@
 import { useState } from "preact/hooks";
 import { useDispatch, useSelector } from "react-redux";
-import { setError } from "../../store/actions";
+import { setError, setMessage } from "../../store/actions";
 import { getErrorObj } from "../../utils/general.util";
 
 import { signupHandler } from "../../services/user-auth.service";
@@ -48,10 +48,7 @@ export default function SignupLogic() {
         name: username,
       });
 
-      console.log(
-        "Hurray! you successfully created the account. Please login now to continue..",
-      );
-      // TODO: dispatch(setMessage("Hurray! you successfully created the account. Please login now to continue.."));
+      dispatch(setMessage("Hurray! you successfully created the account. Please login now to continue.."));
     } catch (err) {
       dispatch(setError(err.errorMsg ?? null));
     }

@@ -1,30 +1,29 @@
 /** @jsx h */
 import { h } from "preact";
-import { useEffect, useState } from "preact/hooks";
+import { useSelector } from "react-redux";
 import style from "../styles/profile.module.scss";
 
-// Note: `user` comes from the URL, courtesy of our router
-const Profile = ({ user }) => {
-  const [time, setTime] = useState(Date.now());
-  const [count, setCount] = useState(10);
+import Redirect from "../components/Redirect";
 
-  useEffect(() => {
-    let timer = setInterval(() => setTime(Date.now()), 1000);
-    return () => clearInterval(timer);
-  }, []);
+const Profile = () => {
+  const isLoggedIn = useSelector(({ user }) => user.loggedIn);
+  const user = useSelector(({ user }) => user.userdata);
 
   return (
-    <div class={style.profile}>
-      <h1>Profile: {user}</h1>
-      <p>This is the user profile for a user named {user}.</p>
+    <>
+      {!isLoggedIn ? (
+        <Redirect to="/signin" />
+      ) : (
+        <div class={style.profile}>
+          <h1>Hello {user.username}!!</h1>
 
-      <div>Current time: {new Date(time).toLocaleString()}</div>
-
-      <p>
-        <button onClick={() => setCount((count) => count + 1)}>Click Me</button>{" "}
-        Clicked {count} times.
-      </p>
-    </div>
+          <p>Currently, we see that your status is set as {user.status}</p>
+          <p>Your preferred language is {user.primaryLanguage}</p>
+          <p>Your location is {user.location}</p>
+          <p>Your userid is {user.userid}</p>
+        </div>
+      )}
+    </>
   );
 };
 
