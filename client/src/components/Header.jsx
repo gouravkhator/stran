@@ -2,40 +2,15 @@
 import { h } from "preact";
 import { Link } from "preact-router/match";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "preact/hooks";
 
 import style from "../styles/header.module.scss";
-import { getUserByToken, logoutHandler } from "../services/user-auth.service";
-import { setError, setUser } from "../store/actions";
+import { logoutHandler } from "../services/user-auth.service";
+import { setError } from "../store/actions";
+import { withAuthHOC } from "../hoc/auth.hoc";
 
-const Header = () => {
+const Header = withAuthHOC(() => {
   const user = useSelector(({ user }) => user.userdata);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    (async () => {
-      // if user exists, we don't want to fetch it from the server..
-      if (!!user.username) {
-        return;
-      }
-
-      try {
-        const userFromToken = await getUserByToken();
-        
-        if (!!userFromToken?.username) {
-          // token is valid, and we fetched the user using the JWT token itself
-          dispatch(setUser(userFromToken));
-        }
-      } catch (err) {
-        /**
-         * fetch to the server is not working,
-         * but as it is the Header component, so we don't show any error here..
-         *
-         * We will show this kind of error in the user details page or when we need user actually..
-         */
-      }
-    })();
-  }, []);
 
   const onSignoutClick = async () => {
     try {
@@ -74,6 +49,8 @@ const Header = () => {
       </nav>
     </header>
   );
-};
+}, false, false);
+// Header component does not require login to be rendered or any error display
+// so passing false to both those params.. 
 
 export default Header;

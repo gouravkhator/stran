@@ -4,6 +4,12 @@
 
 ## Client End Only
 
+- [ ] Bugs solved:
+  - [x] `ISSUE`: When I just go to `/profile` or `/call` directly, it redirects me to the signin page.
+    And it is because loggedIn and user are not loaded via fetch user by token.
+
+    - [x] We should wait for that fetch to happen and then only show the app fully.
+
 - [x] Make all components in client end, the `.jsx` files.
 - Calling Feature
   - [x] PeerJS feature implemented

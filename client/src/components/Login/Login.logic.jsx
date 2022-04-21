@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect, useState } from "preact/hooks";
+import { useState } from "preact/hooks";
 import { bufferToHex } from "ethereumjs-util";
 import { setError, setAccount, setUser, setMessage } from "../../store/actions";
 
@@ -7,7 +7,6 @@ import { getErrorObj } from "../../utils/general.util";
 
 import {
   fetchNonce,
-  getUserByToken,
   verifySignatureHandler,
 } from "../../services/user-auth.service.js";
 
@@ -19,26 +18,6 @@ export default function LoginLogic() {
   const isMMConnected = useSelector(({ metamask }) => metamask.isConnected);
 
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    (async () => {
-      try {
-        const userFromToken = await getUserByToken();
-
-        /**
-         * This step might feel redundant, as the Header component already checks if the user can be set via token..
-         * But this step may be crucial if the Header does not re-render, and we have to check in Login step itself..
-         */
-        if (!!userFromToken?.username) {
-          // token is valid, and we fetched the user using the JWT token itself
-          dispatch(setError(null));
-          dispatch(setUser(userFromToken));
-        }
-      } catch (err) {
-        dispatch(setError(err.message ?? null));
-      }
-    })();
-  }, []);
 
   const signNonce = async ({ nonce, publicAddress }) => {
     try {
@@ -67,7 +46,11 @@ export default function LoginLogic() {
       if (!!isMMConnected) {
         accountAddress = metamaskAcc;
       } else {
-        dispatch(setMessage("Please check your Metamask notification for letting the login complete.."));
+        dispatch(
+          setMessage(
+            "Please check your Metamask notification for letting the login complete..",
+          ),
+        );
 
         const accounts = await ethereum.request({
           method: "eth_requestAccounts",

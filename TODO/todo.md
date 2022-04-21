@@ -14,14 +14,13 @@
     - We cannot listen to when the cookies/user were removed.
 
     - What we can also do is to **send a heartbeat to the server** for the validity of this user. Heartbeat can be implemented using setTimeout function and doing fetch to the /user route to the server.
-    
-  - [ ] `ISSUE`: When I just go to `/profile` or `/call` directly, it redirects me to the signin page.
-    And it is because loggedIn and user are not loaded via fetch user by token.
+  - [ ] `ISSUE`: When I click on left/right for navigating through the browser history, I can go to the signed in state again, even if I am currently signed out.
+  - [ ] `ISSUE`: When I click on other routes, the error shown on current page should not be shown on other page.
 
-    - [ ] We should wait for that fetch to happen and then only show the app fully.
+- [ ] Keep the user's data in encrypted way in local/other client side storage and keep that for a few mins like 1 or 2 mins, just to reduce the fetch user by token request to the server.
 
-    - [ ] Also, we should keep the user's data in encrypted way in local storage and keep that for only a few seconds till we know that we have the token fetch successful.
-
+- [ ] Delete functionality to add in the profile page
+- [ ] Edit functionality to add in profile page. 
 - [x] Add Global message state, to have message for the user in some cases
 
 ### Server End Only
@@ -45,7 +44,7 @@
 
 ### Server End Only
 
-- [ ] User shpuld not request multiple times for same things, or else sent a `429 Too Many Requests` as the response status code.
+- [ ] User should not request multiple times for same things, or else sent a `429 Too Many Requests` as the response status code.
 - [ ] Host your own peer server, which will not go down anytime, and we will have no dependency on public free peer server.
 
 ### Blockchain Solidity Only
