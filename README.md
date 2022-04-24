@@ -181,4 +181,6 @@ If we will be using ipfs services, then we have to install **go-ipfs** on your h
 - [Video on WebRTC, Video calling and Javascript integration](https://youtu.be/pv3UHYwgxnM)
 - [Centralized Error Handling using Redux](https://www.pluralsight.com/guides/centralized-error-handing-with-react-and-redux)
 - For blockchain deployment and testing inside docker container: [How To Dockerize Your Hardhat Solidity Contract On Localhost](https://codingwithmanny.medium.com/how-to-dockerize-your-hardhat-solidity-contract-on-localhost-a45424369896)
+- [ExpressJS OPTIONS Request](http://johnzhang.io/options-request-in-express) and [CORS errors and Preflight requests](https://www.topcoder.com/thrive/articles/cors-errors-and-how-to-solve-them)
+- [CORS Middleware](https://stackabuse.com/handling-cors-with-node-js/)
 

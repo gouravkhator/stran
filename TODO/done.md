@@ -5,6 +5,7 @@
 ## Client End Only
 
 - [ ] Bugs solved:
+  - [x] `ISSUE`: delete request throws error of cors.. But POST and GET worked fine.. It was because of CORS preflight request, and I solved this by using cors npm package which provides pre-flight request management by default.
   - [x] `ISSUE`: When I just go to `/profile` or `/call` directly, it redirects me to the signin page.
     And it is because loggedIn and user are not loaded via fetch user by token.
 

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setError, setMessage } from "../../store/actions";
 import { getErrorObj } from "../../utils/general.util";
 
-import { signupHandler } from "../../services/user-auth.service";
+import { signupHandler } from "../../services/auth-routes.service";
 
 /**
  * As sign up logic involves more user inputs than Login,
@@ -50,7 +50,11 @@ export default function SignupLogic() {
 
       dispatch(setMessage("Hurray! you successfully created the account. Please login now to continue.."));
     } catch (err) {
-      dispatch(setError(err.errorMsg ?? null));
+      if(!err){
+        return;
+      }
+
+      dispatch(setError(err.errorMsg ?? "Account creation failed due to some internal issue. Please try after sometime."));
     }
   };
 

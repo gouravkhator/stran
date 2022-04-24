@@ -12,7 +12,6 @@ import Header from "./components/Header";
 
 // Code-splitting is automated for `routes` directory
 import Home from "./routes/Home";
-import Profile from "./routes/Profile";
 import ErrorPage from "./routes/ErrorPage";
 
 import reducer from "./store/reducers/root.reducer";
@@ -45,7 +44,7 @@ export function App() {
           path="/profile"
           // lazy loading the component
           getComponent={() =>
-            import("./routes/Profile").then((module) => module.default)
+            import("./routes/Profile/Profile").then((module) => module.default)
           }
         />
 

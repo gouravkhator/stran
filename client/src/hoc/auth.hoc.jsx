@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { getUserByToken } from "../services/user-auth.service";
+import { getUserByToken } from "../services/user-routes.service";
 import { setError, setUser } from "../store/actions";
 
 import { useEffect, useState } from "preact/hooks";
@@ -61,11 +61,17 @@ export function withAuthHOC(
 
           setFetched(() => true);
         } catch (err) {
+          // even if some thing throwed some error, the state of the data should be set to fetched..
+          // after the state is set to fetched, then the loggedIn state is checked and accordingly it acts upon that
           setFetched(() => true);
 
-          if (err && requiresErrorDisplay) {
+          if(!err){
+            return;
+          }
+
+          if (requiresErrorDisplay) {
             // if error exists and the component requires error to be displayed..
-            dispatch(setError(err.message ?? null));
+            dispatch(setError(err.errorMsg ?? "Cannot authenticate you in, due to some internal error. Please try after sometime."));
           }
         }
       })();

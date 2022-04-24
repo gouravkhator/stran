@@ -17,18 +17,24 @@ For detailed explanation on how things work, checkout the [CLI Readme](https://g
 
 ## Client-side Error Handling
 
-As we have multiple parts of the client side where we can get the error, so we don't user default Error object, rather we throw an object with below structure:
+- As we have multiple parts of the client side where we can get the error, so we don't user default Error object, rather we throw an object with below structure:
 
-```js
-throw {
-  errorMsg: 'Long descriptive error message for user',
-  shortErr: 'short-error-message-in-hyphenated-format',
-}
-```
+  ```js
+  throw {
+    errorMsg: 'Long descriptive error message for user',
+    shortErr: 'short-error-message-in-hyphenated-format',
+  }
+  ```
 
-**Why 2 fields for Error Messages ?**
-- Long error messages are for users to see.
-- Short error messages are kept, so that we can use this hyphenated short error strings in switch case statements in the catch blocks, to have conditional logic for each of those short errors.
+- `errorMsg` is our custom error field, and if that is not thrown in our custom code, then we show user some specific message like `"Cannot process this request.."`
+
+- **Why 2 fields for Error Messages ?**
+  - Long error messages are for users to see.
+  - Short error messages are kept, so that we can use this hyphenated short error strings in switch case statements in the catch blocks, to have conditional logic for each of those short errors.
+
+## Components File Structure
+
+> To Complete this section of the README.md
 
 ## Resolving older Issues with PreactJS:
 

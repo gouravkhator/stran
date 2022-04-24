@@ -12,8 +12,8 @@ const app = express();
 // const session = require('express-session'); // for session-based auth
 const cookieParser = require("cookie-parser");
 // const helmet = require('helmet');
+const cors = require("cors");
 
-const { allowCrossDomain } = require("./src/middlewares/global.middleware");
 const {
   authenticateTokenMiddleware,
 } = require("./src/middlewares/auth.middleware");
@@ -24,29 +24,55 @@ const authRouter = require("./src/routes/auth.route");
 const userRouter = require("./src/routes/user.route");
 const { AppError } = require("./src/utils/errors.util");
 
+/**
+ * Cookie parser middleware helps sign and unsign every cookie with the secret as process.env.TOKEN_SECRET
+ */
 app.use(cookieParser(process.env.TOKEN_SECRET));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(allowCrossDomain);
-// app.use(helmet()); // !ISSUE: enabling helmet works fine for all use cases, except the token passing from server to client
 
 /**
- * We are using token authentication currently,
- * but uncomment the below session-based auth if needed, else would remove in future.
+ * express.json() is a method, to recognize the incoming Request Object as a JSON Object.
+ *
+ * express.urlencoded() is a method, to recognize the incoming Request Object as strings or arrays.
+ *
+ * You NEED express.json() and express.urlencoded() just for POST and PUT requests,
+ * because in both these requests you are sending data to the server and
+ * you are asking the server to accept or store that data (object),
+ * which is enclosed in the body (i.e. req.body) of that (POST or PUT) Request.
  */
-/*
-app.use(session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        sameSite: 'lax', // to prevent CSRF attack..
-        maxAge: 24 * 60 * 60 * 1000, // 24 hrs written in milliseconds
-        secure: process.env.NODE_ENV === 'production', // secure only on production environment
-        signed: true, // signed cookie
-    }
-}));
-*/
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+/**
+ * CORS allows us to deploy client to any other origin
+ * and then only accept authenticated requests from those origins..
+ * -----------------------------------------------------------------
+ *
+ * CORS, by default, takes care of the Pre-flight requests,
+ * which are required for non-GET and non-POST requests..
+ *
+ * Without the pre-flight requests, the requests like PUT, PATCH or DELETE will not work in cross origin requests..
+ * ---------------------------------------------------------------------------
+ *
+ * Headers set by CORS with below options are:
+ * res.header("Access-Control-Allow-Origin", process.env.CLIENT_URL);
+ * res.header("Access-Control-Allow-Credentials", true);
+ * res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
+ * res.header("Access-Control-Allow-Headers", "Content-Type");
+ */
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL, // the origin from which this server can accept authenticated requests
+    credentials: true, // allow credentials
+    methods: "GET, PUT, POST, DELETE", // allowed methods for the cross origin requests
+    allowedHeaders: "Content-Type", // allowed headers for the cross origin requests
+    optionsSuccessStatus: 200, // success status code sent for the OPTIONS request
+  }),
+);
+
+/**
+ * Helmet helps secure ExpressJS apps by setting various headers..
+ */
+// app.use(helmet()); // !ISSUE: enabling helmet works fine for all use cases, except the token passing from server to client
 
 app.use("/ipfs", ipfsRouter);
 app.use("/auth", authenticateTokenMiddleware, authRouter);

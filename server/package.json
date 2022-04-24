@@ -11,6 +11,7 @@
   "dependencies": {
     "@metamask/eth-sig-util": "^4.0.0",
     "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
     "ethereumjs-util": "^7.1.4",
     "express": "^4.17.2",
     "express-session": "^1.17.2",

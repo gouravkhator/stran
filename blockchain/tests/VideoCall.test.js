@@ -1,9 +1,21 @@
 const { expect } = require("chai");
 const { ethers } = require("hardhat");
 
-describe("VideoCallContract", function () {
+describe("VideoCall | Current User CRUD Tests", function () {
+  /**
+   * The contract factory, containing the main smart contract
+   */
   let contractFactory;
+
+  /**
+   * Deployed contract, created from the contract factory..
+   * Deployed contract is like an instance of that contract factory
+   */
   let deployedContract;
+
+  /**
+   * One of the blockchain account address, used for testing the methods..
+   */
   let addr1;
 
   /**
@@ -26,6 +38,10 @@ describe("VideoCallContract", function () {
       primaryLanguage = 1,
       knownLanguages = [1];
 
+    /*
+      By default, if we don't call the connect method on deployedContract variable,
+      that actually connects to the 1st account address.
+    */
     const registerUserTx = await deployedContract.registerUser(
       "go",
       location,
@@ -65,7 +81,7 @@ describe("VideoCallContract", function () {
     const editedUser = await deployedContract.userdata(updateUserTx.from);
     expect(editedUser.username).to.equal("GO");
     expect(editedUser.primaryLanguage).to.equal(2);
-    
+
     /**
      * as primaryLanguage gets updated,
      * so the requiredLanguage of callerOptions also gets updated in our code..
@@ -85,5 +101,101 @@ describe("VideoCallContract", function () {
 
     const removedUser = await deployedContract.userdata(deleteUserTx.from);
     expect(removedUser.username).to.equal("");
+  });
+});
+
+describe("VideoCall | Strangers Tests", function () {
+  /**
+   * The contract factory, containing the main smart contract
+   */
+  let contractFactory;
+
+  /**
+   * Deployed contract, created from the contract factory..
+   * Deployed contract is like an instance of that contract factory
+   */
+  let deployedContract;
+
+  /*
+   The blockchain account addresses, used for testing the methods..
+   */
+  let userAddr, strangerAddr1, strangerAddr2;
+
+  /**
+   * Instantiates and deploys the smart contract, and sets the addresses..
+   *
+   * Run the before hook, to run before any of the sub-tests runs..
+   */
+  before(async function () {
+    contractFactory = await ethers.getContractFactory("VideoCallContract");
+    deployedContract = await contractFactory.deploy();
+
+    // getting the account address for testing
+    [userAddr, strangerAddr1, strangerAddr2] = await ethers.getSigners();
+  });
+
+  /**
+   * Registers the main current user, and other stranger users..
+   */
+  before(async function () {
+    /**
+     * Helper method for registering a new user.
+     * @param {*} addr Signer Address object of the user to be registered newly.
+     *
+     * This addr is not a string, instead the main address is addr.address
+     */
+    const registerNewUserHelper = async (addr) => {
+      const location = 0,
+        primaryLanguage = 1,
+        knownLanguages = [1];
+
+      const registerUserTx = await deployedContract
+        .connect(addr)
+        .registerUser("go", location, primaryLanguage, knownLanguages);
+
+      await registerUserTx.wait();
+    };
+
+    // registering current user with status as available by default
+    await registerNewUserHelper(userAddr);
+
+    // registering two strangers with status as available by default
+    await registerNewUserHelper(strangerAddr1);
+    await registerNewUserHelper(strangerAddr2);
+  });
+
+  it("Should get available persons' address for current user, as equal to 1st stranger's address", async function () {
+    // gets first available person address for the current user, which is currently stranger1's address
+    const foundAvailableAddr = await deployedContract
+      .connect(userAddr)
+      .getRandomAvailableUser();
+
+    expect(foundAvailableAddr).to.be.equal(strangerAddr1.address);
+  });
+
+  it("Should make the first stranger offline, and then get available persons' address, as equal to 2nd stranger's address", async function () {
+    // updating stranger's status to be equal to OFFLINE (integer representation is 4)
+    const existingUser = await deployedContract.userdata(strangerAddr1.address);
+    const newStatus = 4,
+      newKnownLanguages = [1];
+
+    const updateUserTx = await deployedContract
+      .connect(strangerAddr1)
+      .updateUser(
+        existingUser.username,
+        existingUser.location,
+        existingUser.primaryLanguage,
+        newStatus,
+        newKnownLanguages,
+      );
+
+    await updateUserTx.wait();
+
+    // find available persons' address for the current user..
+    const foundAvailableAddr = await deployedContract
+      .connect(userAddr)
+      .getRandomAvailableUser();
+
+    expect(foundAvailableAddr).to.be.equal(strangerAddr2.address);
   });
 });

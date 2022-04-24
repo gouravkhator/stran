@@ -71,10 +71,6 @@ contract VideoCallContract {
 
     address[] memory emptyArr;
     // setting userdata
-    /*
-      user has just registered so we keep him in DND mode
-      set the status to AVAILABLE, once he is fully logged in.
-    */
     userdata[msg.sender] = User({
       userid: msg.sender,
       nonce: getRandomNumber(),
@@ -82,7 +78,7 @@ contract VideoCallContract {
       location: location,
       primaryLanguage: primaryLanguage,
       knownLanguages: knownLanguages,
-      status: Status.DND,
+      status: Status.AVAILABLE,
       callerOptions: VideoCallOptions({
         requiredLanguage: primaryLanguage,
         requiredLocation: location
@@ -181,11 +177,16 @@ contract VideoCallContract {
     return temp; // returning empty object
   }
 
+  /*
+  Returns the random available user's address, which is not the current user.
+   */
   function getRandomAvailableUser() public view returns (address) {
     uint256 i;
 
     for (i = 0; i < users.length; i++) {
-      if (userdata[users[i]].status == Status.AVAILABLE) {
+      // !ISSUE: this has to be random and not linear search for first available
+      // this thing will always return first available person of all the available persons..
+      if (userdata[users[i]].status == Status.AVAILABLE && users[i] != msg.sender) {
         return users[i];
       }
     }

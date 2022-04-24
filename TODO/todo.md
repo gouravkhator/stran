@@ -19,8 +19,8 @@
 
 - [ ] Keep the user's data in encrypted way in local/other client side storage and keep that for a few mins like 1 or 2 mins, just to reduce the fetch user by token request to the server.
 
-- [ ] Delete functionality to add in the profile page
 - [ ] Edit functionality to add in profile page. 
+- [x] Delete functionality to add in the profile page. 
 - [x] Add Global message state, to have message for the user in some cases
 
 ### Server End Only
@@ -40,7 +40,7 @@
 ### Client End Only
 
 - [ ] Migrate client code from preact-cli to ViteJS, using [my Preact + ViteJS](https://github.com/gouravkhator/previte) template.
-- [ ] Have the env working in the client end.
+- [ ] Have the env variables, functionally working in the client end.
 
 ### Server End Only
 
@@ -62,6 +62,8 @@
       > Keep redis and other service working in different docker containers.
       And keep the app in a different one, so that when we have to update the app and restart the server, then the redis cache does not get flushed.
   6. IPFS node to be running inside docker, if we need IPFS functionality in future.
+
+- [ ] Error reporting and logging to some tools available, just to monitor if everything is rightfully working or not.
 - [ ] Privacy setting for every user
   - It is bcoz, every user can allow/deny his profile visibility.
   - There can be different settings for friends vs for other strangers.

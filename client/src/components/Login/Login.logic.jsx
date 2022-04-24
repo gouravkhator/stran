@@ -8,7 +8,7 @@ import { getErrorObj } from "../../utils/general.util";
 import {
   fetchNonce,
   verifySignatureHandler,
-} from "../../services/user-auth.service.js";
+} from "../../services/auth-routes.service";
 
 export default function LoginLogic() {
   const [loading, setLoading] = useState(false);
@@ -109,6 +109,10 @@ export default function LoginLogic() {
       dispatch(setMessage(null));
       setLoading((previousLoadingState) => false); // button loading should be false now
 
+      if (!err) {
+        return;
+      }
+
       if (err?.code === 4001) {
         // these errors are when we click on cancel instead of processing the popups from Metamask
         dispatch(
@@ -117,10 +121,8 @@ export default function LoginLogic() {
           ),
         );
       } else {
-        dispatch(setError(err.errorMsg ?? null));
+        dispatch(setError(err.errorMsg ?? "Cannot signin with Metamask due to some internal error. Please try after sometime."));
       }
-
-      console.error(err);
     }
   };
 

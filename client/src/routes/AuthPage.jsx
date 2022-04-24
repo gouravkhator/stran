@@ -9,7 +9,6 @@ import Signup from "../components/Signup/Signup";
 import ConnectMM from "../components/ConnectMetamask/ConnectMM";
 
 import { useMetamask } from "../custom-hooks/MetamaskCustomHooks";
-import { signupHandler } from "../services/user-auth.service.js";
 import { useEffect } from "preact/hooks";
 import { setError } from "../store/actions";
 

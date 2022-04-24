@@ -24,8 +24,13 @@ async function updateUserController(req, res, next) {
       status: req.body.status ?? null,
       knownLanguages: req.body.knownLanguages ?? null,
     };
+
+    /*
+    Most necessary validations are done in the updateUser service method or its internally invoked util methods..
     
-    // most necessary validations are done in the updateUser service method or its internally invoked util methods..
+    This updateUser internally checks if no data is passed in req.body to edit,
+    or if the data passed requires any update in blockchain or not.
+    */
     const updatedUserData = await updateUser({
       username: dataToEdit.username,
       location: dataToEdit.location,

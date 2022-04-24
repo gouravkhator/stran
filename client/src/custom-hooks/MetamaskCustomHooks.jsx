@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "preact/hooks";
 import { setError, setAccount, setIsInstalled } from "../store/actions";
-import { logoutHandler } from "../services/user-auth.service";
+import { logoutHandler } from "../services/auth-routes.service";
 
 export function useMetamask() {
   const accountAddress = useSelector(({ metamask }) => metamask.accountAddress);
