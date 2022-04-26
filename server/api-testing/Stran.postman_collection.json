@@ -216,6 +216,61 @@
 					"response": []
 				},
 				{
+					"name": "Get Friend Data",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "jwtToken={{jwtToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/users/:friendUserId",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								":friendUserId"
+							],
+							"variable": [
+								{
+									"key": "friendUserId",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Random Available User",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Cookie",
+								"value": "jwtToken={{jwtToken}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseUrl}}/users/random/available",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"users",
+								"random",
+								"available"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Update User",
 					"request": {
 						"method": "PUT",
@@ -367,6 +422,11 @@
 		},
 		{
 			"key": "localNodeAcc",
+			"value": "0x...",
+			"type": "string"
+		},
+		{
+			"key": "otherNodeAcc",
 			"value": "0x...",
 			"type": "string"
 		},

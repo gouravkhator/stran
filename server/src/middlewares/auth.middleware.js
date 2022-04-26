@@ -23,7 +23,7 @@ async function authenticateTokenMiddleware(req, res, next) {
         userid: userid,
         senderAccAddr: userid,
       });
-      
+
       return next();
     }
   } catch (err) {

@@ -115,7 +115,6 @@ export async function deleteUserHandler() {
 
     const data = await result.json();
 
-    console.log({data});
     if (data.status === "success") {
       return {
         deletedUser: true,

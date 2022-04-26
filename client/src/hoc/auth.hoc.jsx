@@ -65,13 +65,18 @@ export function withAuthHOC(
           // after the state is set to fetched, then the loggedIn state is checked and accordingly it acts upon that
           setFetched(() => true);
 
-          if(!err){
+          if (!err) {
             return;
           }
 
           if (requiresErrorDisplay) {
             // if error exists and the component requires error to be displayed..
-            dispatch(setError(err.errorMsg ?? "Cannot authenticate you in, due to some internal error. Please try after sometime."));
+            dispatch(
+              setError(
+                err.errorMsg ??
+                  "Cannot authenticate you in, due to some internal error. Please try after sometime.",
+              ),
+            );
           }
         }
       })();

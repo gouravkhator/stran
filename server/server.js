@@ -22,6 +22,8 @@ const { throwErrIfUserNotExist } = require("./src/middlewares/user.middleware");
 const ipfsRouter = require("./src/routes/ipfs.route");
 const authRouter = require("./src/routes/auth.route");
 const userRouter = require("./src/routes/user.route");
+const otherUsersRouter = require("./src/routes/other-users.route");
+
 const { AppError } = require("./src/utils/errors.util");
 
 /**
@@ -76,6 +78,7 @@ app.use(
 
 app.use("/ipfs", ipfsRouter);
 app.use("/auth", authenticateTokenMiddleware, authRouter);
+
 app.use(
   "/user",
   authenticateTokenMiddleware,
@@ -83,6 +86,15 @@ app.use(
   userRouter,
 );
 
+// this route is for getting friends' data or some available random user's ids
+app.use(
+  "/users",
+  authenticateTokenMiddleware,
+  throwErrIfUserNotExist,
+  otherUsersRouter,
+);
+
+// error handling route
 app.use((err, req, res, next) => {
   console.error(err); // just for debugging
 

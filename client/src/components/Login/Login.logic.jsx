@@ -121,7 +121,12 @@ export default function LoginLogic() {
           ),
         );
       } else {
-        dispatch(setError(err.errorMsg ?? "Cannot signin with Metamask due to some internal error. Please try after sometime."));
+        dispatch(
+          setError(
+            err.errorMsg ??
+              "Cannot signin with Metamask due to some internal error. Please try after sometime.",
+          ),
+        );
       }
     }
   };

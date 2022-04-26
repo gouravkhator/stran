@@ -186,7 +186,9 @@ contract VideoCallContract {
     for (i = 0; i < users.length; i++) {
       // !ISSUE: this has to be random and not linear search for first available
       // this thing will always return first available person of all the available persons..
-      if (userdata[users[i]].status == Status.AVAILABLE && users[i] != msg.sender) {
+      if (
+        userdata[users[i]].status == Status.AVAILABLE && users[i] != msg.sender
+      ) {
         return users[i];
       }
     }

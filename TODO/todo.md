@@ -17,19 +17,18 @@
   - [ ] `ISSUE`: When I click on left/right for navigating through the browser history, I can go to the signed in state again, even if I am currently signed out.
   - [ ] `ISSUE`: When I click on other routes, the error shown on current page should not be shown on other page.
 
-- [ ] Keep the user's data in encrypted way in local/other client side storage and keep that for a few mins like 1 or 2 mins, just to reduce the fetch user by token request to the server.
+- [ ] Profile and User
+  - [ ] Edit functionality to add in profile page.
 
-- [ ] Edit functionality to add in profile page. 
-- [x] Delete functionality to add in the profile page. 
-- [x] Add Global message state, to have message for the user in some cases
+- [ ] Keep the user's data in encrypted way in local/other client side storage and keep that for a few mins like 1 or 2 mins, just to reduce the fetch user by token request to the server.
 
 ### Server End Only
 
-- [ ] Add helmet with proper options to let us use JWT also.
+- [ ] Add `helmet` package, with proper options to let us use JWT also.
 
-### Blockchain Solidity Only
+### Blockchain End Only
 
-- [ ] `ISSUE`: knownLanguages array in registerUser method is undefined and not saved when we fetch that.
+- [ ] `ISSUE`: knownLanguages array in `registerUser` solidity method is undefined and not saved when we fetch that.
 
 ### Overall Project's In-Progress Items
 
@@ -46,8 +45,9 @@
 
 - [ ] User should not request multiple times for same things, or else sent a `429 Too Many Requests` as the response status code.
 - [ ] Host your own peer server, which will not go down anytime, and we will have no dependency on public free peer server.
+- [ ] Redis service: create child process in server end, for connecting with redis server.
 
-### Blockchain Solidity Only
+### Blockchain End Only
 
 - [ ] 
 
@@ -64,9 +64,12 @@
   6. IPFS node to be running inside docker, if we need IPFS functionality in future.
 
 - [ ] Error reporting and logging to some tools available, just to monitor if everything is rightfully working or not.
+
 - [ ] Privacy setting for every user
+  - [ ] Have the current user permission to do CRUD on his own profile, but only view permission to partial data of his friends.
   - It is bcoz, every user can allow/deny his profile visibility.
   - There can be different settings for friends vs for other strangers.
+  
 - [ ] Have the Search functionality for any person, with filters of location and primary languages, and known languages.
 - [ ] Call history to save and retrieve to/from smart contract.
 - [ ] User preferred Location can be taken from browser current location data.
@@ -76,6 +79,20 @@
 
 ## Features on hold for now
 
-- [ ] Server auth endpoints to be hosted in different server, rather than the main server, so as to reduce the requests load on only one server.
+### Client End Only
+
+- [ ] 
+
+### Server End Only
+
+- [ ] Server auth endpoints to be hosted in different server, rather than the main server, so as to reduce the requests load, caused on that only server.
+
+### Blockchain End Only
+
+- [ ] Index some userdata like the status, location, language in smart contract solidity code, for optimised access.
+- [ ] Add a ***rinkeby*** network in the `hardhat.config.js` file for deploying the contracts on that test net.
+
+### Overall Project's Features On Hold
+
 - [ ] Connecting with IPFS:
   - [ ] Using docker for running IPFS daemon on them, or an online IPFS node runner.

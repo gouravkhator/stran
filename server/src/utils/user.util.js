@@ -125,9 +125,9 @@ function makeDataBlockchainCompat({
     compatKnownLanguages = knownLanguages?.reduce((tempList, val) => {
       let languageIndex = null;
 
-      if(val in Language){
+      if (val in Language) {
         languageIndex = Language[val];
-      }else{
+      } else {
         throw invalidEnumErr;
       }
 

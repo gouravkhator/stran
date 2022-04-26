@@ -110,7 +110,7 @@ async function createUser({
 /**
  * updateUser - A service function to update user's data in the blockchain.
  * It takes in username, currentLocation, primaryLanguage of choice, and languages known by the user.
- * 
+ *
  * This service method checks below things by itself or the util methods used in here:
  * 1. checkIfUpdateRequired method checks if the fields are really to be updated..
  * 2. makeDataBlockchainCompat method checks if we can parse the data to blockchain data types,
@@ -150,7 +150,7 @@ async function updateUser({
       status,
       knownLanguages,
     };
-    
+
     /**
      * Checks if any fields are modified really or not,
      * and if no fields are modified then it throws a 400 Bad request AppError
@@ -291,8 +291,12 @@ async function addFriend(friendUserId, senderAccAddr) {
 
 /**
  * Returns the list of friends for the sender accounts user.
+ *
+ * @param senderAccAddr Sender's account address, for whom, we need the friends list
+ * @param onlyUserIdsNeeded If only the user ids of those friends are needed,
+ * then it returns their user ids only, else their full data is returned too..
  */
-async function getFriendsList(senderAccAddr) {
+async function getFriendsList({ senderAccAddr, onlyUserIdsNeeded = false }) {
   try {
     validateSmartContractParams({ senderAccAddr });
     const { vcContract } = await getContract();
@@ -302,7 +306,7 @@ async function getFriendsList(senderAccAddr) {
       senderAccAddr,
     });
 
-    // check if user exists or not, via the sender account address
+    // check if user exists or not
     if (userdata.username === "") {
       throw new AppError({
         message: "This account does not exist. Please signup to continue..",
@@ -314,6 +318,11 @@ async function getFriendsList(senderAccAddr) {
     const friendsAddrList = await vcContract.methods.getFriendsList().call({
       from: senderAccAddr,
     });
+
+    if (onlyUserIdsNeeded === true) {
+      // then return the friends' addresses list
+      return friendsAddrList;
+    }
 
     // reduce method is used so that we can check for every friend and then return appropriate data
     const friendsObjList = await friendsAddrList.reduce(
@@ -347,6 +356,71 @@ async function getFriendsList(senderAccAddr) {
       message:
         "Unable to fetch friends' details for the current user. Please try again after sometime.",
       shortMsg: "get-friends-err",
+      statusCode: 500,
+    });
+  }
+}
+
+/**
+ * Returns the random available user's account address if there is any, else throws a 404 error.
+ * @param {*} senderAccAddr Sender Blockchain's account address, which is same as the userid here..
+ * @returns the random available user's account address, otherwise a 404 error is thrown if no users are available.
+ */
+async function getRandomAvailableUser(senderAccAddr) {
+  try {
+    validateSmartContractParams({ senderAccAddr });
+    const { vcContract } = await getContract();
+
+    const userdata = await getUserData({
+      userid: senderAccAddr,
+      senderAccAddr,
+    });
+
+    // check if user exists or not
+    if (userdata.username === "") {
+      throw new AppError({
+        message: "This account does not exist. Please signup to continue..",
+        shortMsg: "invalid-account",
+        statusCode: 404,
+      });
+    }
+
+    const availableUserAddr = await vcContract.methods
+      .getRandomAvailableUser()
+      .call({
+        from: senderAccAddr,
+      });
+
+    const zeroedAddrPattern = /^0x(0)+$/;
+
+    /*
+    if availableUserAddr is a zeroed address, 
+    then match results will be an array of those results..
+
+    if availableUserAddr is not a zeroed address,
+    then the results will be null, and we default the results to empty array
+    */
+    const zeroedAddrMatchResults =
+      availableUserAddr.match(zeroedAddrPattern) ?? [];
+
+    if (zeroedAddrMatchResults.length === 0) {
+      return availableUserAddr;
+    } else {
+      throw new AppError({
+        message: "No users available now. Please try again after sometime..",
+        shortMsg: "no-random-available-user",
+        statusCode: 404,
+      });
+    }
+  } catch (err) {
+    if (err instanceof AppError) {
+      throw err;
+    }
+
+    throw new AppError({
+      message:
+        "Unable to fetch available user's info. Please try again after sometime.",
+      shortMsg: "get-available-user-err",
       statusCode: 500,
     });
   }
@@ -453,6 +527,7 @@ module.exports = {
   deleteUser,
   addFriend,
   getFriendsList,
+  getRandomAvailableUser,
   getUserData,
   verifySignature,
 };
@@ -468,7 +543,7 @@ module.exports = {
   try {
     const currentUserData = await createUser({
       username: "Gourav Khator",
-      currentLocation: 'AMERICA',
+      currentLocation: "AMERICA",
       senderAccAddr: accounts[0],
     });
 
@@ -484,10 +559,13 @@ module.exports = {
     console.log("Modified user data is as follows: ");
     console.log(modifiedUserData);
 
-    const friendsObjList = await getFriendsList(accounts[0]);
+    const friendsObjList = await getFriendsList({senderAccAddr: accounts[0], onlyUserIdsNeeded: false});
     console.log("\nCurrently, this new user has no friends as logged below:");
     console.log(friendsObjList);
 
+    console.log("Getting random available user: ");
+    console.log(await getRandomAvailableUser(accounts[0]));
+    
     const otherUser = await createUser({
       username: "Friend",
       currentLocation: "ASIA",
@@ -502,8 +580,11 @@ module.exports = {
       "\nThe friends list of current user, after adding friend with id: " +
         otherUser.userid,
     );
-    console.log(await getFriendsList(accounts[0]));
+    console.log(await getFriendsList({ senderAccAddr: accounts[0], onlyUserIdsNeeded: false}));
 
+    console.log("Getting random available user: ");
+    console.log(await getRandomAvailableUser(accounts[0]));
+    
     await deleteUser(accounts[0]);
     console.log("\nDeleted user : " + currentUserData.userid);
 
@@ -518,7 +599,7 @@ module.exports = {
     );
 
     console.log("\n\nFriends list of the friend of current user: ");
-    console.log(await getFriendsList(accounts[1]));
+    console.log(await getFriendsList({senderAccAddr: accounts[1], onlyUserIdsNeeded: false}));
   } catch (error) {
     console.error(error);
   }

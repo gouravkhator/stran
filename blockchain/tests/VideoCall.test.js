@@ -174,7 +174,8 @@ describe("VideoCall | Strangers Tests", function () {
   });
 
   it("Should make the first stranger offline, and then get available persons' address, as equal to 2nd stranger's address", async function () {
-    // updating stranger's status to be equal to OFFLINE (integer representation is 4)
+    // updating stranger1's status to be equal to OFFLINE (integer representation is 4)
+    // now the available user should be stranger2
     const existingUser = await deployedContract.userdata(strangerAddr1.address);
     const newStatus = 4,
       newKnownLanguages = [1];

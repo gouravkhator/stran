@@ -62,11 +62,11 @@ const locationsList = [
 
 /**
  * Location is an object like below:
- * 
+ *
  *  {
  *    "ASIA": 0,
  *    "EUROPE": 1,
- *    ..... 
+ *    .....
  *  }
  */
 const Location = convertArrToEnum(locationsList);

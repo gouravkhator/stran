@@ -48,13 +48,22 @@ export default function SignupLogic() {
         name: username,
       });
 
-      dispatch(setMessage("Hurray! you successfully created the account. Please login now to continue.."));
+      dispatch(
+        setMessage(
+          "Hurray! you successfully created the account. Please login now to continue..",
+        ),
+      );
     } catch (err) {
-      if(!err){
+      if (!err) {
         return;
       }
 
-      dispatch(setError(err.errorMsg ?? "Account creation failed due to some internal issue. Please try after sometime."));
+      dispatch(
+        setError(
+          err.errorMsg ??
+            "Account creation failed due to some internal issue. Please try after sometime.",
+        ),
+      );
     }
   };
 
