@@ -32,7 +32,7 @@
 
 ### Overall Project's In-Progress Items
 
-- [ ] Configure the Postman collection runner, to run the tests one by one in a sequence defined by me.
+- [ ] Video Calling SDK/API integration in both server and client with Twilio probably.
 
 ## Features Planned
 
@@ -63,6 +63,7 @@
       And keep the app in a different one, so that when we have to update the app and restart the server, then the redis cache does not get flushed.
   6. IPFS node to be running inside docker, if we need IPFS functionality in future.
 
+- [ ] Configure the Postman collection runner, to run the tests one by one in a sequence defined by me.
 - [ ] Error reporting and logging to some tools available, just to monitor if everything is rightfully working or not.
 
 - [ ] Privacy setting for every user

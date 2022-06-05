@@ -39,6 +39,15 @@ async function main() {
     "../contractsConfig/VideoCallContract.config.json",
   );
 
+  const directoryName = path.dirname(configPath);
+
+  try {
+    await fs.access(directoryName); // checks if directory exists or not
+  } catch (err) {
+    // if directory does not exist, create those directories recursively
+    await fs.mkdir(directoryName, { recursive: true });
+  }
+
   await fs.writeFile(
     configPath,
     JSON.stringify({

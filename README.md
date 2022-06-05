@@ -80,7 +80,9 @@ If we will be using ipfs services, then we have to install **go-ipfs** on your h
 - Connect ***MetaMask*** to Local node:
 
     - After running the local node, connect the MetaMask to that local node.
-    - Then, import the account, by providing the private key of one of the accounts of that localnode.
+    - Then goto the metamask profile settings and to Advanced, then enable "Show Test Networks".
+    - Then, click on the circle icon of yours, and then click "Import Account", and then provide the private key of one of the accounts of that localnode.
+    - *Hurray!!*, you have successfully setup your localnode in Metamask.
     - Refer [this article](https://dev.to/dabit3/the-complete-guide-to-full-stack-ethereum-development-3j13) for more details.
 
 - Deploy the smart contract -- It will firstly compile the smart contracts and then would deploy them.
