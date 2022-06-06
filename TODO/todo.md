@@ -32,7 +32,7 @@
 
 ### Overall Project's In-Progress Items
 
-- [ ] Video Calling SDK/API integration in both server and client with Twilio probably.
+- [ ] Video Calling SDK/API integration in both server and client with VideoSDK probably.
 
 ## Features Planned
 
@@ -65,7 +65,7 @@
 
 - [ ] Configure the Postman collection runner, to run the tests one by one in a sequence defined by me.
 - [ ] Error reporting and logging to some tools available, just to monitor if everything is rightfully working or not.
-
+- [ ] VideoSDK provides the createMeeting option, where we can have a region-based meeting creation, to improve latency.
 - [ ] Privacy setting for every user
   - [ ] Have the current user permission to do CRUD on his own profile, but only view permission to partial data of his friends.
   - It is bcoz, every user can allow/deny his profile visibility.

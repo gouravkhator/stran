@@ -23,6 +23,7 @@ const ipfsRouter = require("./src/routes/ipfs.route");
 const authRouter = require("./src/routes/auth.route");
 const userRouter = require("./src/routes/user.route");
 const otherUsersRouter = require("./src/routes/other-users.route");
+const videoSDKRouter = require("./src/routes/videosdk.route");
 
 const { AppError } = require("./src/utils/errors.util");
 
@@ -92,6 +93,14 @@ app.use(
   authenticateTokenMiddleware,
   throwErrIfUserNotExist,
   otherUsersRouter,
+);
+
+// this route is used for video calling
+app.use(
+  "/videosdk",
+  authenticateTokenMiddleware,
+  throwErrIfUserNotExist,
+  videoSDKRouter,
 );
 
 // error handling route
