@@ -90,7 +90,8 @@ export async function signupHandler({
     }
 
     if (errorFromServer === true) {
-      // if error from server flag is true, then we directly throw that server error.
+      // if error from server flag is true, then we directly throw that server error, 
+      // that we are throwing from try block.
       throw err;
     }
 

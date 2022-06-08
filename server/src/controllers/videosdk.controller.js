@@ -37,10 +37,16 @@ function getVideoSDKTokenController(req, res, next) {
 async function createMeetingController(req, res, next) {
   try {
     const accessToken = req.body.videoSDKToken ?? null;
+
+    /**
+     * region variable can be used for taking advantage of region-based service.
+     * This helps in better latency, and even we can change the region based on the time.
+     *
+     * This way, we allow better latency meetings to US regions in the US working hours time.
+     * And similarly for other regions in their working hours time.
+     */
     const region = req.body.region ?? "sg001"; // region can be  sg001 | uk001 | us001 | eu001
 
-    // we can take advantage of the region, to provide a more region-based better latency video calls
-    
     if (accessToken === null) {
       throw new AppError({
         message:
@@ -62,8 +68,12 @@ async function createMeetingController(req, res, next) {
     };
 
     const response = await fetch(url, options);
-    const responseData = response.json();
-    return res.json(responseData);
+    const responseData = await response.json();
+
+    return res.json({
+      status: "success",
+      meetingData: responseData,
+    });
   } catch (err) {
     if (err instanceof AppError) {
       return next(err);
@@ -106,8 +116,13 @@ async function validateMeetingController(req, res, next) {
     };
 
     const response = await fetch(url, options);
-    const responseData = response.json();
-    return res.json(responseData);
+    const responseData = await response.json();
+
+    return res.json({
+      status: "success",
+      meetingValidated: true,
+      meetingData: responseData,
+    });
   } catch (err) {
     if (err instanceof AppError) {
       return next(err);

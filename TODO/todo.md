@@ -17,6 +17,7 @@
   - [ ] `ISSUE`: When I click on left/right for navigating through the browser history, I can go to the signed in state again, even if I am currently signed out.
   - [ ] `ISSUE`: When I click on other routes, the error shown on current page should not be shown on other page.
 
+- [ ] Set the Incoming call state to have the UI for "Incoming Call, Please answer"
 - [ ] Profile and User
   - [ ] Edit functionality to add in profile page.
 

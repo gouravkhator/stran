@@ -11,6 +11,33 @@
 - [ ] What server does torrent use out of STUN and TURN, to make a peer network ?
 - [ ] 
 
+## Bugs that are not easily fixable as of now
+
+### Client End Only
+
+- [ ] When we toggle video off, then also the camera light is on.
+
+    * Code block for current approach:
+    ```js
+    const videoTrack = localStream
+        .getTracks()
+        .find((track) => track.kind === "video");
+
+    if (webcamOn === true) {
+      // turn the webcam off, meaning disable the video tracks of the local stream
+      videoTrack.enabled = false;
+    } else {
+      videoTrack.enabled = true; // enable the video track..
+    }
+    ```
+
+    * But, this just sends the black frame to the client side, and keeps the camera light on.
+        
+        Refer the article on the same issue faced in previous versions of [Agora Video SDK FAQ section](https://docs.agora.io/en/All/faq/web_camera_light).
+
+        They say that if we close the stream, then the audio track also gets closed. 
+    * This can only be avoided when we publish the audio and video track as separate objects, enabling you to disable the local video and turn off the camera light by using the `close` method of the video track object, without affecting the audio track.
+
 ## OKR -- The Objective Keys and Results
 
 Monthly ammended. With all its history.

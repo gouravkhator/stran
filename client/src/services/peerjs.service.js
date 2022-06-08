@@ -1,13 +1,13 @@
 import { captureStream } from "../utils/video_stream.util";
 
-export function answerCall({ peer, setLocalStream, setRemoteStream }) {
+export function answerCall({ peer, setIncomingCall, setLocalStream, setRemoteStream }) {
   if (!peer) {
     return;
   }
 
   peer.on("call", async function (call) {
     const localStream = await captureStream();
-    setLocalStream((previousLocalStream) => localStream);
+    setLocalStream(() => localStream);
 
     // Answer the call, providing our mediaStream
     call.answer(localStream);

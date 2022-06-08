@@ -17,6 +17,7 @@
     "server:start": "npm start --prefix server/",
     "server:dev": "npm run dev --prefix server/",
     "server:test": "npm run test --prefix server/",
+    "server:redis": "docker run --name redis -p 6379:6379 -d --rm redis",
     "full-install": "npm i && npm i --prefix blockchain/ && npm i --prefix client/ && npm i --prefix server/"
   },
   "license": "Apache-2.0",

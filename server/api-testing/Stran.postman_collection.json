@@ -400,7 +400,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"videoSDKToken\": \"\"\n}",
+							"raw": "{\n    \"videoSDKToken\": \"{{videoSDKToken}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -433,7 +433,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"videoSDKToken\": \"\"\n}",
+							"raw": "{\n    \"videoSDKToken\": \"{{videoSDKToken}}\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -453,7 +453,7 @@
 							"variable": [
 								{
 									"key": "meetingId",
-									"value": null
+									"value": "5uen-xx52-dhle"
 								}
 							]
 						}
@@ -535,6 +535,11 @@
 		},
 		{
 			"key": "jwtToken",
+			"value": "-",
+			"type": "string"
+		},
+		{
+			"key": "videoSDKToken",
 			"value": "-",
 			"type": "string"
 		}

@@ -95,7 +95,7 @@ app.use(
   otherUsersRouter,
 );
 
-// this route is used for video calling
+// this route is used for video sdk api (would be removed later, as we are not using it now)
 app.use(
   "/videosdk",
   authenticateTokenMiddleware,

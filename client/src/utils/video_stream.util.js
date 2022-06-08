@@ -30,7 +30,7 @@ export async function captureStream() {
 /**
  * Sets the incoming stream to target element
  */
-export function setStream({ incomingStream, targetElement }) {
+export function setStreamToTarget({ incomingStream, targetElement }) {
   if ("srcObject" in targetElement) {
     targetElement.srcObject = incomingStream;
   }

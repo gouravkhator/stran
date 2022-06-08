@@ -13,6 +13,7 @@
 
 - [ ] Calling Feature
   - [x] PeerJS feature implemented
+  - [x] Toggling of Mic and Webcam implemented.
 
 - [ ] Redux and State Managements
   - [x] Metamask reducer

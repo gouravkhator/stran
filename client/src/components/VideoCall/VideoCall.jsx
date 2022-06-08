@@ -14,7 +14,13 @@ const VideoCallBase = () => {
     localStream,
     remoteStream,
     handleDestIdInput,
+    micOn,
+    toggleMic,
+    webcamOn,
+    toggleWebcam,
   } = VideoCallLogic();
+
+  const iconSize = "30";
 
   return (
     <div>
@@ -31,6 +37,7 @@ const VideoCallBase = () => {
       <video
         id="localstream"
         autoPlay
+        muted={true} // to keep out own video muted (no sound)
         style={{ width: "40%" }}
         ref={(video) => {
           if (video !== null && localStream) video.srcObject = localStream;
@@ -46,6 +53,45 @@ const VideoCallBase = () => {
           if (video !== null && remoteStream) video.srcObject = remoteStream;
         }}
       ></video>
+
+      <div id="video-controls">
+        <button onClick={toggleMic}>
+          {micOn === true ? (
+            <img
+              src="/assets/icons/microphone-on.png"
+              width={iconSize}
+              height={iconSize}
+            />
+          ) : (
+            <img
+              src="/assets/icons/microphone-off.png"
+              width={iconSize}
+              height={iconSize}
+            />
+          )}
+        </button>
+
+        <button onClick={toggleWebcam}>
+          {webcamOn === true ? (
+            <img
+              src="/assets/icons/video-camera-on.png"
+              width={iconSize}
+              height={iconSize}
+            />
+          ) : (
+            <img
+              src="/assets/icons/video-camera-off.png"
+              width={iconSize}
+              height={iconSize}
+            />
+          )}
+        </button>
+
+        {/* TODO: end call functionality implementation required */}
+        {/* <button onClick={endCall}>
+          <img src="/assets/icons/end-call-icon.png" width={iconSize} height={iconSize}/>
+        </button> */}
+      </div>
     </div>
   );
 };
