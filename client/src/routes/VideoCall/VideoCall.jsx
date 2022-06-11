@@ -1,5 +1,8 @@
 /** @jsx h */
 import { h } from "preact";
+import { route } from "preact-router";
+import { useEffect } from "preact/hooks";
+import { useSelector } from "react-redux";
 import { withAuthHOC } from "../../hoc/auth.hoc";
 
 import VideoCallLogic from "./VideoCall.logic";
@@ -8,28 +11,61 @@ import VideoCallLogic from "./VideoCall.logic";
  * VideoCallBase is the VideoCall component without the auth HOC wrapper.
  */
 const VideoCallBase = () => {
+  // this VideoCallLogic creates the peer connection if not already created,
+  // and also monitors the incoming call and sets the incomingCall in the redux store
   const {
-    peerConn,
-    initiateCall,
-    localStream,
-    remoteStream,
+    initiateCallToDest,
     handleDestIdInput,
-    micOn,
     toggleMic,
-    webcamOn,
     toggleWebcam,
+    answerCallWrapper,
+    endCall,
   } = VideoCallLogic();
+
+  const peerConn = useSelector(({ call }) => call.peerConn);
+  const currCall = useSelector(({ call }) => call.currCall);
+  const isCallee = useSelector(({ call }) => call.isCallee);
+
+  const inCall = useSelector(({ call }) => call.inCall);
+
+  const localStream = useSelector(({ call }) => call.localStream);
+
+  const micOn = useSelector(({ call }) => call.micOn);
+  const webcamOn = useSelector(({ call }) => call.webcamOn);
 
   const iconSize = "30";
 
+  useEffect(() => {
+    if (inCall === true) {
+      // push the path of the call page to this page, so that we can go back to this page again..
+      route(`/call/${currCall?.connectionId || ""}`);
+    }
+  }, [inCall]);
+
+  console.log({ currCall, isCallee, inCall });
   return (
     <div>
       <h2>Wanna Know some Unknown Strans??</h2>
       <h3>Go check them out with a single click right below..</h3>
 
+      {currCall !== null && isCallee === true && (
+        <div id="incoming-call">
+          <button
+            onClick={() => answerCallWrapper(currCall)}
+            class="answer-call"
+          >
+            Answer
+          </button>
+
+          <button onClick={endCall} class="end-call">
+            End Call
+          </button>
+        </div>
+      )}
+
       {peerConn?._id && <h3>Your id: {peerConn._id}</h3>}
 
-      <button onClick={initiateCall}>Call</button>
+      <button onClick={initiateCallToDest}>Call</button>
 
       <input onChange={handleDestIdInput} />
       <br />
@@ -41,16 +77,6 @@ const VideoCallBase = () => {
         style={{ width: "40%" }}
         ref={(video) => {
           if (video !== null && localStream) video.srcObject = localStream;
-        }}
-      ></video>
-
-      <h2>Remote Video</h2>
-      <video
-        id="remotestream"
-        autoPlay
-        style={{ width: "40%" }}
-        ref={(video) => {
-          if (video !== null && remoteStream) video.srcObject = remoteStream;
         }}
       ></video>
 
@@ -86,11 +112,6 @@ const VideoCallBase = () => {
             />
           )}
         </button>
-
-        {/* TODO: end call functionality implementation required */}
-        {/* <button onClick={endCall}>
-          <img src="/assets/icons/end-call-icon.png" width={iconSize} height={iconSize}/>
-        </button> */}
       </div>
     </div>
   );
