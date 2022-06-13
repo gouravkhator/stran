@@ -6,6 +6,11 @@ const initialState = {
   remoteStream: null,
   micOn: true,
   webcamOn: true,
+  /**
+   * currCall is set as mentioned below on both the caller and callee sides:
+   * 1. Set on the side of caller A, when A calls another person B,
+   * 2. Set on the side of callee B, when B monitors the incoming call, which is now of caller A.
+   */
   currCall: null,
 
   /*
@@ -14,6 +19,9 @@ const initialState = {
   */
   isCallee: false,
   isCaller: false,
+  /**
+   * isAnswering is set on the callee side, when he clicks on Answer button
+   */
   isAnswering: false,
   inCall: false,
 };

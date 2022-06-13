@@ -17,10 +17,12 @@
   - [ ] `ISSUE`: When I click on left/right for navigating through the browser history, I can go to the signed in state again, even if I am currently signed out.
   - [ ] `ISSUE`: When I click on other routes, the error shown on current page should not be shown on other page.
 
-- [ ] Resolve the issue of endCall function, which only ends the call on the side I clicked the endCall.
-- [ ] localStream variable might not be set on the VideoCall page, just validate using Redux Dev tools.
-- [ ] Show errors in important code blocks in the VideoCall and CurrCallPage components.
-- [ ] Current call id and the callid passed in param of the currcallpage url should be checked to be same, else show error message.
+- [ ] End Call Issues and Checks to Validate: 
+  - [ ] Resolve the issue of endCall function, which only ends the call on the side I clicked the endCall.
+    This issue is an [open issue in peerjs repo](https://github.com/peers/peerjs/issues/636) till now. 
+    There are workarounds given, which we are trying to implement in our code. 
+  - [ ] Check if the end call button click is working, when user does not answer the call, but clicks on end call button.
+- [ ] Show errors in important code blocks in the VideoCall and CurrCallPage components, and in peerjs.service.js files, on the promise and events code blocks.
 - [ ] Profile and User
   - [ ] Edit functionality to add in profile page.
 

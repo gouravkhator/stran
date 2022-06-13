@@ -2,13 +2,10 @@
 import { h } from "preact";
 import { useEffect, useState } from "preact/hooks";
 import { withAuthHOC } from "../../hoc/auth.hoc";
-import { route } from "preact-router";
-
-import Redirect from "../../components/Redirect";
+import { Link } from "preact-router";
 
 import VideoCallLogic from "../VideoCall/VideoCall.logic";
 import { useDispatch, useSelector } from "react-redux";
-import { setError } from "../../store/actions";
 import { setCurrCall } from "../../store/actions/call.actions";
 
 /**
@@ -18,64 +15,69 @@ import { setCurrCall } from "../../store/actions/call.actions";
  * Other props things were passed from the parent components to it.
  */
 const CurrCallPageBase = ({ callId }) => {
+  // ?NOTE: checking of, whether inCall is false or not, is not done,
+  // as when inCall is false, we will be for sure in the VideoCall component page
+
   const { toggleMic, toggleWebcam, endCall } = VideoCallLogic();
+
+  const dispatch = useDispatch();
+  const iconSize = "30";
 
   const [isUserActionLegit, setIsUserActionLegit] = useState(true);
 
-  const dispatch = useDispatch();
-
-  const inCall = useSelector(({ call }) => call.inCall);
+  const currCall = useSelector(({ call }) => call.currCall);
   const localStream = useSelector(({ call }) => call.localStream);
   const remoteStream = useSelector(({ call }) => call.remoteStream);
 
   const micOn = useSelector(({ call }) => call.micOn);
   const webcamOn = useSelector(({ call }) => call.webcamOn);
 
-  const currCall = useSelector(({ call }) => call.currCall);
+  const error = useSelector(({ global }) => global.error);
+  const message = useSelector(({ global }) => global.message);
 
-  // TODO: uncomment the below and do this legit action checks
-  /*
+  /*------------------Side Effects------------------*/
   useEffect(() => {
-    console.log({passedCallId: callId, currCallId: currCall?.connectionId});
     if (callId !== currCall?.connectionId) {
-      // the passed callId in param in the url is not the same as the one we accepted the call for,
-      // this means that user has visited this call page by himself, and this is not allowed//
+      /**
+       * the passed callId in param in the url is not the same as the one we accepted the call for,
+       * this means that user has visited this call page by himself, and this is not allowed//
+       */
       dispatch(setCurrCall(null)); // reset the current call id..
-
-      console.log("illegal action");
       setIsUserActionLegit(() => false); // this action should not be permitted.
-
-      dispatch(
-        setError(
-          "You cannot visit any random call, for which you were not invited to..",
-        ),
-      );
     }
-  }, []);*/
-
-  const iconSize = "30";
-
-  useEffect(() => {
-    // normally redux stores don't re-render the components, so we have this useEffect,
-    // and it will re-render when the inCall state changes
-    if (inCall === false) {
-      route("/call", true); // replace path with the new url, instead of pushing to the history..
-    }
-  }, [inCall]);
+  }, []);
 
   useEffect(() => {
     // on unmount of the component, just end the call
     return () => {
-      endCall(); // this also sets the inCall state to false
+      // !ISSUE: endCall's peer connection not set and so it causes issues, uncomment below method call
+      // endCall(); // this also sets the inCall state to false
     };
   }, []);
 
-  return isUserActionLegit !== true || inCall === false ? (
-    // if user action is not legit, meaning the user has tried visiting random call page
-    // or the user is not in call even, but he was dropped to this page mistakenly..
-    <Redirect to="/call" />
-  ) : (
+  /*------------------Conditional Renders based on some state/value------------------*/
+  /**
+   * If user action is not legit, meaning the user has tried visiting random call page..
+   */
+  if (isUserActionLegit !== true) {
+    return (
+      <div>
+        <p>
+          You cannot visit any call with random/invalid call id, or for you were
+          not invited to..
+        </p>
+
+        <Link href="/call">Get me to the Main Call Page</Link>
+      </div>
+    );
+  }
+
+  /*------------------Default Renders------------------*/
+  return (
     <div>
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      {message && <p style={{ color: "blue" }}>{message}</p>}
+
       <h2>Local Video</h2>
       <video
         id="localstream"
@@ -101,13 +103,13 @@ const CurrCallPageBase = ({ callId }) => {
         <button onClick={toggleMic}>
           {micOn === true ? (
             <img
-              src="/assets/icons/microphone-on.png"
+              src="/assets/icons/calling/microphone-on.png"
               width={iconSize}
               height={iconSize}
             />
           ) : (
             <img
-              src="/assets/icons/microphone-off.png"
+              src="/assets/icons/calling/microphone-off.png"
               width={iconSize}
               height={iconSize}
             />
@@ -117,13 +119,13 @@ const CurrCallPageBase = ({ callId }) => {
         <button onClick={toggleWebcam}>
           {webcamOn === true ? (
             <img
-              src="/assets/icons/video-camera-on.png"
+              src="/assets/icons/calling/webcam-on.png"
               width={iconSize}
               height={iconSize}
             />
           ) : (
             <img
-              src="/assets/icons/video-camera-off.png"
+              src="/assets/icons/calling/webcam-off.png"
               width={iconSize}
               height={iconSize}
             />
@@ -132,7 +134,7 @@ const CurrCallPageBase = ({ callId }) => {
 
         <button onClick={endCall}>
           <img
-            src="/assets/icons/end-call-icon.png"
+            src="/assets/icons/calling/end-call.png"
             width={iconSize}
             height={iconSize}
           />

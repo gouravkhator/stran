@@ -29,7 +29,8 @@ export function withAuthHOC(
   requiresLogin = true,
   requiresErrorDisplay = true,
 ) {
-  return () => {
+  // returns a new component, which takes in props which we can pass to wrapped component
+  return (props) => {
     const [fetched, setFetched] = useState(false);
 
     const user = useSelector(({ user }) => user.userdata);
@@ -90,12 +91,12 @@ export function withAuthHOC(
      */
     const loginConditionalRender = requiresLogin ? (
       isLoggedIn ? (
-        <Component />
+        <Component {...props} />
       ) : (
         <Redirect to="/signin" />
       )
     ) : (
-      <Component />
+      <Component {...props} />
     );
 
     return (

@@ -1,55 +1,41 @@
-import Peer from "peerjs";
 import { route } from "preact-router";
 import { useEffect, useState } from "preact/hooks";
 import { useSelector, useDispatch } from "react-redux";
 
-import { v4 as uuidv4 } from "uuid";
-
 import {
   answerCall,
   callPeer,
-  monitorCallEnd,
+  manualConnectionClose,
   monitorIncomingCall,
+  openPeerConnection,
 } from "../../services/peerjs.service";
 
 import {
-  setPeerConn,
   setLocalStream,
   setIsInCall,
   setMicOn,
   setWebcamOn,
   setError,
   setMessage,
-  setIsCaller,
-  setIsCallee,
 } from "../../store/actions";
 
 import { captureStream } from "../../utils/video_stream.util";
 
 export default function VideoCallLogic() {
+  const dispatch = useDispatch();
+
   const user = useSelector(({ user }) => user.userdata);
 
   const peerConn = useSelector(({ call }) => call.peerConn);
   const localStream = useSelector(({ call }) => call.localStream);
+  const currCall = useSelector(({ call }) => call.currCall);
 
   const micOn = useSelector(({ call }) => call.micOn);
   const webcamOn = useSelector(({ call }) => call.webcamOn);
 
-  const currCall = useSelector(({ call }) => call.currCall);
-
-  const dispatch = useDispatch();
-
   const [destId, setDestId] = useState("");
 
-  const peerjsConfguration = {
-    config: {
-      iceServers: [
-        { urls: "stun:stun.l.google.com:19302" },
-        // {urls: 'turn:user@turn.bistri.com:80', credential: 'usercredential'}
-      ],
-    },
-  };
-
+  /*------------------Extra Functions------------------*/
   /**
    * Captures stream and sets it to localStream, if localStream is null..
    *
@@ -63,7 +49,15 @@ export default function VideoCallLogic() {
     }
   };
 
-  // -----------Creates the peer server----------------------
+  /*------------------Side Effects------------------*/
+  /**
+   * ?NOTE: No need to reset errors and success messages in the side effects functionalities,
+   * as this VideoCall.logic.jsx is used in multiple components
+   *
+   * Those reset of errors and messages are done in the call initiation, or before answering the call.
+   */
+
+  // Creating the connection to the peer server, if peer connection not already created
   useEffect(() => {
     /**
      * ! ISSUE: Public Peer server gets down sometimes..
@@ -76,27 +70,15 @@ export default function VideoCallLogic() {
       return;
     }
 
-    dispatch(setError(null));
-    dispatch(setMessage(null));
-
-    // if we don't pass the userid, it creates its own unique id..
-    const peer = new Peer(user.userid, peerjsConfguration);
-
-    peer.on("open", (id) => {
-      console.log("Congrats! You are a peer in this video-calling dapp");
-      console.info("Your id is: " + id);
-      dispatch(setPeerConn(peer));
-    });
+    // create a connection with the given userid, and this method also sets the peerConn global state
+    openPeerConnection({ userid: user.userid });
   }, []);
 
-  // --------------Capture the local stream and also monitor incoming calls-------------
+  // Captures the local stream and also monitors the incoming calls
   useEffect(() => {
     if (!peerConn) {
-      return;
+      return; // TODO: set some error here, as the peer connection should be present till now
     }
-
-    dispatch(setError(null));
-    dispatch(setMessage(null));
 
     try {
       (async () => {
@@ -110,25 +92,25 @@ export default function VideoCallLogic() {
       );
     }
 
+    // to constantly monitor any incoming call, and set respective states accordingly
     monitorIncomingCall({
       peer: peerConn,
     });
   }, [peerConn]);
 
-  useEffect(() => {
-    monitorCallEnd({ currCall });
-  }, [currCall]);
-
+  /*------------------Logical Functions------------------*/
   const initiateCallToDest = () => {
+    // reset errors and messages before calling and going to call page
     dispatch(setError(null));
     dispatch(setMessage(null));
 
     callPeer({ peerConn, destId, localStream });
 
-    route(`/call/${currCall?.connectionId || ""}`); // ? NOTE: can have issues
+    route(`/call/${currCall?.connectionId || ""}`);
   };
 
   const answerCallWrapper = (call) => {
+    // reset errors and messages before answering the call and going to call page
     dispatch(setError(null));
     dispatch(setMessage(null));
 
@@ -141,8 +123,9 @@ export default function VideoCallLogic() {
   };
 
   const endCall = () => {
-    currCall.close(); // !ISSUE: some issues I think, as the other end's call is not ending when I end my call
-    dispatch(setIsInCall(false)); // this ends the call from current user side only
+    manualConnectionClose({ peer: peerConn }); // !ISSUE: some issues I think, as the other end's call is not ending when I end my call
+    dispatch(setIsInCall(false)); // this sets the inCall to false
+    route("/call", true); // when I end the call I will route back to the main call page
   };
 
   const handleDestIdInput = (event) => {
