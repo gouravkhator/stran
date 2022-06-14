@@ -18,6 +18,7 @@ In order to dispatch from outside of the scope of Component,
 we need to get the store instance and call dispatch on it
 */
 import store from "../store/store";
+import { getRandomAvailableUser } from "./other-user-routes.service";
 
 export const peerjsConfguration = {
   config: {
@@ -90,20 +91,34 @@ export function answerCall({ incomingCall, localStream }) {
   });
 }
 
-export function callPeer({ peerConn, destId, localStream }) {
-  if (!peerConn || !localStream) {
-    return; // TODO: throw some error
+export async function callPeer({
+  peerConn,
+  localStream,
+  destId,
+  isCalleeRandom = false,
+}) {
+  try {
+    if (!peerConn || !localStream) {
+      return; // TODO: throw some error
+    }
+
+    if (isCalleeRandom === true) {
+      // getting the random available user
+      destId = await getRandomAvailableUser();
+    }
+
+    const call = peerConn.call(destId, localStream);
+
+    store.dispatch(setCurrCall(call));
+    store.dispatch(setIsCaller(true));
+
+    call.on("stream", function (remoteStream) {
+      store.dispatch(setRemoteStream(remoteStream));
+      store.dispatch(setIsInCall(true));
+    });
+  } catch (err) {
+    throw err;
   }
-
-  const call = peerConn.call(destId, localStream);
-
-  store.dispatch(setCurrCall(call));
-  store.dispatch(setIsCaller(true));
-
-  call.on("stream", function (remoteStream) {
-    store.dispatch(setRemoteStream(remoteStream));
-    store.dispatch(setIsInCall(true));
-  });
 }
 
 export function manualConnectionClose({ peer }) {

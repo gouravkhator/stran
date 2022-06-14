@@ -15,6 +15,7 @@
   - [x] PeerJS feature implemented
   - [x] Toggling of Mic and Webcam implemented.
   - [x] Set the Incoming call state to have the UI for "Incoming Call, Please answer"
+  - [x] Call Random Available User implemented on Client End
 
 - [ ] Redux and State Managements
   - [x] Metamask reducer

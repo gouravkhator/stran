@@ -49,29 +49,56 @@ const VideoCallBase = () => {
   return (
     <div>
       <ErrorNSuccess />
-
-      <h2>Wanna Know some Unknown Strans??</h2>
-      <h3>Go check them out with a single click right below..</h3>
-
+      <div>
+        <h2>Feeling Lonely?? Feeling Bored??</h2>
+        <h3>Wanna Call some Strans??</h3>
+        <h3>Go check them out with a single click right below..</h3>
+      </div>
       {currCall !== null && isCallee === true && (
         <div id="incoming-call">
+          <p>
+            You are receiving a call from some stran, please answer or end the
+            call
+          </p>
+
           <button
             onClick={() => answerCallWrapper(currCall)}
             class="answer-call"
           >
-            Answer
+            <img
+              src="/assets/icons/calling/phone-ringing.png"
+              width={iconSize}
+              height={iconSize}
+            />
           </button>
 
           <button onClick={endCall} class="end-call">
-            End Call
+            <img
+              src="/assets/icons/calling/end-call.png"
+              width={iconSize}
+              height={iconSize}
+            />
           </button>
         </div>
       )}
-
       {peerConn?._id && <h3>Your id: {peerConn._id}</h3>}
+      {/*-----------Call Provided Peer or Random Peer-----------*/}
+      <button onClick={() => initiateCallToDest({ isCalleeRandom: true })}>
+        <strong style={{fontSize: '20px'}}>Call Random Available Stran</strong>{" "}
+        <span>
+          <img
+            src="/assets/icons/calling/end-call.png"
+            width={iconSize}
+            height={iconSize}
+          />
+        </span>
+      </button>
 
-      <button onClick={initiateCallToDest}>Call</button>
-
+      <br />
+      <p>Or enter the user's ID below to call:</p>
+      <button onClick={() => initiateCallToDest({ isCalleeRandom: false })}>
+        Call
+      </button>
       <input onChange={handleDestIdInput} />
       <br />
       <h2>Local Video</h2>
@@ -84,7 +111,7 @@ const VideoCallBase = () => {
           if (video !== null && localStream) video.srcObject = localStream;
         }}
       ></video>
-
+      {/*-----------Video Controls-----------*/}
       <div id="video-controls">
         <button onClick={toggleMic}>
           {micOn === true ? (

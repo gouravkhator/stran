@@ -99,14 +99,38 @@ export default function VideoCallLogic() {
   }, [peerConn]);
 
   /*------------------Logical Functions------------------*/
-  const initiateCallToDest = () => {
+  const initiateCallToDest = async ({ isCalleeRandom = false }) => {
     // reset errors and messages before calling and going to call page
     dispatch(setError(null));
     dispatch(setMessage(null));
 
-    callPeer({ peerConn, destId, localStream });
+    try {
+      if (isCalleeRandom === true) {
+        await callPeer({ peerConn, destId, localStream, isCalleeRandom });
+      } else {
+        // callee is not random, rather its id is provided as destId
 
-    route(`/call/${currCall?.connectionId || ""}`);
+        if (destId === user.userid) {
+          // check if inputted destId (user to call to) is same as the current user, then we throw error
+          dispatch(
+            setError(
+              "You cannot call your own self.. Please enter valid user id of other person!",
+            ),
+          );
+        } else {
+          await callPeer({ peerConn, destId, localStream, isCalleeRandom });
+        }
+      }
+
+      route(`/call/${currCall?.connectionId || ""}`);
+    } catch (err) {
+      dispatch(
+        setError(
+          err.errorMsg ??
+            "Unable to initiate call to any of the stran! Please try after sometime!!",
+        ),
+      );
+    }
   };
 
   const answerCallWrapper = (call) => {
