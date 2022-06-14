@@ -5,6 +5,8 @@ import { useEffect } from "preact/hooks";
 import { useSelector } from "react-redux";
 import { withAuthHOC } from "../../hoc/auth.hoc";
 
+import ErrorNSuccess from "../../components/ErrorNSuccess";
+
 import VideoCallLogic from "./VideoCall.logic";
 
 /**
@@ -33,9 +35,6 @@ const VideoCallBase = () => {
   const micOn = useSelector(({ call }) => call.micOn);
   const webcamOn = useSelector(({ call }) => call.webcamOn);
 
-  const error = useSelector(({ global }) => global.error);
-  const message = useSelector(({ global }) => global.message);
-
   const iconSize = "30";
 
   /*------------------Side Effects------------------*/
@@ -49,8 +48,7 @@ const VideoCallBase = () => {
   /*------------------Default Renders------------------*/
   return (
     <div>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {message && <p style={{ color: "blue" }}>{message}</p>}
+      <ErrorNSuccess />
 
       <h2>Wanna Know some Unknown Strans??</h2>
       <h3>Go check them out with a single click right below..</h3>

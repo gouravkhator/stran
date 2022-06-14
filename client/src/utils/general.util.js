@@ -15,3 +15,12 @@ export const getErrorObj = ({ errorMsg, shortErr }) => {
     shortErr: shortErr ?? errorMsg,
   };
 };
+
+export const capitalizeString = (string = "") => {
+  if (string === null || string.length === 0) {
+    return "";
+  }
+
+  // if string is of length 1, then string.substring(1) will return "", so no checks needed for that
+  return string.charAt(0).toUpperCase() + string.substring(1);
+};

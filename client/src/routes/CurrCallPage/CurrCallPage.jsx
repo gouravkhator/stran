@@ -4,9 +4,13 @@ import { useEffect, useState } from "preact/hooks";
 import { withAuthHOC } from "../../hoc/auth.hoc";
 import { Link } from "preact-router";
 
+import ErrorNSuccess from "../../components/ErrorNSuccess";
+
 import VideoCallLogic from "../VideoCall/VideoCall.logic";
+
 import { useDispatch, useSelector } from "react-redux";
 import { setCurrCall } from "../../store/actions/call.actions";
+import { capitalizeString } from "../../utils/general.util";
 
 /**
  * CurrCallPageBase is the In-Call Page component, without the auth HOC wrapper.
@@ -25,15 +29,14 @@ const CurrCallPageBase = ({ callId }) => {
 
   const [isUserActionLegit, setIsUserActionLegit] = useState(true);
 
+  const user = useSelector(({ user }) => user.userdata);
+
   const currCall = useSelector(({ call }) => call.currCall);
   const localStream = useSelector(({ call }) => call.localStream);
   const remoteStream = useSelector(({ call }) => call.remoteStream);
 
   const micOn = useSelector(({ call }) => call.micOn);
   const webcamOn = useSelector(({ call }) => call.webcamOn);
-
-  const error = useSelector(({ global }) => global.error);
-  const message = useSelector(({ global }) => global.message);
 
   /*------------------Side Effects------------------*/
   useEffect(() => {
@@ -75,10 +78,9 @@ const CurrCallPageBase = ({ callId }) => {
   /*------------------Default Renders------------------*/
   return (
     <div>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {message && <p style={{ color: "blue" }}>{message}</p>}
+      <ErrorNSuccess />
 
-      <h2>Local Video</h2>
+      <h2>{capitalizeString(user.username)}</h2>
       <video
         id="localstream"
         autoPlay
@@ -89,7 +91,12 @@ const CurrCallPageBase = ({ callId }) => {
         }}
       ></video>
 
-      <h2>Remote Video</h2>
+      <h2>Anonymous</h2>
+      {/**
+       * ?NOTE: Here, we don't show the name or other info of the other user,
+       * as we are building an anonymous privacy-conscious strangers' video calling app
+      */}
+
       <video
         id="remotestream"
         autoPlay

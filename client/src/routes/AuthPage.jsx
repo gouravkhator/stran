@@ -4,6 +4,8 @@ import style from "../styles/auth.module.scss";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "preact-router/match";
 
+import ErrorNSuccess from "../components/ErrorNSuccess";
+
 import Login from "../components/Login/Login";
 import Signup from "../components/Signup/Signup";
 import ConnectMM from "../components/ConnectMetamask/ConnectMM";
@@ -27,9 +29,6 @@ import { setError } from "../store/actions";
  */
 export default function AuthPage() {
   useMetamask(); // our own useMetamask custom hook
-
-  const error = useSelector(({ global }) => global.error);
-  const message = useSelector(({ global }) => global.message);
 
   const isMMInstalled = useSelector(({ metamask }) => metamask.isInstalled);
   const isMMConnected = useSelector(({ metamask }) => metamask.isConnected);
@@ -104,8 +103,7 @@ export default function AuthPage() {
 
   return (
     <div class={style.auth}>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {message && <p style={{ color: "blue" }}>{message}</p>}
+      <ErrorNSuccess />
 
       <h1>Auth Page</h1>
 

@@ -43,6 +43,15 @@ Secondly, the `throwErrIfUserNotExist` is run. If user is not set in previous mi
 - `PUT /user`: Edit the user data.
 - `DELETE /user`: Deletes the user from the blockchain.
 
+## Other Users Data Fetching Endpoints
+
+Firstly, the req.user is already set by `authenticateTokenMiddleware` before we get to user routes.
+
+Secondly, the `throwErrIfUserNotExist` is run. If user is not set in previous middleware, then it throws an error (as we don't want to process user route without user being set).
+
+- `GET /users/random/available`: Returns the random available user's id.
+- `GET /users/:friendUserId`: Returns the friend data by his/her user id.
+
 ## IPFS Endpoints
 
 - `GET /ipfs/:cid`: Pass the path variable `cid` and it will return the data as the response, else a status of 404 Not Found.

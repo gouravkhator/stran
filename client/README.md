@@ -32,6 +32,40 @@ For detailed explanation on how things work, checkout the [CLI Readme](https://g
   - Long error messages are for users to see.
   - Short error messages are kept, so that we can use this hyphenated short error strings in switch case statements in the catch blocks, to have conditional logic for each of those short errors.
 
+## PeerJS API Structure and Usage
+
+### States and their functionalities:
+
+* `currCall` Object: It is the call object, that is the incoming or outgoing call.
+  * `currCall.peer` Property: It represents the peerid of the remote peer, who is in current call.
+  * `currCall.connectionId` Property: It represents the current call unique id.
+  * `currCall` Object is set as mentioned below on both the caller and callee sides:
+    1. Set on the side of caller A, when A calls another person B,
+    2. Set on the side of callee B, when B monitors the incoming call, which is now of caller A.
+* `isAnswering` state: It is set on the callee side, when the callee user clicks on Answer button, to answer the incoming call.
+* `isCallee` and `isCaller` states:
+  * both isCallee and isCaller cannot be true at the same time,
+  * but both can be false at the same time denoting that there is no call now..
+  * isCaller is set on the caller side, when that user initiates the call.
+  * isCallee is set on the callee side, when that user monitors the incoming call.
+
+### Algorithmic Flow of the PeerJS Connections and state changes
+
+TODO
+
+### Extra Notes for PeerJS
+
+* To get the remoteId, we can get from two of the methods given below:
+    1. Approach #1 is that the property `currCall.peer` is actually the peerid of the remote peer.
+    2. Approach #2 is mentioned in below code block:
+        ```js
+        for (let conns in peerConn.connections) {
+            peerConn.connections[conns].forEach((conn, index, array) => {
+                // here `conn.peer` is the remote peer id
+            });
+        }
+        ```
+
 ## Components File Structure
 
 > To Complete this section of the README.md
