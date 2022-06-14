@@ -22,6 +22,7 @@
     This issue is an [open issue in peerjs repo](https://github.com/peers/peerjs/issues/636) till now. 
     There are workarounds given, which we are trying to implement in our code. 
   - [ ] Check if the end call button click is working, when user does not answer the call, but clicks on end call button.
+- [ ] If the webcamOn state is false, then show the blue screen only, and not that black weird default screen.
 - [ ] Have two flaticon's icons namely "phone" and "shuffle" to make a merged icon for the "Call Random Available Stran"
 - [ ] Show errors in important code blocks in the VideoCall and CurrCallPage components, and in peerjs.service.js files, on the promise and events code blocks.
 - [ ] Profile and User
@@ -39,7 +40,7 @@
 
 ### Overall Project's In-Progress Items
 
-- [ ] Video Calling SDK/API integration in both server and client with VideoSDK probably.
+- [ ] 
 
 ## Features Planned
 

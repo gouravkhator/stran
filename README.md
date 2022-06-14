@@ -4,6 +4,22 @@
 
 This is a video calling peer-to-peer decentralised app, centered to the users to connect with unknowns, whilst also being on the **3rd era of Web, i.e. the modern and more privacy-focused web**.
 
+## Fancy Pics of this CoOl Project
+
+The below pics are updated as on 14th June, 2022. They might not be the latest.
+
+### Video Calling Main Page
+
+![Video Calling Main Page](project-images/video_call_screen.png)
+
+### Ongoing Call Screen
+
+![Ongoing Call Page](project-images/ongoing_call_screen.png)
+
+### One Step Login through MetaMask
+
+![One Step Login through MetaMask](project-images/metamask_one_step_login.png)
+
 ## Project Installation
 
 > This project currently does not use custom docker setup.
