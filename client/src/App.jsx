@@ -14,15 +14,25 @@ import Header from "./components/Header";
 import Home from "./routes/Home";
 import ErrorPage from "./routes/ErrorPage";
 
-import { Provider } from "react-redux";
+import { Provider, useDispatch } from "react-redux";
 import store from "./store/store";
+import { setError, setMessage } from "./store/actions";
 
 export function App() {
+  const dispatch = useDispatch();
+
+  const handleRouteChange = (event) => {
+    // reset the error and message state, when the route changes
+    // this is done, as the error and message states are intentionally to be maintained 'per-page' only
+    dispatch(setError(null));
+    dispatch(setMessage(null));
+  };
+
   return (
     <div id="app">
       <Header />
 
-      <Router>
+      <Router onChange={(event) => handleRouteChange(event)}>
         <Home path="/" />
 
         <AsyncRoute

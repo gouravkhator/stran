@@ -6,6 +6,8 @@ export const globalActions = Object.freeze({
   RESET_ERR: "RESET_ERR",
   SET_MSG: "SET_MSG",
   RESET_MSG: "RESET_MSG",
+  SET_BANNER_MSG: "SET_BANNER_MSG",
+  RESET_BANNER_MSG: "RESET_BANNER_MSG",
 });
 
 /*-----Action Object generator functions----- */
@@ -31,6 +33,19 @@ export const setMessage = (message = null) => {
     return {
       type: globalActions.SET_MSG,
       message,
+    };
+  }
+};
+
+export const setBannerMsg = (bannerMsg = null) => {
+  if (!bannerMsg) {
+    return {
+      type: globalActions.RESET_BANNER_MSG,
+    };
+  } else {
+    return {
+      type: globalActions.SET_BANNER_MSG,
+      bannerMsg,
     };
   }
 };

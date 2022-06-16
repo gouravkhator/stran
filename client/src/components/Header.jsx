@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import style from "../styles/header.module.scss";
 import { logoutHandler } from "../services/auth-routes.service";
-import { setError } from "../store/actions";
+import { setError, setUser } from "../store/actions";
 import { withAuthHOC } from "../hoc/auth.hoc";
 
 /**
@@ -18,6 +18,7 @@ const HeaderBase = () => {
   const onSignoutClick = async () => {
     try {
       await logoutHandler();
+      dispatch(setUser(null)); // after logging out, set the userdata to null
     } catch (err) {
       if (!err) {
         return;

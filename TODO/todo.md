@@ -14,15 +14,13 @@
     - We cannot listen to when the cookies/user were removed.
 
     - What we can also do is to **send a heartbeat to the server** for the validity of this user. Heartbeat can be implemented using setTimeout function and doing fetch to the /user route to the server.
-  - [ ] `ISSUE`: When I click on left/right for navigating through the browser history, I can go to the signed in state again, even if I am currently signed out.
-  - [ ] `ISSUE`: When I click on other routes, the error shown on current page should not be shown on other page.
-
+  
 - [ ] End Call Issues and Checks to Validate: 
   - [ ] Resolve the issue of endCall function, which only ends the call on the side I clicked the endCall.
     This issue is an [open issue in peerjs repo](https://github.com/peers/peerjs/issues/636) till now. 
     There are workarounds given, which we are trying to implement in our code. 
   - [ ] Check if the end call button click is working, when user does not answer the call, but clicks on end call button.
-- [ ] If the webcamOn state is false, then show the blue screen only, and not that black weird default screen.
+- [ ] If the webcamOn state is false or if the remote peer's webcam is off, then show the blue screen only, and not that black weird default screen.
 - [ ] Have two flaticon's icons namely "phone" and "shuffle" to make a merged icon for the "Call Random Available Stran"
 - [ ] Show errors in important code blocks in the VideoCall and CurrCallPage components, and in peerjs.service.js files, on the promise and events code blocks.
 - [ ] Profile and User

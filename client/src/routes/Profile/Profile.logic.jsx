@@ -5,7 +5,12 @@ import {
   editUserHandler,
 } from "../../services/user-routes.service";
 
-import { setError, setMessage, setUser } from "../../store/actions";
+import {
+  setBannerMsg,
+  setError,
+  setMessage,
+  setUser,
+} from "../../store/actions";
 import { getErrorObj } from "../../utils/general.util";
 
 export default function ProfileLogic() {
@@ -23,8 +28,20 @@ export default function ProfileLogic() {
         });
       }
 
+      dispatch(setUser(null)); // set the redux stored userdata to null
+
+      /**
+       * This delete button deletes the user and redirects to the home page directly..
+       * So, we set the banner message, that will be shown in the home page for 5 seconds,
+       * and then it will be set to empty string..
+       *
+       * Q) Why we don't set the global 'message' here instead of 'bannerMsg'?
+       * > It is bcoz, I want to store page specific errors and messages to not overflow to other pages/routes.
+       * Secondly, in the home page, I don't want to show any error or message.
+       * But the banner message is one thing, which I only want in the home page, and that too for 5 seconds.
+       */
       dispatch(
-        setMessage(
+        setBannerMsg(
           "A warm goodbye to you!! Thank you for being a part of this family.",
         ),
       );

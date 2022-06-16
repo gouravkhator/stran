@@ -25,7 +25,12 @@ import {
   setIsInstalled,
 } from "./metamask.actions";
 
-import { globalActions, setError, setMessage } from "./global.actions";
+import {
+  globalActions,
+  setError,
+  setMessage,
+  setBannerMsg,
+} from "./global.actions";
 
 export { userActions, callActions, metamaskActions, globalActions };
 
@@ -36,6 +41,7 @@ export {
   setIsInstalled,
   setError,
   setMessage,
+  setBannerMsg,
   setPeerConn,
   setLocalStream,
   setRemoteStream,

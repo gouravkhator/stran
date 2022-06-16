@@ -17,7 +17,7 @@ For detailed explanation on how things work, checkout the [CLI Readme](https://g
 
 ## Client-side Error Handling
 
-- As we have multiple parts of the client side where we can get the error, so we don't user default Error object, rather we throw an object with below structure:
+- As we have multiple parts of the client side where we can get the error, so we don't use default Error object, rather we throw an object with below structure:
 
   ```js
   throw {
@@ -32,26 +32,73 @@ For detailed explanation on how things work, checkout the [CLI Readme](https://g
   - Long error messages are for users to see.
   - Short error messages are kept, so that we can use this hyphenated short error strings in switch case statements in the catch blocks, to have conditional logic for each of those short errors.
 
-## PeerJS API Structure and Usage
+## States and their functionalities
 
-### States and their functionalities:
+### Calling State
 
+* `peerConn` Object: It is the peer connection to the remote PeerJS server.
+* `localStream` MediaStream Object: It is the MediaStream object for the current user's 2-in-1 video/audio stream.
+* `remoteStream` MediaStream Object: It is the MediaStream object for the other side users' 2-in-1 video/audio stream.
+* `micOn` boolean state: It is the boolean value denoting that microphone for the current user is on or not.
+* `webcamOn` boolean state: It is the boolean value denoting that video for the current user is on or not.
 * `currCall` Object: It is the call object, that is the incoming or outgoing call.
   * `currCall.peer` Property: It represents the peerid of the remote peer, who is in current call.
   * `currCall.connectionId` Property: It represents the current call unique id.
   * `currCall` Object is set as mentioned below on both the caller and callee sides:
     1. Set on the side of caller A, when A calls another person B,
     2. Set on the side of callee B, when B monitors the incoming call, which is now of caller A.
-* `isAnswering` state: It is set on the callee side, when the callee user clicks on Answer button, to answer the incoming call.
-* `isCallee` and `isCaller` states:
+* `isCallee` and `isCaller` boolean states:
   * both isCallee and isCaller cannot be true at the same time,
   * but both can be false at the same time denoting that there is no call now..
   * isCaller is set on the caller side, when that user initiates the call.
   * isCallee is set on the callee side, when that user monitors the incoming call.
+* `isAnswering` boolean state: It is set on the callee side, when the callee user clicks on Answer button, to answer the incoming call.
+* `inCall` boolean state: It is set on both the caller and callee sides, when the caller initiates the call to someone, and when the callee also monitors the incoming call and gets an incoming call.
+
+### User State
+
+* `userdata` Object: It represents the user data JSON, sent from the server end in the similar format as below:
+
+  ```js
+  {
+    'username': 'Gourav',
+    'userid': '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266',
+    'primaryLanguage': 'English',
+    'location': 'Asia',
+    ....
+  }
+  ```
+* `loggedIn` boolean state: It is true if the `userdata.username` in the redux store is not empty else it is false.
+
+  `userdata.username` is the only field which denotes accurate logged in status. `userdata.userid` is '0x0000000000' if the user does not exist, and so it requires more checks.
+
+### MetaMask State
+
+> To Complete this section of the README.md
+
+### Global State
+
+* `error`: It represents the per-page error messages.
+* `message`: It represents the per-page success messages.
+* `error` and `message` common notes:
+  * Both states are maintained per-page, as we reset the global store states `error` and `message` whenever the route/path changes. This handling of resetting of error and message is done in the App.jsx file, in the Router onChange handler.
+  * This is a needed action, so that we don't overload the app with other pages' error or success messages.
+* `bannerMsg`: bannerMsg is the message only shown on the home page.
+   * It is used in special situations only, like "After Deletion of account, it should show Sorry to let you go" on the home page.
+   * In the home page, we don't show any `error` or `message`, as we want to keep the home page clean, and we won't get any home-page specific error and success message too.
+   * But, after deletion of account or after some special situations, we may need to just click that button which would do some processing, and would directly redirect us to home page.
+   * There, we need to show some banner message that "This operation has been completed".
+   * This banner message is there just for 5 seconds intentionally and then reset back to empty string.
+
+## Components File Structure
+
+> To Complete this section of the README.md
+
+## PeerJS API Structure and Usage
 
 ### Algorithmic Flow of the PeerJS Connections and state changes
 
-TODO
+> To Complete this section of the README.md
 
 ### Extra Notes for PeerJS
 
@@ -65,10 +112,6 @@ TODO
             });
         }
         ```
-
-## Components File Structure
-
-> To Complete this section of the README.md
 
 ## Resolving older Issues with PreactJS:
 

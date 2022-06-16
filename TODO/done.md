@@ -7,9 +7,11 @@
 - [ ] Bugs solved:
   - [x] `ISSUE`: delete request throws error of cors.. But POST and GET worked fine.. It was because of CORS preflight request, and I solved this by using cors npm package which provides pre-flight request management by default.
   - [x] `ISSUE`: When I just go to `/profile` or `/call` directly, it redirects me to the signin page.
-    And it is because loggedIn and user are not loaded via fetch user by token.
-
+  
+  And it is because loggedIn and user are not loaded via fetch user by token.
     - [x] We should wait for that fetch to happen and then only show the app fully.
+  - [x] `ISSUE`: When I click on other routes, the error shown on current page should not be shown on other page.
+  - [x] `ISSUE`: When I click on left/right for navigating through the browser history, I can go to the signed in state again, even if I am currently signed out.
 
 - [ ] Calling Feature
   - [x] PeerJS feature implemented
