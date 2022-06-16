@@ -81,7 +81,7 @@
 - [ ] Have the Search functionality for any person, with filters of location and primary languages, and known languages.
 - [ ] Call history to save and retrieve to/from smart contract.
 - [ ] User preferred Location can be taken from browser current location data.
-- [ ] Test cases for client and server side, and even for solidity code.
+- [ ] Perform Testing for client and server side, and even for solidity (blockchain) code.
 - [ ] Postman Export with versioning in the filename/file's contents.
 - [ ] Add a flowchart for the whole project flow, in the `Project_Flow_In_Brief.md` file.
 
