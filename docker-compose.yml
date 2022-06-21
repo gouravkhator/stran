@@ -1,6 +1,8 @@
 version: "3.9"
 services:
+  # TODO: in all the services, the environment should come from .env.docker file
   frontend:
+    image: stran-frontend
     container_name: frontend
     build:
       context: ./client
@@ -15,14 +17,15 @@ services:
     volumes:
       # for development ease, so that it mounts the code, and as we used nodemon, so it reloads the app on code changes
       - ./client:/usr/src/client
-    deploy:
-      resources:
-        limits:
-          cpus: "0.3"
+    # deploy:
+    #   resources:
+    #     limits:
+          # cpus: "0.3"
           # add swap memory limit too, to each service in docker compose yaml files
-          memory: 50M
+          # memory: 50M
 
   backend:
+    image: stran-backend
     container_name: backend
     build:
       context: ./server
@@ -36,22 +39,24 @@ services:
       - "8081:8081"
     volumes:
       - ./server:/usr/src/server
-    deploy:
-      resources:
-        limits:
-          cpus: "0.3"
-          memory: 50M
+    # deploy:
+    #   resources:
+    #     limits:
+          # cpus: "0.3"
+          # memory: 50M
 
   redis-server:
     container_name: redis-server
     image: redis
     ports:
       - "6379:6379"
-
+      
   blockchain:
+    image: stran-blockchain
     container_name: blockchain
     build:
       context: ./blockchain
+      dockerfile: Dockerfile
       args:
         - NODE_ENV=development
       target: blockchain
@@ -59,8 +64,8 @@ services:
       - "8545:8545"
     volumes:
       - ./blockchain:/usr/src/blockchain
-    deploy:
-      resources:
-        limits:
-          cpus: "0.3"
-          memory: 50M
+    # deploy:
+    #   resources:
+    #     limits:
+          # cpus: "0.3"
+          # memory: 50M

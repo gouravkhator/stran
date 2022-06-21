@@ -1,5 +1,7 @@
 node_modules
 .env
+.env.local
+.env.docker
 /coverage/
 /coverage.json
 /typechain/

@@ -69,10 +69,8 @@
       And keep the app in a different one, so that when we have to update the app and restart the server, then the redis cache does not get flushed.
   6. IPFS node to be running inside docker, if we need IPFS functionality in future.
 
-- [ ] Remove VideoSDK code from server and client end, once all the video calling using peerjs is set.
 - [ ] Configure the Postman collection runner, to run the tests one by one in a sequence defined by me.
 - [ ] Error reporting and logging to some tools available, just to monitor if everything is rightfully working or not.
-- [ ] VideoSDK provides the createMeeting option, where we can have a region-based meeting creation, to improve latency.
 - [ ] Privacy setting for every user
   - [ ] Have the current user permission to do CRUD on his own profile, but only view permission to partial data of his friends.
   - It is bcoz, every user can allow/deny his profile visibility.

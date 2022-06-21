@@ -1,23 +1,27 @@
 {
   "name": "stran",
   "description": "A Video Calling P2P DApp, to strongly connect strangers together..",
+  "config": {
+    "env": ".env.local"
+  },
   "scripts": {
     "check-format": "prettier --config .prettierrc -c .",
     "format": "prettier --config .prettierrc -w .",
     "sc:accounts": "npm run accounts --prefix blockchain/",
     "sc:compile": "npm run compile --prefix blockchain/",
     "sc:test": "npm test --prefix blockchain/",
-    "sc:localnode": "npm run localnode --prefix blockchain/",
-    "sc:deploy": "npm run deploy --prefix blockchain/",
-    "app:dev": "npm run dev --prefix client/",
+    "sc:localnode": "dotenv -e $npm_package_config_env -- npm run localnode --prefix blockchain/",
+    "sc:deploy": "dotenv -e $npm_package_config_env -- npm run deploy --prefix blockchain/",
+    "app:dev": "dotenv -e $npm_package_config_env -- npm run dev --prefix client/",
     "app:start": "npm run app:dev",
-    "app:build": "npm run build --prefix client/",
-    "app:serve": "npm run serve --prefix client/",
-    "app:test": "npm test --prefix client/",
-    "server:start": "npm start --prefix server/",
-    "server:dev": "npm run dev --prefix server/",
-    "server:test": "npm run test --prefix server/",
-    "server:redis": "docker run --name redis -p 6379:6379 -d --rm redis",
+    "app:build": "dotenv -e $npm_package_config_env -- npm run build --prefix client/",
+    "app:serve": "dotenv -e $npm_package_config_env -- npm run serve --prefix client/",
+    "app:test": "dotenv -e $npm_package_config_env -- npm test --prefix client/",
+    "server:start": "dotenv -e $npm_package_config_env -- npm start --prefix server/",
+    "server:dev": "dotenv -e $npm_package_config_env -- npm run dev --prefix server/",
+    "server:test": "dotenv -e $npm_package_config_env -- npm run test --prefix server/",
+    "redis:start": "docker run --name redis -p 6379:6379 -d --rm redis",
+    "redis:stop": "docker stop redis",
     "full-install": "npm i && npm i --prefix blockchain/ && npm i --prefix client/ && npm i --prefix server/"
   },
   "license": "Apache-2.0",
@@ -47,5 +51,8 @@
   "devDependencies": {
     "prettier": "^2.5.1",
     "prettier-plugin-solidity": "^1.0.0-beta.19"
+  },
+  "dependencies": {
+    "dotenv-cli": "^5.1.0"
   }
 }

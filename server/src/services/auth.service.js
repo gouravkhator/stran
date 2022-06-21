@@ -4,7 +4,7 @@ const { insertValueRedis, existsInListRedis } = require("./redis.service");
 const { AppError } = require("../utils/errors.util");
 
 function generateAccessToken(userid) {
-  return jwt.sign({ userid }, process.env.TOKEN_SECRET, { expiresIn: "1d" });
+  return jwt.sign({ userid }, process.env.SERVER_TOKEN_SECRET, { expiresIn: "1d" });
 }
 
 async function authenticateToken(token) {
@@ -32,7 +32,7 @@ async function authenticateToken(token) {
     let tempUserId = null,
       authenticated = false;
 
-    jwt.verify(token, process.env.TOKEN_SECRET, (err, result) => {
+    jwt.verify(token, process.env.SERVER_TOKEN_SECRET, (err, result) => {
       if (err) {
         throw new AppError({
           statusCode: 403, // forbidden, as the token was invalid

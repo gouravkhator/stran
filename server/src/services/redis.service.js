@@ -9,17 +9,19 @@ async function getRedisClient() {
   if (client !== null) {
     return client;
   } else {
+    // process env values are all strings only, whether we declare in CLI args or in .env file
+    let redisHost = process.env.REDIS_HOST || "localhost";
+    let redisPort = process.env.REDIS_PORT || 6379;
+
     client = redis.createClient({
-      url: "redis://localhost:6379",
-      // For Docker, comment above and uncomment the below..
-      // url: "redis://redis-server:6379",
+      url: `redis://${redisHost}:${redisPort}`,
     });
 
     client.on("error", (err) => {
       throw new AppError({
         message:
-          "Could not connect to Redis in-memory database. Please wait before making any auth request..",
-        shortMsg: "redis-connect-err",
+          "Cannot connect to Redis in-memory database. Please contact the administrator to restart the redis service to continue..",
+        shortMsg: "redis-connect-failed",
         statusCode: 503, // service unavailable
       });
     });

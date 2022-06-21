@@ -1,11 +1,11 @@
-if (process.env.NODE_ENV !== "production") {
-  /* either NODE_ENV will be 'production', or it can be set to nothing too.
-    So, it assumes nothing also as 'development' mode.
-    */
-  require("dotenv").config({
-    path: "./.env",
-  });
-}
+// if (process.env.NODE_ENV !== "production") {
+//   /* either NODE_ENV will be 'production', or it can be set to nothing too.
+//     So, it assumes nothing also as 'development' mode.
+//     */
+//   require("dotenv").config({
+//     path: "./.env",
+//   });
+// }
 
 const express = require("express");
 const app = express();
@@ -23,14 +23,15 @@ const ipfsRouter = require("./src/routes/ipfs.route");
 const authRouter = require("./src/routes/auth.route");
 const userRouter = require("./src/routes/user.route");
 const otherUsersRouter = require("./src/routes/other-users.route");
-const videoSDKRouter = require("./src/routes/videosdk.route");
 
 const { AppError } = require("./src/utils/errors.util");
+const { getRedisClient } = require("./src/services/redis.service");
+const { connectBlockchain } = require("./src/services/blockchain-init.service");
 
 /**
- * Cookie parser middleware helps sign and unsign every cookie with the secret as process.env.TOKEN_SECRET
+ * Cookie parser middleware helps sign and unsign every cookie with the secret as process.env.SERVER_TOKEN_SECRET
  */
-app.use(cookieParser(process.env.TOKEN_SECRET));
+app.use(cookieParser(process.env.SERVER_TOKEN_SECRET));
 
 /**
  * express.json() is a method, to recognize the incoming Request Object as a JSON Object.
@@ -64,7 +65,7 @@ app.use(express.urlencoded({ extended: false }));
  */
 app.use(
   cors({
-    origin: process.env.CLIENT_URL, // the origin from which this server can accept authenticated requests
+    origin: process.env.CLIENT_URL || "http://localhost:3000", // the origin from which this server can accept authenticated requests
     credentials: true, // allow credentials
     methods: "GET, PUT, POST, DELETE", // allowed methods for the cross origin requests
     allowedHeaders: "Content-Type", // allowed headers for the cross origin requests
@@ -95,19 +96,21 @@ app.use(
   otherUsersRouter,
 );
 
-// this route is used for video sdk api (would be removed later, as we are not using it now)
-app.use(
-  "/videosdk",
-  authenticateTokenMiddleware,
-  throwErrIfUserNotExist,
-  videoSDKRouter,
-);
-
 // error handling route
 app.use((err, req, res, next) => {
   console.error(err); // just for debugging
 
   if (err instanceof AppError) {
+    if (
+      err.statusCode === 503 &&
+      (err.shortMsg === "redis-connect-failed" ||
+        err.shortMsg === "blockchain-connect-failed")
+    ) {
+      // if the service is unavailable (status code is 503), and the error is for redis or blockchain services unavailability
+      // TODO: log with the highest priority that redis is down, and we stopped the server
+      process.exit(1); // stop the server
+    }
+
     return res.status(err.statusCode).send({
       errorMsg: err.message,
       shortErrCode: err.shortMsg,
@@ -122,8 +125,43 @@ app.use((err, req, res, next) => {
   });
 });
 
-const PORT = process.env.PORT ?? 8081;
+// make necessary checks and connections before starting the server
+(async () => {
+  try {
+    const serverCrashError = new AppError({
+      statusCode: 500,
+      message:
+        "Some internal server error occurred, so the admins would restart the server after fixing the issues. Please wait and try again later..",
+      shortMsg: "server-err",
+    });
 
-app.listen(PORT, () => {
-  console.log(`Server started on port ${PORT}`);
-});
+    /**
+     * This checks if the necessary environment variables are loaded or not.
+     * If not loaded, we would throw the error, and stop the server.
+     *
+     * Some environment variables like SERVER_PORT, REDIS_HOST, REDIS_PORT,
+     * BLOCKCHAIN_HOST or BLOCKCHAIN_PORT are either loaded or set with our defaults.
+     *
+     * But for necessary envs like SERVER_TOKEN_SECRET should not be set with our defaults.
+     */
+    const isNecessaryEnvsPresent = !!process.env.SERVER_TOKEN_SECRET;
+
+    if (isNecessaryEnvsPresent === false) {
+      throw serverCrashError;
+    }
+
+    await connectBlockchain(); // connect to blockchain
+    await getRedisClient(); // connect to the redis service
+    console.log("Connection to Blockchain and Redis were successful");
+
+    const PORT = process.env.SERVER_PORT || 8081;
+
+    // only start listening for this server, if all the necessary connections are successful as above..
+    app.listen(PORT, () => {
+      console.log(`Server started on port ${PORT}`);
+    });
+  } catch (err) {
+    console.error(err);
+    process.exit(1);
+  }
+})();

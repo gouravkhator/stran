@@ -130,8 +130,14 @@ If we will be using ipfs services, then we have to install **go-ipfs** on your h
 ### Prerequisites
 
 - Before running docker, edit below things that should be done as per docker setup:
-    - The package.json in blockchain has a docker:deploy script, which deploys to host `blockchain`.
-    - Redis connection uri should be changed to `redis://redis-server:6379`, in the file: `server/src/services/redis.service.js`.
+    - The package.json in the root folder has a config env field, just change the value like below:
+        ```json
+        {
+            "config": {
+                "env": ".env.docker"
+            }
+        }
+        ```
 - Install docker and docker-compose, and then enable the docker daemon service globally.
 
 ### Docker Commands
@@ -165,7 +171,7 @@ If we will be using ipfs services, then we have to install **go-ipfs** on your h
 - Run the deploy script after the `docker-compose up` commands:
 
     ```sh
-    docker exec -it blockchain /bin/sh -c "cd /usr/src/blockchain; npm run docker:deploy";
+    docker exec -it blockchain /bin/sh -c "cd /usr/src/blockchain; BLOCKCHAIN_HOST=blockchain npm run deploy";
     ```
 
 - Remove the created containers:
@@ -190,11 +196,23 @@ If we will be using ipfs services, then we have to install **go-ipfs** on your h
 
 ### Environment Variables
 
-- The sample files for environment variables is mentioned in both the client-side and server-side.
+- The environment variables are mentioned in a all-in-one single local or single docker env file, for all the services.
+    - We use `dotenv-cli` package in the root `package.json`, and for each script, we load the environment variables from the `.env.*` file mentioned, using this package.
+    - This `dotenv-cli` loads the environment variables into that particular script, such that we can use the variable like `echo $BLOCKCHAIN_HOST`.
+    - We can even inject the environment variable value ourselves too like the below:
+        ```sh
+        BLOCKCHAIN_HOST=blockchain echo $BLOCKCHAIN_HOST
+        ```
+
+- Environment variables `.env.*` files:
+    - `.env.local`: This is the local environment file, which is for running the scripts on localhost, outside the docker environment.
+    - `.env.docker`: This is the docker specific environment file, which is for running the scripts in the docker environment, with docker specific environment variables and values.
+    - `.env.sample`: Sample file to make the respective above-mentioned env files with the similar field structures.
+
 - To deploy the environment variables to production, we can directly add the variable names to the Heroku/Netlify/Other hosting platform.
     - **For example:-** If the process.env does not find the required variable in the `server` folder, then it will look for the environment defined in the parent folder of server, and if not there even, then it will go further upwards in the folder hierarchy.
 
-## Credits/Resources Followed
+## Credits to the Resources Used
 
 - [Video on WebRTC, Video calling and Javascript integration](https://youtu.be/pv3UHYwgxnM)
 - [Centralized Error Handling using Redux](https://www.pluralsight.com/guides/centralized-error-handing-with-react-and-redux)
