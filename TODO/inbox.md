@@ -38,6 +38,19 @@
         They say that if we close the stream, then the audio track also gets closed. 
     * This can only be avoided when we publish the audio and video track as separate objects, enabling you to disable the local video and turn off the camera light by using the `close` method of the video track object, without affecting the audio track.
 
+- [ ] Resolve the `Metamask "Already Processing eth_requestAccounts" bug`:
+  - [ ] When the user clicks on "Connect MetaMask", and the popup comes, and without unlocking the Metamask wallet, user refreshes the page, which lets him connect again.
+    But, as the old request is still pending, the error is thrown from Metamask team like: 
+    ```js
+    {code: -32002, message: "Request of type 'wallet_requestPermissions' alread…ng for origin http://localhost:3000. Please wait."}
+    ```
+  - [ ] When the user clicks on "Login with Metamask", but the blockchain network is down, and then user refreshes and now he can again click on Login, and this throws error like:
+    ```js
+    {code: -32002, message: "MetaMask - RPC Error: Already processing eth_requestAccounts. Please wait."}
+    ```
+  - [ ] Both of the mentioned cases are mentioned in one [open issue in Metamask repo](https://github.com/MetaMask/metamask-extension/issues/10085) since more than 1 year.
+    There are workarounds given, which we can try to implement in our code.
+
 ## OKR -- The Objective Keys and Results
 
 Monthly ammended. With all its history.

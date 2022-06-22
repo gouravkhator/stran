@@ -69,7 +69,6 @@ export default function LoginLogic() {
       dispatch(setAccount(accountAddress));
 
       const nonce = await fetchNonce(accountAddress);
-      console.log({ nonce });
 
       if (!!nonce) {
         // if nonce is present, it means that user's account exists already..
@@ -78,7 +77,6 @@ export default function LoginLogic() {
           publicAddress: accountAddress,
         });
 
-        console.log({ signature });
         const user = await verifySignatureHandler({
           signature,
           publicAddress: accountAddress,
@@ -90,8 +88,6 @@ export default function LoginLogic() {
 
         if (!!user.username) {
           // token is successfully saved
-          console.log("token is in the cookie now..");
-
           // sets user in the redux store
           dispatch(setUser(user));
           return;
@@ -124,7 +120,7 @@ export default function LoginLogic() {
         dispatch(
           setError(
             err.errorMsg ??
-              "Cannot signin with Metamask due to some internal error. Please try after sometime.",
+              "Some issues occurred with SignIn with MetaMask!! Please check if there are any pending notifications in MetaMask wallet, and try to resolve them before trying to Login here.",
           ),
         );
       }

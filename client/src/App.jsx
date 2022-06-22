@@ -29,7 +29,7 @@ export function App() {
   };
 
   return (
-    <div id="app">
+    <div id="app" class="container">
       <Header />
 
       <Router onChange={(event) => handleRouteChange(event)}>

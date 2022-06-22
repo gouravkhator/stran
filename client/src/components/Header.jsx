@@ -29,34 +29,82 @@ const HeaderBase = () => {
   };
 
   return (
-    <header class={style.header}>
-      <Link href="/">
-        <h1>Stran</h1>
-      </Link>
-
-      <nav>
-        <Link activeClassName={style.active} href="/">
-          Home
-        </Link>
-
-        {!user?.username ? (
-          <Link activeClassName={style.active} href="/signin">
-            Sign In
+    <header>
+      <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+        <div class="container-fluid">
+          
+          <Link class="navbar-brand" href="/">
+            Stran
           </Link>
-        ) : (
-          <>
-            <Link
-              activeClassName={style.active}
-              href="/"
-              onClick={onSignoutClick}
-            >
-              Sign Out
-            </Link>
-            <Link activeClassName={style.active} href="/profile">
-              Profile
-            </Link>
-          </>
-        )}
+
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <Link
+                  class="nav-link"
+                  aria-current="page"
+                  activeClassName="active"
+                  href="/"
+                >
+                  Home
+                </Link>
+              </li>
+
+              {!user?.username ? (
+                <li class="nav-item">
+                  <Link
+                    class="nav-link"
+                    aria-current="page"
+                    activeClassName="active"
+                    href="/signin"
+                  >
+                    SignIn
+                  </Link>
+                </li>
+              ) : (
+                <>
+                  <li class="nav-item">
+                    <Link
+                      class="nav-link"
+                      aria-current="page"
+                      activeClassName="active"
+                      href="/profile"
+                    >
+                      Profile
+                    </Link>
+                  </li>
+
+                  <li class="nav-item">
+                    <Link
+                      class="nav-link"
+                      aria-current="page"
+                      href="/"
+                      onClick={onSignoutClick}
+                    >
+                      Logout
+                    </Link>
+                  </li>
+                </>
+              )}
+            </ul>
+          </div>
+        </div>
+      </nav>
+
+      <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+        <div class="container-fluid"></div>
       </nav>
     </header>
   );

@@ -107,7 +107,6 @@ export default function AuthPage() {
 
       <h1>Signup/Login Page</h1>
 
-      <h2>Kindly login to continue..</h2>
       {/**
        * If user is logged in, then show him the link to his profile,
        * else, show him the not logged in component..

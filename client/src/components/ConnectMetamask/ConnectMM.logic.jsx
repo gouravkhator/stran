@@ -55,7 +55,7 @@ export default function ConnectMMLogic() {
         dispatch(
           setError(
             err.errorMsg ??
-              "Cannot connect to the Metamask due to some internal issue. Please try after sometime.",
+              "Some issues occurred with Connecting to MetaMask!! Please check if there are any pending notifications in your MetaMask wallet, and try to resolve them before clicking on Connect here",
           ),
         );
       }
