@@ -18,6 +18,7 @@ import {
   setError,
   setMessage,
 } from "../../store/actions";
+import { isValidBlockchainUserId } from "../../utils/general.util";
 
 import { captureStream } from "../../utils/video_stream.util";
 
@@ -65,14 +66,20 @@ export default function VideoCallLogic() {
      * If we need to have the peer server running always, we need to host our own.
      */
 
-    if (peerConn !== null) {
-      // if we have the peer connection already in place in Redux state, we don't create another one..
+    if (peerConn !== null && peerConn?._id === user?.userid) {
+      /**
+       * if peer connection is present, but it was opened with a same id than the current user id,
+       * then no need to re-create the peer connection.
+       * But, if those are different ids, then we re-render this component and allow the new peer connection
+       */
       return;
     }
 
+    // TODO: close any open peer connection if possible..
+
     // create a connection with the given userid, and this method also sets the peerConn global state
     openPeerConnection({ userid: user.userid });
-  }, []);
+  }, [user?.userid]);
 
   // Captures the local stream and also monitors the incoming calls
   useEffect(() => {
@@ -105,10 +112,19 @@ export default function VideoCallLogic() {
     dispatch(setMessage(null));
 
     try {
-      if (isCalleeRandom === true) {
-        await callPeer({ peerConn, destId, localStream, isCalleeRandom });
-      } else {
+      if (isCalleeRandom === false) {
         // callee is not random, rather its id is provided as destId
+
+        if (!isValidBlockchainUserId(destId)) {
+          // destId not provided or it is an invalid hex address
+          dispatch(
+            setError(
+              "No user Id provided to call to.. Please provide valid inputs..",
+            ),
+          );
+
+          return;
+        }
 
         if (destId === user.userid) {
           // check if inputted destId (user to call to) is same as the current user, then we throw error
@@ -117,11 +133,13 @@ export default function VideoCallLogic() {
               "You cannot call your own self.. Please enter valid user id of other person!",
             ),
           );
-        } else {
-          await callPeer({ peerConn, destId, localStream, isCalleeRandom });
+
+          return;
         }
       }
 
+      // call the peer irrespective of the callee if its random or specifically given
+      await callPeer({ peerConn, destId, localStream, isCalleeRandom });
       route(`/call/${currCall?.connectionId || ""}`);
     } catch (err) {
       dispatch(

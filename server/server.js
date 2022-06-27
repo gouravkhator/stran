@@ -15,6 +15,9 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
 const {
+  makeImpConnectionsMiddleware,
+} = require("./src/middlewares/global.middleware");
+const {
   authenticateTokenMiddleware,
 } = require("./src/middlewares/auth.middleware");
 const { throwErrIfUserNotExist } = require("./src/middlewares/user.middleware");
@@ -25,8 +28,6 @@ const userRouter = require("./src/routes/user.route");
 const otherUsersRouter = require("./src/routes/other-users.route");
 
 const { AppError } = require("./src/utils/errors.util");
-const { getRedisClient } = require("./src/services/redis.service");
-const { connectBlockchain } = require("./src/services/blockchain-init.service");
 
 /**
  * Cookie parser middleware helps sign and unsign every cookie with the secret as process.env.SERVER_TOKEN_SECRET
@@ -78,6 +79,17 @@ app.use(
  */
 // app.use(helmet()); // !ISSUE: enabling helmet works fine for all use cases, except the token passing from server to client
 
+app.use(makeImpConnectionsMiddleware);
+
+app.get("/healthcheck", (req, res) => {
+  // this healthcheck is a very basic health checker, and most errors are thrown before the route hits this.
+  // if the route gets through it, it sends a 200 OK message.
+  return res.status(200).send({
+    message: "Healthcheck worked fine.. Server is healthy",
+    status: "success",
+  });
+});
+
 app.use("/ipfs", ipfsRouter);
 app.use("/auth", authenticateTokenMiddleware, authRouter);
 
@@ -101,16 +113,6 @@ app.use((err, req, res, next) => {
   console.error(err); // just for debugging
 
   if (err instanceof AppError) {
-    if (
-      err.statusCode === 503 &&
-      (err.shortMsg === "redis-connect-failed" ||
-        err.shortMsg === "blockchain-connect-failed")
-    ) {
-      // if the service is unavailable (status code is 503), and the error is for redis or blockchain services unavailability
-      // TODO: log with the highest priority that redis is down, and we stopped the server
-      process.exit(1); // stop the server
-    }
-
     return res.status(err.statusCode).send({
       errorMsg: err.message,
       shortErrCode: err.shortMsg,
@@ -125,8 +127,8 @@ app.use((err, req, res, next) => {
   });
 });
 
-// make necessary checks and connections before starting the server
-(async () => {
+// make necessary checks and any connections, before starting the server
+(() => {
   try {
     const serverCrashError = new AppError({
       statusCode: 500,
@@ -150,13 +152,9 @@ app.use((err, req, res, next) => {
       throw serverCrashError;
     }
 
-    await connectBlockchain(); // connect to blockchain
-    await getRedisClient(); // connect to the redis service
-    console.log("Connection to Blockchain and Redis were successful");
-
     const PORT = process.env.SERVER_PORT || 8081;
 
-    // only start listening for this server, if all the necessary connections are successful as above..
+    // only start listening for this server, if all the necessities are satisfied..
     app.listen(PORT, () => {
       console.log(`Server started on port ${PORT}`);
     });

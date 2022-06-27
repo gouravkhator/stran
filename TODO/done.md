@@ -38,6 +38,7 @@
   - [x] Throw an object as an error and short error formatted object, on client end too.
   - [x] Make all components in client end, the `.jsx` files.
   - [x] Edit setState to have functions passed in instead of objects, so that functions won't be created again and again on re-renders..
+  - [x] Redirects to a 503 page, when the healthcheck on the server returns 503, and this redirect works on every route changes
 
 ## Server End Only
 

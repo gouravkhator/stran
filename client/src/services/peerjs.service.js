@@ -116,6 +116,8 @@ export async function callPeer({
       store.dispatch(setRemoteStream(remoteStream));
       store.dispatch(setIsInCall(true));
     });
+
+    // !ISSUE: if user's status is available, but he is not receiving the call, then just set curr call to null, and reset all
   } catch (err) {
     throw err;
   }
@@ -132,7 +134,8 @@ export function manualConnectionClose({ peer }) {
         conn.peerConnection,
       );
 
-      conn.peerConnection.close();
+      conn.peerConnection.close(); // !ISSUE: on incoming call, when we try to close this, it throws error like conn.peerConnection is null
+      // We have to make sure that when we close, the other side knows that we are ending the incoming call also
 
       // close it using peerjs methods
       if (conn.close) conn.close();

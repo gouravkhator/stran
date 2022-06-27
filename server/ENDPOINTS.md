@@ -6,6 +6,7 @@ Base URL for the local server: `http://localhost:8081/`
 
 ### General Middlewares
 
+- **makeImpConnectionsMiddleware**: Runs on every request to check and connect to the blockchain and redis services.
 - **authenticateTokenMiddleware**: Run before all of the authentication/user endpoints.
     
     This checks if the jwt token is passed, and if it is valid or not. If valid, the user is set in the request object.
@@ -21,6 +22,10 @@ Base URL for the local server: `http://localhost:8081/`
 - **throwErrIfUserNotExist**: If user does not exist, it throws an `401 Unauthorized error`.
 
     Checks if the user is set in req object, and if it isn't, then throw the 401 error.
+
+## HealthCheck Endpoints
+
+- GET `/healthcheck`: It returns a 200 OK status code, with the message that the server is healthy. But, before the healthcheck url hit, the server runs all the middlewares defined above it, including our custom middleware too which is `makeImpConnectionsMiddleware`.
 
 ## Authentication Endpoints
 

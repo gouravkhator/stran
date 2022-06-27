@@ -24,3 +24,14 @@ export const capitalizeString = (string = "") => {
   // if string is of length 1, then string.substring(1) will return "", so no checks needed for that
   return string.charAt(0).toUpperCase() + string.substring(1);
 };
+
+export const isValidBlockchainUserId = (userid = "") => {
+  userid = userid ?? "";
+
+  return (
+    userid !== "" &&
+    typeof userid === "string" &&
+    userid.startsWith("0x") &&
+    userid.length > 2
+  );
+};

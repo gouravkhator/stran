@@ -83,8 +83,13 @@ const VideoCallBase = () => {
       )}
       {peerConn?._id && <h3>Your id: {peerConn._id}</h3>}
       {/*-----------Call Provided Peer or Random Peer-----------*/}
-      <button onClick={() => initiateCallToDest({ isCalleeRandom: true })}>
-        <strong style={{fontSize: '20px'}}>Call Random Available Stran</strong>{" "}
+      <button
+        onClick={() => initiateCallToDest({ isCalleeRandom: true })}
+        disabled={currCall === null ? false : true}
+      >
+        <strong style={{ fontSize: "20px" }}>
+          Call Random Available Stran
+        </strong>{" "}
         <span>
           <img
             src="/assets/icons/calling/end-call.png"
@@ -96,7 +101,11 @@ const VideoCallBase = () => {
 
       <br />
       <p>Or enter the user's ID below to call:</p>
-      <button onClick={() => initiateCallToDest({ isCalleeRandom: false })}>
+
+      <button
+        onClick={() => initiateCallToDest({ isCalleeRandom: false })}
+        disabled={currCall === null ? false : true}
+      >
         Call
       </button>
       <input onChange={handleDestIdInput} />

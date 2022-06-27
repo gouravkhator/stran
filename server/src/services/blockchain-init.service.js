@@ -1,12 +1,41 @@
 const Web3 = require("web3");
-const {
-  CONTRACT_ABI,
-  CONTRACT_ADDRESS,
-} = require("../../../blockchain/contractsConfig/VideoCallContract.config.json");
+const path = require("path");
+const fs = require("fs/promises");
 
 const { AppError } = require("../utils/errors.util");
 
 let vcContract = null;
+
+/**
+ *
+ * @returns CONTRACT_ABI and CONTRACT_ADDRESS of the smart contract, and if the smart contract is not deployed, this function throws the error
+ */
+async function readSmartContractConfigFile() {
+  try {
+    const configPath = path.join(
+      __dirname,
+      "../../../blockchain/contractsConfig/VideoCallContract.config.json",
+    );
+
+    await fs.access(configPath); // checks if file exists or not
+
+    // if file exists, then read the file
+    const data = await fs.readFile(configPath);
+    const { CONTRACT_ABI, CONTRACT_ADDRESS } = JSON.parse(data);
+
+    return {
+      CONTRACT_ABI,
+      CONTRACT_ADDRESS,
+    };
+  } catch (err) {
+    throw new AppError({
+      statusCode: 503, // as the config file is not found, so the service will be unavailable
+      shortMsg: "blockchain-smart-contract-not-deployed",
+      message:
+        "Blockchain smart contract is not deployed. Please contact the administrator for this issue.",
+    });
+  }
+}
 
 /**
  * connectBlockchain function initializes web3 providers and connects to the blockchain network.
@@ -24,6 +53,9 @@ async function connectBlockchain({ web3 = undefined } = {}) {
       web3 = new Web3(new Web3.providers.HttpProvider(providerUrl));
     }
 
+    const { CONTRACT_ABI, CONTRACT_ADDRESS } =
+      await readSmartContractConfigFile();
+
     const tempContract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
 
     // this accounts fetching is done just to make sure that the blockchain network is connected
@@ -34,12 +66,16 @@ async function connectBlockchain({ web3 = undefined } = {}) {
       web3,
     };
   } catch (err) {
-    throw new AppError({
-      statusCode: 503,
-      shortMsg: "blockchain-connect-failed",
-      message:
-        "Cannot connect to Blockchain Network. Please contact the administrator to restart the network to continue..",
-    });
+    if (err instanceof AppError) {
+      throw err;
+    } else {
+      throw new AppError({
+        statusCode: 503,
+        shortMsg: "blockchain-connect-failed",
+        message:
+          "Cannot connect to Blockchain Network. Please contact the administrator to restart the network to continue..",
+      });
+    }
   }
 }
 

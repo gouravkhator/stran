@@ -13,14 +13,19 @@
 
     - We cannot listen to when the cookies/user were removed.
 
-    - What we can also do is to **send a heartbeat to the server** for the validity of this user. Heartbeat can be implemented using setTimeout function and doing fetch to the /user route to the server.
-  
-- [ ] Fix and Validate `"End Call" Issues`: 
+    - What we can also do is to **send a heartbeat to the server** for the validity of this user. Heartbeat can be implemented using setTimeout function and doing fetch to the /user route to the server. Currently, we perform health check only on route change.
+
+- [ ] Fix the `"End Call" Issues`: 
   - [ ] Resolve the issue of endCall function, which only ends the call on the side I clicked the endCall.
     This issue is an [open issue in peerjs repo](https://github.com/peers/peerjs/issues/636) till now. 
     There are workarounds given, which we are trying to implement in our code. 
-  - [ ] Check if the end call button click is working, when user does not answer the call, but clicks on end call button.
+  - [ ] When user does not answer call, but clicks on end call button, firstly on callee side itself, conn.peerConnection is null in the method `manualConnectionClose`. Secondly, this end call should also let caller know that he has ended the call.
 
+- [ ] If user's status is available, but he is not ending the call or receiving it, then we should wait for 10 secs and then reset the call and close connection.
+- [ ] When user provides the destination id, and when he clicks the enter key, it should invoke method initiate call to dest.
+- [ ] Once the userid changes in the VideoCall.logic.jsx component, it normally re-renders the peer connection thing, and re-creates a new peer connection. But, it should close the old connection if possible.
+- [ ] When calling, a sound should play at the caller and the callee side.
+- [ ] If the camera permission or audio permission is not provided by the browser, then throw the error too.
 - [ ] If the webcamOn state is false or if the remote peer's webcam is off, then show the blue screen only, and not that black weird default screen.
 - [ ] Have two flaticon's icons namely "phone" and "shuffle" to make a merged icon for the "Call Random Available Stran"
 - [ ] Show errors in important code blocks in the VideoCall and CurrCallPage components, and in peerjs.service.js files, on the promise and events code blocks.
