@@ -2,27 +2,41 @@
   "name": "stran",
   "description": "A Video Calling P2P DApp, to strongly connect strangers together..",
   "config": {
-    "env": ".env.local"
+    "env_local": ".env.local",
+    "env_docker": ".env.docker",
+    "prescript": "dotenv -e .env.local -- bash -c"
   },
   "scripts": {
     "check-format": "prettier --config .prettierrc -c .",
     "format": "prettier --config .prettierrc -w .",
-    "sc:accounts": "npm run accounts --prefix blockchain/",
-    "sc:compile": "npm run compile --prefix blockchain/",
-    "sc:test": "npm test --prefix blockchain/",
-    "sc:localnode": "dotenv -e $npm_package_config_env -- npm run localnode --prefix blockchain/",
-    "sc:deploy": "dotenv -e $npm_package_config_env -- npm run deploy --prefix blockchain/",
-    "app:dev": "dotenv -e $npm_package_config_env -- npm run dev --prefix client/",
+
+    "sc:accounts": "$npm_package_config_prescript 'npm run accounts --prefix blockchain/'",
+    "sc:compile": "$npm_package_config_prescript 'npm run compile --prefix blockchain/'",
+    "sc:test": "$npm_package_config_prescript 'npm test --prefix blockchain/'",
+    "sc:localnode": "$npm_package_config_prescript 'npm run localnode --prefix blockchain/'",
+    "sc:deploy": "$npm_package_config_prescript 'npm run deploy --prefix blockchain/'",
+
+    "app:dev": "$npm_package_config_prescript 'npm run dev --prefix client/'",
     "app:start": "npm run app:dev",
-    "app:build": "dotenv -e $npm_package_config_env -- npm run build --prefix client/",
-    "app:serve": "dotenv -e $npm_package_config_env -- npm run serve --prefix client/",
-    "app:test": "dotenv -e $npm_package_config_env -- npm test --prefix client/",
-    "server:start": "dotenv -e $npm_package_config_env -- npm start --prefix server/",
-    "server:dev": "dotenv -e $npm_package_config_env -- npm run dev --prefix server/",
-    "server:test": "dotenv -e $npm_package_config_env -- npm run test --prefix server/",
-    "redis:start": "docker run --name redis -p 6379:6379 -d --rm redis",
+    "app:build": "$npm_package_config_prescript 'npm run build --prefix client/'",
+    "app:serve": "$npm_package_config_prescript 'npm run serve --prefix client/'",
+    "app:test": "$npm_package_config_prescript 'npm test --prefix client/'",
+
+    "server:start": "$npm_package_config_prescript 'npm start --prefix server/'",
+    "server:dev": "$npm_package_config_prescript 'npm run dev --prefix server/'",
+    "server:test": "$npm_package_config_prescript 'npm run test --prefix server/'",
+    
+    "redis:start": "$npm_package_config_prescript 'docker run --name redis -p $REDIS_PORT:$REDIS_PORT -d --rm redis:4.0.6-alpine'",
     "redis:stop": "docker stop redis",
-    "full-install": "npm i && npm i --prefix blockchain/ && npm i --prefix client/ && npm i --prefix server/"
+
+    "full-install": "npm i && npm i --prefix blockchain/ && npm i --prefix client/ && npm i --prefix server/",
+
+    "docker-dev:up": "docker-compose -f docker-compose.yml --env-file $npm_package_config_env_docker up",
+    "docker-prod:up": "docker-compose -f docker-compose.prod.yml --env-file $npm_package_config_env_docker up",
+    "docker-dev:build": "npm run docker-dev:up -- --build",
+    "docker-prod:build": "npm run docker-prod:up -- --build",
+    "docker:down": "docker-compose --env-file $npm_package_config_env_docker down",
+    "docker:sc:deploy": "docker exec -it blockchain /bin/sh -c \"cd /usr/src/blockchain; BLOCKCHAIN_HOST=localhost npm run deploy\";"
   },
   "license": "Apache-2.0",
   "repository": {

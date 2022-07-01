@@ -1,4 +1,4 @@
-import { getErrorObj } from "../utils/general.util";
+import { BACKEND_URL, getErrorObj } from "../utils/general.util";
 
 /**
  * This error happens when the server is not responding to the fetch events,
@@ -24,7 +24,7 @@ export async function getRandomAvailableUser() {
   let errorFromServer = false;
 
   try {
-    result = await fetch("http://localhost:8081/users/random/available", {
+    result = await fetch(`${BACKEND_URL}/users/random/available`, {
       method: "GET",
       credentials: "include",
     });

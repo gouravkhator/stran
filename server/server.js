@@ -59,14 +59,14 @@ app.use(express.urlencoded({ extended: false }));
  * ---------------------------------------------------------------------------
  *
  * Headers set by CORS with below options are:
- * res.header("Access-Control-Allow-Origin", process.env.CLIENT_URL);
+ * res.header("Access-Control-Allow-Origin", `http://localhost:${process.env.CLIENT_PORT}`);
  * res.header("Access-Control-Allow-Credentials", true);
  * res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
  * res.header("Access-Control-Allow-Headers", "Content-Type");
  */
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:3000", // the origin from which this server can accept authenticated requests
+    origin: `http://localhost:${process.env.CLIENT_PORT}`, // the origin from which this server can accept authenticated requests
     credentials: true, // allow credentials
     methods: "GET, PUT, POST, DELETE", // allowed methods for the cross origin requests
     allowedHeaders: "Content-Type", // allowed headers for the cross origin requests

@@ -17,6 +17,7 @@ import ErrorPage from "./routes/ErrorPage";
 import { Provider, useDispatch } from "react-redux";
 import { setError, setMessage } from "./store/actions";
 import store from "./store/store";
+import { BACKEND_URL } from "./utils/general.util";
 
 export function App() {
   const dispatch = useDispatch();
@@ -26,7 +27,7 @@ export function App() {
    */
   const performHealthCheckOnServer = async () => {
     try {
-      const result = await fetch("http://localhost:8081/healthcheck");
+      const result = await fetch(`${BACKEND_URL}/healthcheck`);
 
       if (result.status === 503) {
         route("/503", true);

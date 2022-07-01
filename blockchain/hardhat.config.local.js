@@ -10,8 +10,6 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
   }
 });
 
-const pk = process.env.dapk;
-
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
 
@@ -28,18 +26,5 @@ module.exports = {
       // Metamask requires chainId, to get us connected to hardhat network on Metamask.
       chainId: 1337,
     },
-    ropsten: {
-      url: "https://ropsten.infura.io/v3/abcd123",
-      account: [`0x${pk}`]
-    },
-    mainnet: {
-      url: `https://mainnet.infura.io/v3/abcd123`,
-      account: [`0x${pk}`]
-    }
-    // TODO: have a rinkeby network for deploying the contracts and many more
-    // rinkeby: {
-    //   url: "https://eth-rinkeby.alchemyapi.io/v2/123abc123abc123abc123abc123abcde",
-    //   accounts: [],
-    // }
   },
 };

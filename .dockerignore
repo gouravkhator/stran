@@ -1,15 +1,16 @@
-Dockerfile.*
+# Generic files
 .git
 node_modules
 build
 /coverage/
 /coverage.json
 /typechain/
+*.md
+project-images/
 
 # Hardhat files
 /blockchain/cache
 /blockchain/artifacts
-/blockchain/contractsConfig/*.config.json
 
 # Frontend files
 /client/*.log

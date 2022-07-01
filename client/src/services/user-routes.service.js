@@ -1,4 +1,4 @@
-import { getErrorObj } from "../utils/general.util";
+import { BACKEND_URL, getErrorObj } from "../utils/general.util";
 
 /**
  * This error happens when the server is not responding to the fetch events,
@@ -14,7 +14,7 @@ export async function getUserByToken() {
   let result = null;
 
   try {
-    result = await fetch(`http://localhost:8081/user`, {
+    result = await fetch(`${BACKEND_URL}/user`, {
       method: "GET",
       /**
        * this sends the credentials like cookies and other headers in a secure way
@@ -52,7 +52,7 @@ export async function editUserHandler({
   let errorFromServer = false;
 
   try {
-    result = await fetch("http://localhost:8081/user", {
+    result = await fetch(`${BACKEND_URL}/user`, {
       body: JSON.stringify({
         username,
         location,
@@ -108,7 +108,7 @@ export async function deleteUserHandler() {
   let errorFromServer = false;
 
   try {
-    result = await fetch("http://localhost:8081/user", {
+    result = await fetch(`${BACKEND_URL}/user`, {
       method: "DELETE",
       credentials: "include",
     });

@@ -40,6 +40,25 @@
 
 ### Blockchain End Only
 
+- [ ] Current bugs and issues in blockchain:
+  - The deploy script deploys to docker container's mounted folder `/usr/src/blockchain/contractsConfig` and that is in the container. But our server backend checks the file in the developer's host directory: `<repo's root directory>/blockchain/contractsConfig/`.
+  - So, the server returns 503 error as expected.
+
+- [ ] For developement volume mounting for reloading of images, we get error like `EACCES: permission denied` for blockchain service, when we use volume in docker-compose or in docker run like:
+
+  ```yml
+  volumes:
+    - ./blockchain:/usr/src/blockchain
+  ```
+
+  Error message is mostly like below:
+  
+  ```sh
+  glob error [Error: EACCES: permission denied, scandir '/root/.npm/_logs'] {
+  ```
+  
+  It seems that the blockchain containerised application is writing data to the host machine, and maybe docker does not allow that.
+  
 - [ ] `ISSUE`: knownLanguages array in `registerUser` solidity method is undefined and not saved when we fetch that.
 
 ### Overall Project's In-Progress Items

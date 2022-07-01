@@ -1,3 +1,7 @@
+export const BACKEND_URL = `http://${
+  process.env.PREACT_APP_BACKEND_HOST ?? "localhost"
+}:${process.env.PREACT_APP_BACKEND_PORT ?? 8081}`;
+
 export const convertArrToObj = (arr = []) => {
   return [...arr].reduce((tempObj, element) => {
     return { ...tempObj, [element]: element };

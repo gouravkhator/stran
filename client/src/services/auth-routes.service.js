@@ -1,4 +1,4 @@
-import { getErrorObj } from "../utils/general.util";
+import { BACKEND_URL, getErrorObj } from "../utils/general.util";
 
 /**
  * This error happens when the server is not responding to the fetch events,
@@ -14,7 +14,7 @@ export async function fetchNonce(publicAddress) {
   let result = null;
 
   try {
-    result = await fetch(`http://localhost:8081/auth/nonce/${publicAddress}`, {
+    result = await fetch(`${BACKEND_URL}/auth/nonce/${publicAddress}`, {
       method: "GET",
       credentials: "include",
     });
@@ -52,7 +52,7 @@ export async function signupHandler({
   let errorFromServer = false;
 
   try {
-    result = await fetch("http://localhost:8081/auth/signup", {
+    result = await fetch(`${BACKEND_URL}/auth/signup`, {
       body: JSON.stringify({
         publicAddress,
         name,
@@ -109,7 +109,7 @@ export async function verifySignatureHandler({ publicAddress, signature }) {
   let errorFromServer = false;
 
   try {
-    result = await fetch("http://localhost:8081/auth/verify", {
+    result = await fetch(`${BACKEND_URL}/auth/verify`, {
       body: JSON.stringify({
         publicAddress,
         signature,
@@ -161,7 +161,7 @@ export async function logoutHandler() {
   let errorFromServer = false;
 
   try {
-    result = await fetch("http://localhost:8081/auth/logout", {
+    result = await fetch(`${BACKEND_URL}/auth/logout`, {
       headers: {
         "Content-Type": "application/json",
       },

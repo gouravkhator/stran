@@ -28,7 +28,8 @@ The below pics are updated as on 14th June, 2022. They might not be the latest.
 
 ### Prerequisites
 
-If we will be using ipfs services, then we have to install **go-ipfs** on your host system. 
+- NodeJS version required is `v16.8.0`, bcoz node17 and above have breaking changes for the blockchain and hardhat framework.
+- If we will be using ipfs services, then we have to install **go-ipfs** on your host system.
 
 ### Installation/Setup Guide 🤔
 
@@ -147,37 +148,37 @@ If we will be using ipfs services, then we have to install **go-ipfs** on your h
 - Build and run the project in Production mode using following command:
 
     ```sh
-    docker-compose -f docker-compose.prod.yml up --build
+    npm run docker-prod:build
     ```
 
 - Only run the already-built docker image in production mode:
 
     ```sh
-    docker-compose -f docker-compose.prod.yml up
+    npm run docker-prod:up
     ```
 
 - Build and run the project in development mode using following command:
 
     ```sh
-    docker-compose -f docker-compose.yml up --build
+    npm run docker-dev:build
     ```
 
 - Only run the already-built docker image in development mode:
 
     ```sh
-    docker-compose -f docker-compose.yml up
+    npm run docker-dev:up
     ```
 
 - Run the deploy script after the `docker-compose up` commands:
 
     ```sh
-    docker exec -it blockchain /bin/sh -c "cd /usr/src/blockchain; BLOCKCHAIN_HOST=blockchain npm run deploy";
+    npm run docker:sc:deploy
     ```
 
 - Remove the created containers:
     
     ```sh
-    docker-compose down
+    npm run docker:down
     ```
 
     > Note: Doing `Ctrl+D` will only stop the container, but will not remove them.
@@ -193,16 +194,20 @@ If we will be using ipfs services, then we have to install **go-ipfs** on your h
 | NodeJS Server              | 8081        |
 | PreactJS Frontend          | 3000        |
 | Local Blockchain Network   | 8545        |
+| Redis Service              | 6379        |
+
+**Note:**
+- Outside docker, every service runs on localhost. 
+- But inside docker, if a service let's say `backend` service of the docker-compose wants to interact with `redis-server` and `blockchain` internally, then it has to use the redis host as `redis-server` in the code for connecting.
+- If we run the services using docker-compose, the ports gets exposed to the localhost, and I can easily access frontend using "http://localhost:3000", or the server backend on "http://localhost:8081" or the redis service on localhost on TCP Port 6379 (Note: redis does not have http service). Blockchain network is accessible on localhost in the metamask extension on port 8545.
+- As we run the frontend from outside the docker, it should access the localhost and not the backend service that is given.
 
 ### Environment Variables
 
 - The environment variables are mentioned in a all-in-one single local or single docker env file, for all the services.
     - We use `dotenv-cli` package in the root `package.json`, and for each script, we load the environment variables from the `.env.*` file mentioned, using this package.
-    - This `dotenv-cli` loads the environment variables into that particular script, such that we can use the variable like `echo $BLOCKCHAIN_HOST`.
-    - We can even inject the environment variable value ourselves too like the below:
-        ```sh
-        BLOCKCHAIN_HOST=blockchain echo $BLOCKCHAIN_HOST
-        ```
+    - This `dotenv-cli` loads the environment variables into that particular script, but to use those environment variables directly into a script, we have to do: `bash -c '<commands-with-args>'`
+    - Note: `bash -c` is not necessary, if the environment variable is to be passed to the command like npm. Npm loads the variables by itself automatically from the environment.
 
 - Environment variables `.env.*` files:
     - `.env.local`: This is the local environment file, which is for running the scripts on localhost, outside the docker environment.

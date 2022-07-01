@@ -1,9 +1,10 @@
 version: "3.9"
 services:
-  # TODO: in all the services, the environment should come from .env.docker file
   frontend:
     image: stran-frontend
     container_name: frontend
+    env_file:
+      - ./.env.docker
     build:
       context: ./client
       # check the args
@@ -11,7 +12,7 @@ services:
         - NODE_ENV=development
       target: client
     ports:
-      - "3000:3000"
+      - "$CLIENT_PORT:$CLIENT_PORT"
     depends_on:
       - backend
     volumes:
@@ -27,6 +28,8 @@ services:
   backend:
     image: stran-backend
     container_name: backend
+    env_file:
+      - ./.env.docker
     build:
       context: ./server
       args:
@@ -36,7 +39,7 @@ services:
       - redis-server
       - blockchain
     ports:
-      - "8081:8081"
+      - "$SERVER_PORT:$SERVER_PORT"
     volumes:
       - ./server:/usr/src/server
     # deploy:
@@ -47,13 +50,15 @@ services:
 
   redis-server:
     container_name: redis-server
-    image: redis
+    image: redis:4.0.6-alpine
     ports:
-      - "6379:6379"
-      
+      - "$REDIS_PORT:$REDIS_PORT"
+
   blockchain:
     image: stran-blockchain
     container_name: blockchain
+    env_file:
+      - ./.env.docker
     build:
       context: ./blockchain
       dockerfile: Dockerfile
@@ -61,9 +66,11 @@ services:
         - NODE_ENV=development
       target: blockchain
     ports:
-      - "8545:8545"
-    volumes:
-      - ./blockchain:/usr/src/blockchain
+      - "$BLOCKCHAIN_PORT:$BLOCKCHAIN_PORT"
+    # commented below block of volumes, as we were getting error just for this blockchain service: EACCESS permission denied.
+    # Mostly, hardhat probably was writing back to the mount point on the main host, and maybe that was causing error.
+    # volumes:
+    #   - ./blockchain:/usr/src/blockchain
     # deploy:
     #   resources:
     #     limits:
