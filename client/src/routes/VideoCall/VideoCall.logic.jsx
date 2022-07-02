@@ -119,7 +119,7 @@ export default function VideoCallLogic() {
           // destId not provided or it is an invalid hex address
           dispatch(
             setError(
-              "No user Id provided to call to.. Please provide valid inputs..",
+              "Either callee's userId is not provided or is invalid.. Please provide valid inputs..",
             ),
           );
 

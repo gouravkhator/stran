@@ -13,7 +13,7 @@
     "compile": "npx hardhat compile",
     "test": "npx hardhat test",
     "localnode": "npx hardhat --config hardhat.config.local.js node",
-    "deploy": "npm run compile && npx hardhat --config hardhat.config.local.js --network $BLOCKCHAIN_HOST run $npm_package_config_deployContractScript"
+    "deploy": "npm run compile && npx hardhat --config hardhat.config.local.js --network $BLOCKCHAIN_NETWORK run $npm_package_config_deployContractScript"
   },
   "dependencies": {
     "@nomiclabs/hardhat-ethers": "^2.0.3",

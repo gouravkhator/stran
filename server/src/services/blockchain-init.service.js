@@ -14,7 +14,7 @@ async function readSmartContractConfigFile() {
   try {
     const configPath = path.join(
       __dirname,
-      "../../../blockchain/contractsConfig/VideoCallContract.config.json",
+      "../../VideoCallContract.config.json",
     );
 
     await fs.access(configPath); // checks if file exists or not
@@ -46,10 +46,23 @@ async function connectBlockchain({ web3 = undefined } = {}) {
     if (typeof web3 !== "undefined") {
       web3 = new Web3(web3.currentProvider);
     } else {
-      const blockchainHost = process.env.BLOCKCHAIN_HOST || "localhost";
+      const blockchainNetwork = process.env.BLOCKCHAIN_NETWORK || "localhost";
       const blockchainPort = process.env.BLOCKCHAIN_PORT || 8545;
+      const blockchainHost = process.env.BLOCKCHAIN_HOST || "localhost";
 
-      const providerUrl = `http://${blockchainHost}:${blockchainPort}`;
+      let providerUrl = "";
+
+      if (blockchainNetwork === "localhost") {
+        providerUrl = `http://${blockchainHost}:${blockchainPort}`;
+      } else {
+        throw new AppError({
+          statusCode: 501, // 501 not implemented
+          shortMsg: "other-blockchain-network-unsupported",
+          message:
+            "We see that the blockchain network configured is not supported right now. Please contact the admins for fixing this issue.",
+        });
+      }
+
       web3 = new Web3(new Web3.providers.HttpProvider(providerUrl));
     }
 

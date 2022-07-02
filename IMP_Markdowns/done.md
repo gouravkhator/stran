@@ -53,6 +53,10 @@
 - [x] Basic structure for smart contract implementation.
 - [x] Full CRUD operation implemented in smart contract code.
 
+## Docker End Only
+
+- [x] Dockerised the application, with every service running on dev and prod, and with managed environment variables.
+
 ## Overall Feature
 
 - [x] Rename npm scripts in package.json to be having colons for better script-names like server:start or server:dev etc.

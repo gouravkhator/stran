@@ -62,12 +62,18 @@ The below pics are updated as on 14th June, 2022. They might not be the latest.
     ```sh
     # below command pulls the redis image and runs the redis container in background
     # when we will kill this container, it automatically would get removed too
-    docker run --name redis -p 6379:6379 -d --rm redis
+    npm run redis:start
 
     # To enter into the redis container, run below commands
     docker exec -it redis /bin/bash
     # and then run below command inside that docker container, to have redis cli
     redis-cli
+    ```
+
+- Stop the redis docker service, and also remove that:
+
+    ```sh
+    npm run redis:stop
     ```
 
 - Run a local ipfs node (it runs a daemon):
@@ -102,7 +108,7 @@ The below pics are updated as on 14th June, 2022. They might not be the latest.
     - *Hurray!!*, you have successfully setup your localnode in Metamask.
     - Refer [this article](https://dev.to/dabit3/the-complete-guide-to-full-stack-ethereum-development-3j13) for more details.
 
-- Deploy the smart contract -- It will firstly compile the smart contracts and then would deploy them.
+- Deploy the smart contract -- It will firstly compile the smart contracts and then would deploy them, and then copy the config to the correct server folder.
 
     ```sh
     npm run sc:deploy
@@ -130,16 +136,11 @@ The below pics are updated as on 14th June, 2022. They might not be the latest.
 
 ### Prerequisites
 
-- Before running docker, edit below things that should be done as per docker setup:
-    - The package.json in the root folder has a config env field, just change the value like below:
-        ```json
-        {
-            "config": {
-                "env": ".env.docker"
-            }
-        }
-        ```
-- Install docker and docker-compose, and then enable the docker daemon service globally.
+- Install docker and docker-compose, and then enable the docker daemon service globally by the below command. The below command is for the ones, who run this repo on linux/mac machines with systemd in it.
+
+    ```sh
+    sudo systemctl start docker
+    ```
 
 ### Docker Commands
 
@@ -169,7 +170,7 @@ The below pics are updated as on 14th June, 2022. They might not be the latest.
     npm run docker-dev:up
     ```
 
-- Run the deploy script after the `docker-compose up` commands:
+- Run the smart contract deploy script after the `docker-compose up` commands:
 
     ```sh
     npm run docker:sc:deploy
@@ -183,40 +184,6 @@ The below pics are updated as on 14th June, 2022. They might not be the latest.
 
     > Note: Doing `Ctrl+D` will only stop the container, but will not remove them.
 
-## Some notes for developers 🧠
-
-### Services and their used Port numbers
-
-| Service                    | Port Used   |
-| -------------------------- | ----------- |
-| IPFS WebUI                 | 5001        |
-| IPFS Daemon Service        | 8080        |
-| NodeJS Server              | 8081        |
-| PreactJS Frontend          | 3000        |
-| Local Blockchain Network   | 8545        |
-| Redis Service              | 6379        |
-
-**Note:**
-- Outside docker, every service runs on localhost. 
-- But inside docker, if a service let's say `backend` service of the docker-compose wants to interact with `redis-server` and `blockchain` internally, then it has to use the redis host as `redis-server` in the code for connecting.
-- If we run the services using docker-compose, the ports gets exposed to the localhost, and I can easily access frontend using "http://localhost:3000", or the server backend on "http://localhost:8081" or the redis service on localhost on TCP Port 6379 (Note: redis does not have http service). Blockchain network is accessible on localhost in the metamask extension on port 8545.
-- As we run the frontend from outside the docker, it should access the localhost and not the backend service that is given.
-
-### Environment Variables
-
-- The environment variables are mentioned in a all-in-one single local or single docker env file, for all the services.
-    - We use `dotenv-cli` package in the root `package.json`, and for each script, we load the environment variables from the `.env.*` file mentioned, using this package.
-    - This `dotenv-cli` loads the environment variables into that particular script, but to use those environment variables directly into a script, we have to do: `bash -c '<commands-with-args>'`
-    - Note: `bash -c` is not necessary, if the environment variable is to be passed to the command like npm. Npm loads the variables by itself automatically from the environment.
-
-- Environment variables `.env.*` files:
-    - `.env.local`: This is the local environment file, which is for running the scripts on localhost, outside the docker environment.
-    - `.env.docker`: This is the docker specific environment file, which is for running the scripts in the docker environment, with docker specific environment variables and values.
-    - `.env.sample`: Sample file to make the respective above-mentioned env files with the similar field structures.
-
-- To deploy the environment variables to production, we can directly add the variable names to the Heroku/Netlify/Other hosting platform.
-    - **For example:-** If the process.env does not find the required variable in the `server` folder, then it will look for the environment defined in the parent folder of server, and if not there even, then it will go further upwards in the folder hierarchy.
-
 ## Credits to the Resources Used
 
 - [Video on WebRTC, Video calling and Javascript integration](https://youtu.be/pv3UHYwgxnM)
@@ -224,4 +191,3 @@ The below pics are updated as on 14th June, 2022. They might not be the latest.
 - For blockchain deployment and testing inside docker container: [How To Dockerize Your Hardhat Solidity Contract On Localhost](https://codingwithmanny.medium.com/how-to-dockerize-your-hardhat-solidity-contract-on-localhost-a45424369896)
 - [ExpressJS OPTIONS Request](http://johnzhang.io/options-request-in-express) and [CORS errors and Preflight requests](https://www.topcoder.com/thrive/articles/cors-errors-and-how-to-solve-them)
 - [CORS Middleware](https://stackabuse.com/handling-cors-with-node-js/)
-

@@ -14,7 +14,8 @@
     "sc:compile": "$npm_package_config_prescript 'npm run compile --prefix blockchain/'",
     "sc:test": "$npm_package_config_prescript 'npm test --prefix blockchain/'",
     "sc:localnode": "$npm_package_config_prescript 'npm run localnode --prefix blockchain/'",
-    "sc:deploy": "$npm_package_config_prescript 'npm run deploy --prefix blockchain/'",
+    "sc:copy:config": "cp ./blockchain/contractsConfig/VideoCallContract.config.json ./server/VideoCallContract.config.json",
+    "sc:deploy": "$npm_package_config_prescript 'npm run deploy --prefix blockchain/' && npm run sc:copy:config",
 
     "app:dev": "$npm_package_config_prescript 'npm run dev --prefix client/'",
     "app:start": "npm run app:dev",
@@ -36,7 +37,8 @@
     "docker-dev:build": "npm run docker-dev:up -- --build",
     "docker-prod:build": "npm run docker-prod:up -- --build",
     "docker:down": "docker-compose --env-file $npm_package_config_env_docker down",
-    "docker:sc:deploy": "docker exec -it blockchain /bin/sh -c \"cd /usr/src/blockchain; BLOCKCHAIN_HOST=localhost npm run deploy\";"
+    "docker:copy:sc-config": "docker cp blockchain:/usr/src/blockchain/contractsConfig/VideoCallContract.config.json ./server/VideoCallContract.config.json && docker cp ./server/VideoCallContract.config.json backend:/usr/src/server/VideoCallContract.config.json",
+    "docker:sc:deploy": "docker exec -it blockchain /bin/sh -c \"cd /usr/src/blockchain; BLOCKCHAIN_NETWORK=localhost npm run deploy\" && npm run docker:copy:sc-config"
   },
   "license": "Apache-2.0",
   "repository": {

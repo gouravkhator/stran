@@ -11,6 +11,7 @@ FROM base AS blockchain-production
 RUN npm install --production
 
 FROM blockchain-${NODE_ENV} AS blockchain
+# Not copying this shell script in different folder, and keeping that in same folder, as that seems reduntant
 # COPY $PWD/docker.entrypoint.sh /usr/local/bin
 COPY . ./
 EXPOSE $BLOCKCHAIN_PORT

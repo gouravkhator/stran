@@ -18,6 +18,12 @@ async function getRedisClient() {
     });
 
     client.on("error", (err) => {
+      /**
+       * if connection to the redis client has an error, we should reset the client object,
+       * as the further calls to getRedisClient would not check the connection again, but would return the existing client..
+       */
+      client = null;
+
       throw new AppError({
         message:
           "Cannot connect to Redis in-memory database. Please contact the administrator to restart the redis service to continue..",

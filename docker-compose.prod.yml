@@ -1,23 +1,31 @@
 version: "3.9"
 services:
   frontend:
+    image: stran-frontend
     container_name: frontend
+    env_file:
+      - ./.env.docker
     build:
       context: ./client
       # check the args
       args:
         - NODE_ENV=production
       target: client
+    ports:
+      - "$CLIENT_PORT:$CLIENT_PORT"
     depends_on:
       - backend
-    deploy:
-      resources:
-        limits:
-          cpus: "0.3"
-          memory: 50M
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: "0.3"
+    #       memory: 50M
 
   backend:
+    image: stran-backend
     container_name: backend
+    env_file:
+      - ./.env.docker
     # perform restart: always (not sure why this field was not suggested in intellisense)
     # do healthcheck too in prod mode.. It is like a heartbeat signal sending every specified time interval
     build:
@@ -29,30 +37,33 @@ services:
       - redis-server
       - blockchain
     ports:
-      - "8000:8000"
-    deploy:
-      resources:
-        limits:
-          cpus: "0.3"
-          memory: 50M
+      - "$SERVER_PORT:$SERVER_PORT"
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: "0.3"
+    #       memory: 50M
 
   redis-server:
     container_name: redis-server
-    image: redis
+    image: redis:4.0.6-alpine
     ports:
-      - "6379:6379"
+      - "$REDIS_PORT:$REDIS_PORT"
 
   blockchain:
+    image: stran-blockchain
     container_name: blockchain
+    env_file:
+      - ./.env.docker
     build:
       context: ./blockchain
       args:
         - NODE_ENV=production
       target: blockchain
     ports:
-      - "8545:8545"
-    deploy:
-      resources:
-        limits:
-          cpus: "0.3"
-          memory: 50M
+      - "$BLOCKCHAIN_PORT:$BLOCKCHAIN_PORT"
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: "0.3"
+    #       memory: 50M

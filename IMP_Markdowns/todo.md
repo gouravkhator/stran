@@ -21,9 +21,10 @@
     There are workarounds given, which we are trying to implement in our code. 
   - [ ] When user does not answer call, but clicks on end call button, firstly on callee side itself, conn.peerConnection is null in the method `manualConnectionClose`. Secondly, this end call should also let caller know that he has ended the call.
 
+- [ ] Check if the inputted user id in the userid to call, exists or not in the blockchain.
 - [ ] If user's status is available, but he is not ending the call or receiving it, then we should wait for 10 secs and then reset the call and close connection.
 - [ ] When user provides the destination id, and when he clicks the enter key, it should invoke method initiate call to dest.
-- [ ] Once the userid changes in the VideoCall.logic.jsx component, it normally re-renders the peer connection thing, and re-creates a new peer connection. But, it should close the old connection if possible.
+- [ ] Once the userid changes in the `VideoCall.logic.jsx` component, it normally re-renders the peer connection thing, and re-creates a new peer connection. But, it should close the old connection if possible.
 - [ ] When calling, a sound should play at the caller and the callee side.
 - [ ] If the camera permission or audio permission is not provided by the browser, then throw the error too.
 - [ ] If the webcamOn state is false or if the remote peer's webcam is off, then show the blue screen only, and not that black weird default screen.
@@ -36,15 +37,19 @@
 
 ### Server End Only
 
+- [ ] Current Bugs:
+  - [ ] When I run the server with redis service off, and I try to send any request to server, it throws "503 redis connect err", but then I connect the redis, and then it processes the request. Then, when I disconnect the redis again, it crashes the server, saying that "Redis Socket Connection closed unexpectedly".
+  
 - [ ] Add `helmet` package, with proper options to let us use JWT also.
 
 ### Blockchain End Only
 
-- [ ] Current bugs and issues in blockchain:
-  - The deploy script deploys to docker container's mounted folder `/usr/src/blockchain/contractsConfig` and that is in the container. But our server backend checks the file in the developer's host directory: `<repo's root directory>/blockchain/contractsConfig/`.
-  - So, the server returns 503 error as expected.
+- [ ] `ISSUE`: knownLanguages array in `registerUser` solidity method is undefined and not saved when we fetch that.
 
-- [ ] For developement volume mounting for reloading of images, we get error like `EACCES: permission denied` for blockchain service, when we use volume in docker-compose or in docker run like:
+### Docker End Only
+
+- [ ] Current Issues:
+  - [ ] For development volume mounting for reloading of images, we get error like `EACCES: permission denied` for blockchain service, when we use volume in docker-compose or in docker run like:
 
   ```yml
   volumes:
@@ -59,7 +64,12 @@
   
   It seems that the blockchain containerised application is writing data to the host machine, and maybe docker does not allow that.
   
-- [ ] `ISSUE`: knownLanguages array in `registerUser` solidity method is undefined and not saved when we fetch that.
+  Currently, I have commented this, so that the docker runs fine for all cases.
+  
+- [ ] Deployment on Heroku/Netlify is kept on hold for now, as it requires much more config in the docker end.
+  - [ ] When doing deployment on any platform, make sure that the contracts config copying part is taken care, by uploading the contracts abi and the contracts address somewhere. Locally, we copied the config json file to a local folder, but that won't work on the cloud.
+
+- [ ] Tests should also be run inside docker containers, before we run the production build.
 
 ### Overall Project's In-Progress Items
 
@@ -83,16 +93,6 @@
 - [ ] 
 
 ### Overall Project's Features Planned
-
-- [ ] Docker Integration for below services:
-  1. Peerjs server (as free server is mostly down)
-  2. Blockchain network with persistence, only required in dev mode, as we will have main net in the prod mode.
-  3. Client side
-  4. Main server side
-  5. Redis service
-      > Keep redis and other service working in different docker containers.
-      And keep the app in a different one, so that when we have to update the app and restart the server, then the redis cache does not get flushed.
-  6. IPFS node to be running inside docker, if we need IPFS functionality in future.
 
 - [ ] Configure the Postman collection runner, to run the tests one by one in a sequence defined by me.
 - [ ] Error reporting and logging to some tools available, just to monitor if everything is rightfully working or not.

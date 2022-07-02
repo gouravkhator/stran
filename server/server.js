@@ -142,7 +142,7 @@ app.use((err, req, res, next) => {
      * If not loaded, we would throw the error, and stop the server.
      *
      * Some environment variables like SERVER_PORT, REDIS_HOST, REDIS_PORT,
-     * BLOCKCHAIN_HOST or BLOCKCHAIN_PORT are either loaded or set with our defaults.
+     * BLOCKCHAIN_HOST, BLOCKCHAIN_NETWORK or BLOCKCHAIN_PORT are either loaded or set with our defaults.
      *
      * But for necessary envs like SERVER_TOKEN_SECRET should not be set with our defaults.
      */
