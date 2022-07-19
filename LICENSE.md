@@ -1,9 +1,3 @@
-Apache License
-
-Version 2.0, January 2004
-
-https://www.apache.org/licenses/
-
 Copyright (c) 2022, Gourav Khator
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License.
