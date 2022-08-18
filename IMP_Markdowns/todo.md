@@ -45,6 +45,8 @@
 ### Blockchain End Only
 
 - [ ] `ISSUE`: knownLanguages array in `registerUser` solidity method is undefined and not saved when we fetch that.
+- [ ] Need to get the random available stran instead of the first available stran.
+  - Also, modify the test codes for the blockchain, to check the randomness of the available stran.
 
 ### Docker End Only
 
@@ -122,6 +124,8 @@
 
 - [ ] Index some userdata like the status, location, language in smart contract solidity code, for optimised access.
 - [ ] Add a ***rinkeby*** network in the `hardhat.config.js` file for deploying the contracts on that test net.
+- [ ] Secure the blockchain side of the project too, so that only authorized persons can make restricted transactions.
+  - Currently, these restrictions are handled by server side, but we should inject security and authorization into the blockchain network too.
 
 ### Overall Project's Features On Hold
 
